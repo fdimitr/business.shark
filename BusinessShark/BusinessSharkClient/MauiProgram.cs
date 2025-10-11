@@ -17,15 +17,14 @@ namespace BusinessSharkClient
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            builder.Services.AddScoped(services =>
-            {
-                var baseUrl = new Uri(baseAddress);
-                var channel = Grpc.Net.Client.GrpcChannel.ForAddress(baseUrl);
-                return new BusinessSharkService.Greeter.GreeterClient(channel);
-            });
+            var baseUrl = new Uri(baseAddress);
+            var channel = Grpc.Net.Client.GrpcChannel.ForAddress(baseUrl);
+
+            builder.Services.AddScoped(services => new BusinessSharkService.Greeter.GreeterClient(channel));
+            builder.Services.AddScoped(services => new BusinessSharkService.AuthService.AuthServiceClient(channel));
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
