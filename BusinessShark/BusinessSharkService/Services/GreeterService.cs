@@ -12,9 +12,10 @@ namespace BusinessSharkService.Services
 
         public async override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
         {
+            var username = context.GetHttpContext().User.Identity?.Name ?? "unknown";
             return await Task.FromResult(new HelloReply
             {
-                Message = "Hello " + request.Name
+                Message = "Hello " + username + " from: " + request.Name
             });
         }
     }
