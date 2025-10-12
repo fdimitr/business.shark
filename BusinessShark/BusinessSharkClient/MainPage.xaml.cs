@@ -26,17 +26,17 @@ namespace BusinessSharkClient
                 CounterBtn.Text = $"Clicked {count} times";
 
             // 1. Авторизация
-            var login = await _authServiceClient.LoginAsync(new LoginRequest
-            {
-                Username = "admin",
-                Password = "12345"
-            });
+            //var login = await _authServiceClient.LoginAsync(new LoginRequest
+            //{
+            //    Username = "admin",
+            //    Password = "12345"
+            //});
 
-            var headers = new Metadata { { "Authorization", $"Bearer {login.AccessToken}" } };
+            //var headers = new Metadata { { "Authorization", $"Bearer {login.AccessToken}" } };
             var response = await _greeterClient.SayHelloAsync(new BusinessSharkService.HelloRequest
             {
                 Name = Environment.MachineName
-            }, headers);
+            }/*, headers*/);
 
             ResponseLabel.Text = response.Message;
             SemanticScreenReader.Announce(CounterBtn.Text);

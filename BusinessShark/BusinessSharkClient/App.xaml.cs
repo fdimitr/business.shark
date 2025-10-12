@@ -1,4 +1,6 @@
-﻿namespace BusinessSharkClient
+﻿using BusinessSharkClient.View;
+
+namespace BusinessSharkClient
 {
     public partial class App : Application
     {
