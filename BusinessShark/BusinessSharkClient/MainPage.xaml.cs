@@ -1,15 +1,14 @@
 ﻿using BusinessSharkService;
-using Grpc.Core;
 
 namespace BusinessSharkClient
 {
     public partial class MainPage : ContentPage
     {
         int count = 0;
-        BusinessSharkService.Greeter.GreeterClient _greeterClient;
-        BusinessSharkService.AuthService.AuthServiceClient _authServiceClient;
+        Greeter.GreeterClient _greeterClient;
+        AuthService.AuthServiceClient _authServiceClient;
 
-        public MainPage(BusinessSharkService.Greeter.GreeterClient greeterClient, BusinessSharkService.AuthService.AuthServiceClient authServiceClient)
+        public MainPage(Greeter.GreeterClient greeterClient, AuthService.AuthServiceClient authServiceClient)
         {
             InitializeComponent();
             _greeterClient = greeterClient;

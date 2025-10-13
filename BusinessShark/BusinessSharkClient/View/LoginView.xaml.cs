@@ -30,7 +30,7 @@ public partial class LoginView : ContentPage
             else
             {
                 await SecureStorage.Default.SetAsync("access_token", loginResult.AccessToken);
-                await Shell.Current.GoToAsync("//MainPage");
+                await Shell.Current.GoToAsync($"//{nameof(MainPage)}", false);
             }
 
         }

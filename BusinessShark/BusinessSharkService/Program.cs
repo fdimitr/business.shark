@@ -6,6 +6,18 @@ using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddConsole();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtKey))
@@ -51,9 +63,12 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseCors();
+app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
+
 // Configure the HTTP request pipeline.
-app.MapGrpcService<AuthGrpcService>();
-app.MapGrpcService<GreeterService>();
+app.MapGrpcService<AuthGrpcService>().EnableGrpcWeb();
+app.MapGrpcService<GreeterService>().EnableGrpcWeb();
 
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
