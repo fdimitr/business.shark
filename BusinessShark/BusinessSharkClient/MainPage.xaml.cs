@@ -34,7 +34,7 @@ namespace BusinessSharkClient
             //var headers = new Metadata { { "Authorization", $"Bearer {login.AccessToken}" } };
             var response = await _greeterClient.SayHelloAsync(new BusinessSharkService.HelloRequest
             {
-                Name = Environment.MachineName
+                Name = await SecureStorage.Default.GetAsync("current_user")
             }/*, headers*/);
 
             ResponseLabel.Text = response.Message;

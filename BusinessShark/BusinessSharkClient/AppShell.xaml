@@ -4,16 +4,86 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:BusinessSharkClient"
-    Title="BusinessSharkClient">
+    Title="BusinessSharkClient"
+    Shell.FlyoutBehavior="Flyout">
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="10" ColumnDefinitions="Auto, *" ColumnSpacing="15">
+                <!-- Иконка -->
+                <Image
+                    Source="{Binding FlyoutIcon}"
+                    WidthRequest="80"
+                    HeightRequest="80"
+                    Aspect="AspectFit"
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Column="1"
+                    Text="{Binding Title}"
+                    VerticalOptions="Center"
+                    FontSize="18"
+                    TextColor="{DynamicResource ShellForegroundColor}" />                
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
 
     <ShellContent
-        Title="Home"
+        Title="Login"
+        IsVisible="False"
         ContentTemplate="{DataTemplate local:View.LoginView}"
         Route="LoginView" />
-
-    <ShellContent
+    
+    <!--<ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="MainPage" />-->
 
+    <FlyoutItem Title="Office" Icon="office80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:View.OfficeView}"
+			Title="Office" />
+    </FlyoutItem>
+    <FlyoutItem Title="Company" Icon="mycompany80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:View.CompanyView}"
+			Title="Company" />
+    </FlyoutItem>
+    <FlyoutItem Title="Construction" Icon="construction80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:View.ConstructionView}"
+			Title="Construction" />
+    </FlyoutItem>
+    <FlyoutItem Title="Analitics" Icon="analitics80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:View.AnaliticsView}"
+			Title="Analitics" />
+    </FlyoutItem>
+    <FlyoutItem Title="Product List" Icon="product_list80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:View.ProductListView}"
+			Title="Product List" />
+    </FlyoutItem>    
+    <FlyoutItem Title="World" Icon="world80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:View.WorldView}"
+			Title="World" />
+    </FlyoutItem>    
+    <FlyoutItem Title="Documentation" Icon="documentation80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:View.DocumentationView}"
+			Title="Documentation" />
+    </FlyoutItem>
+    <FlyoutItem Title="Profile" Icon="profile80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:View.ProfileView}"
+			Title="Profile" />
+    </FlyoutItem>
 </Shell>

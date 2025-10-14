@@ -11,6 +11,7 @@ public partial class LoginView : ContentPage
 	{
 		InitializeComponent();
         _authServiceClient = authServiceClient;
+        Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)
@@ -30,7 +31,10 @@ public partial class LoginView : ContentPage
             else
             {
                 await SecureStorage.Default.SetAsync("access_token", loginResult.AccessToken);
-                await Shell.Current.GoToAsync($"//{nameof(MainPage)}", false);
+                await SecureStorage.Default.SetAsync("current_user", EmailEntry.Text);
+
+                Application.Current.MainPage = new AppShell();
+                //await Shell.Current.GoToAsync($"//{nameof(OfficeView)}", false);
             }
 
         }

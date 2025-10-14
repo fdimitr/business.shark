@@ -71,7 +71,46 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="View\AnaliticsView.xaml.cs">
+	    <DependentUpon>AnaliticsView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\ConstructionView.xaml.cs">
+	    <DependentUpon>ConstructionView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\DocumentationView.xaml.cs">
+	    <DependentUpon>DocumentationView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\WorldView.xaml.cs">
+	    <DependentUpon>WorldView.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="View\AnaliticsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\CompanyView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\ConstructionView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\DocumentationView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\LoginView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\OfficeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\ProductListView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\ProfileView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\WorldView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
