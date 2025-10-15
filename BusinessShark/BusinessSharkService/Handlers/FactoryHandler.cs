@@ -15,7 +15,7 @@ namespace BusinessSharkService.Handlers
 
         public override void StartCalculation(Factory factory)
         {
-            Debug.Assert(factory.ItemDefinition != null, "factory.ItemDefinition != null");
+            Debug.Assert(factory.ProductDefinition != null, "factory.ProductDefinition != null");
             if (factory.WarehouseInput.Count == 0)
             {
                 return; // No product to produce or no resources available
@@ -33,7 +33,7 @@ namespace BusinessSharkService.Handlers
                     // Take resources for production
                     var listForQualityCalc = new List<QualityItem>();
                     
-                    foreach (var unit in factory.ItemDefinition.ProductionUnits ?? Enumerable.Empty<ProductionUnit>())
+                    foreach (var unit in factory.ProductDefinition.ProductionUnits ?? Enumerable.Empty<ComponentUnit>())
                     {
                         var item = factory.WarehouseInput[unit.ComponentDefinitionId];
                         item.Quantity -= unit.ProductionQuantity;
@@ -61,17 +61,17 @@ namespace BusinessSharkService.Handlers
                 var productionCount = (int)Math.Truncate(factory.ProgressProduction);
                 factory.ProgressProduction -= productionCount;
 
-                if (factory.WarehouseOutput.TryGetItem(factory.ItemDefinition.ItemDefinitionId, out Item storedItem))
+                if (factory.WarehouseOutput.TryGetItem(factory.ProductDefinition.ProductDefinitionId, out Product storedItem))
                 {
                     storedItem.ProcessingQuality = factory.ProgressQuality;
                     storedItem.ProcessingQuantity += productionCount;
                 }
                 else
                 {
-                    factory.WarehouseOutput.Add(new Item
+                    factory.WarehouseOutput.Add(new Product
                     {
-                        ItemDefinitionId = factory.ItemDefinitionId,
-                        ItemDefinition = factory.ItemDefinition,
+                        ProductDefinitionId = factory.ProductDefinitionId,
+                        ProductDefinition = factory.ProductDefinition,
                         ProcessingQuantity = productionCount,
                         ProcessingQuality = factory.ProgressQuality
                     });
@@ -86,7 +86,7 @@ namespace BusinessSharkService.Handlers
 
         public override void CompleteCalculation(Factory factory)
         {
-            if (factory.ItemDefinition != null && factory.WarehouseOutput.TryGetItem(factory.ItemDefinitionId, out var item))
+            if (factory.ProductDefinition != null && factory.WarehouseOutput.TryGetItem(factory.ProductDefinitionId, out var item))
             {
                 if (item.ProcessingQuantity == 0)
                 {
@@ -104,11 +104,11 @@ namespace BusinessSharkService.Handlers
 
         private bool PossibleToProduce(Factory factory)
         {
-            if (factory.ItemDefinition == null) return false;
+            if (factory.ProductDefinition == null) return false;
 
-            foreach (var unit in factory.ItemDefinition.ProductionUnits)
+            foreach (var unit in factory.ProductDefinition.ProductionUnits)
             {
-                if (!factory.WarehouseInput.TryGetItem(unit.ComponentDefinitionId, out Item item) ||
+                if (!factory.WarehouseInput.TryGetItem(unit.ComponentDefinitionId, out Product item) ||
                     item.Quantity < unit.ProductionQuantity)
                 {
                     return false;
@@ -120,7 +120,7 @@ namespace BusinessSharkService.Handlers
 
         internal double CalculateProductionQuality(Factory factory, List<QualityItem> qualityItems)
         {
-            var itemDef = factory.ItemDefinition;
+            var itemDef = factory.ProductDefinition;
             if (itemDef is null || factory.Tools is null || factory.Workers is null)
             {
                 return 0;
@@ -134,7 +134,7 @@ namespace BusinessSharkService.Handlers
 
         internal double CalculateProductionQuantity(Factory factory)
         {
-            var itemDef = factory.ItemDefinition;
+            var itemDef = factory.ProductDefinition;
             if (itemDef is null || factory.Tools is null || factory.Workers is null)
             {
                 return 0;

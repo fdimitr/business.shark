@@ -1,7 +1,7 @@
 ﻿using BusinessSharkService.Helpers;
 using Grpc.Core;
 
-namespace BusinessSharkService.Services;
+namespace BusinessSharkService.GrpcServices;
 
 public class AuthGrpcService : AuthService.AuthServiceBase
 {

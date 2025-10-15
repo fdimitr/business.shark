@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BusinessSharkService.DataAccess.Models.Items;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSharkService.DataAccess.Models.Divisions
 {
@@ -11,13 +12,23 @@ namespace BusinessSharkService.DataAccess.Models.Divisions
         [Required]
         [StringLength(30)]
         public required string Name { get; set; }
+
+        [StringLength(300)]
         public string? Description { get; set; }
+
+        [Comment("The volume capacity of the division warehouse")]
+        public int VolumeCapacity { get; set; }
+
+        [Comment("The cost of renting this division per month. Based on the city metric and city location")]
         public float RentalCost { get; set; }
 
-        public List<Item> WarehouseInput = new();  //to
-        public List<Item> WarehouseOutput = new(); //from
+        [Comment("Input warehouse for the division")]
+        public List<Product> WarehouseInput = new();  //to
 
-        public List<Route> Routes { get; set; } = new();
+        [Comment("Output warehouse for the division")]
+        public List<Product> WarehouseOutput = new(); //from
+
+        public List<DeliveryRoute> DeliveryRoutes { get; set; } = new();
 
 
     }

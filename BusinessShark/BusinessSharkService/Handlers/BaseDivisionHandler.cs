@@ -11,27 +11,27 @@ namespace BusinessSharkService.Handlers
 
         public void StartTransferItems(T baseDivision)
         {
-            foreach (var route in baseDivision.Routes)
+            foreach (var route in baseDivision.DeliveryRoutes)
             {
                 var fromDivision = worldHandler.Divisions[route.DivisionId];
-                if (fromDivision.WarehouseOutput.TryGetItem(route.ItemDefinitionId, out var item))
+                if (fromDivision.WarehouseOutput.TryGetItem(route.ProductDefinitionId, out var item))
                 {
                     if (item is { Quantity: > 0 })
                     {
-                        if (!baseDivision.WarehouseInput.TryGetItem(route.ItemDefinitionId, out var targetItem))
+                        if (!baseDivision.WarehouseInput.TryGetItem(route.ProductDefinitionId, out var targetItem))
                         {
-                            targetItem = (Item)item.Clone();
+                            targetItem = (Product)item.Clone();
                         }
 
-                        var sourceItem = fromDivision.WarehouseOutput[route.ItemDefinitionId];
+                        var sourceItem = fromDivision.WarehouseOutput[route.ProductDefinitionId];
 
-                        if (item.Quantity >= route.TransferringCount)
+                        if (item.Quantity >= route.DeliveryCount)
                         {
                             targetItem.ProcessingQuality =
-                                CalculateWarehouseQuality(targetItem.ProcessingQuantity, targetItem.ProcessingQuality, route.TransferringCount, sourceItem.Quality);
+                                CalculateWarehouseQuality(targetItem.ProcessingQuantity, targetItem.ProcessingQuality, route.DeliveryCount, sourceItem.Quality);
 
-                            targetItem.ProcessingQuantity += route.TransferringCount;
-                            sourceItem.Quantity -= route.TransferringCount;
+                            targetItem.ProcessingQuantity += route.DeliveryCount;
+                            sourceItem.Quantity -= route.DeliveryCount;
                         }
                         else
                         {
@@ -51,9 +51,9 @@ namespace BusinessSharkService.Handlers
 
         public void CompleteTransferItems(T baseDivision)
         {
-            foreach (var route in baseDivision.Routes)
+            foreach (var route in baseDivision.DeliveryRoutes)
             {
-                if (baseDivision.WarehouseInput.TryGetItem(route.ItemDefinitionId, out var item))
+                if (baseDivision.WarehouseInput.TryGetItem(route.ProductDefinitionId, out var item))
                 {
                     if (item.ProcessingQuantity > 0)
                     {
@@ -79,7 +79,7 @@ namespace BusinessSharkService.Handlers
             return weightedSum / totalWeight;
         }
 
-        internal static double CalculateWarehouseQuality(Item item)
+        internal static double CalculateWarehouseQuality(Product item)
         {
             return CalculateWarehouseQuality(item.Quantity, item.Quality, item.ProcessingQuantity, item.ProcessingQuality);
         }

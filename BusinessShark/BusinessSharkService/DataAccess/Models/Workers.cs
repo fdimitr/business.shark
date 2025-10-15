@@ -1,12 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace BusinessSharkService.DataAccess.Models
 {
+    [Comment("Represents workers involved in production, affecting quantity and quality based on technology level.")]
     public class Workers
     {
         [Key]
         public int WorkersId { get; set; }
+
+        [Comment("The total number of workers involved in production.")]
         public int TotalQuantity { get; set; }
+
+        [Comment("Technology level of the workers, influencing their effectiveness.")]
         public double TechLevel { get; set; } = 1;
 
     }

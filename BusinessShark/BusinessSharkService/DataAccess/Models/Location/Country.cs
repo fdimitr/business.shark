@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace BusinessSharkService.DataAccess.Models.Location
 {
+    [Comment("Represent countries with properties and list cities for each city")]
     public class Country
     {
         [Key]

@@ -1,12 +1,28 @@
+using BusinessSharkService.Constants;
+using BusinessSharkService.DataAccess;
 using BusinessSharkService.Helpers;
-using BusinessSharkService.Services;
+using BusinessSharkService.GrpcServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
+using BusinessSharkService.CoreServices;
+using BusinessSharkService.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
+
+//For Entity Framework DbContext
+DbContextOptions<DataContext> dbContextOptions = new DbContextOptionsBuilder<DataContext>()
+    .UseNpgsql(builder.Configuration.GetValue<string>(ConfigKey.ConnectionString)).Options;
+
+builder.Services.AddSingleton(dbContextOptions);
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetValue<string>(ConfigKey.ConnectionString));
+});
+
 
 builder.Services.AddCors(options =>
 {
@@ -57,6 +73,9 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddSingleton(new JwtTokenService(jwtKey, jwtIssuer));
 builder.Services.AddGrpc();
+
+builder.Services.AddScoped<WorldHandler>();
+builder.Services.AddHostedService<CalculationService>();
 
 var app = builder.Build();
 

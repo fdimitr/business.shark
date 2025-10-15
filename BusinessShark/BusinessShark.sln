@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9 d17.14
+VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessSharkService", "BusinessSharkService\BusinessSharkService.csproj", "{A481A35F-C685-4AB0-AE94-442126A583B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessSharkShared", "BusinessSharkShared\BusinessSharkShared.csproj", "{C13A0506-EBA6-47CE-A28C-EDC632ED1789}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessSharkClient", "BusinessSharkClient\BusinessSharkClient.csproj", "{238FE8C2-F121-4458-94AE-F3AA6AC0AFC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessSharkTests", "BusinessSharkTests\BusinessSharkTests.csproj", "{607E137F-25F3-4853-A1A0-29582012A660}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +30,10 @@ Global
 		{238FE8C2-F121-4458-94AE-F3AA6AC0AFC2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{238FE8C2-F121-4458-94AE-F3AA6AC0AFC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{238FE8C2-F121-4458-94AE-F3AA6AC0AFC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{607E137F-25F3-4853-A1A0-29582012A660}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{607E137F-25F3-4853-A1A0-29582012A660}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{607E137F-25F3-4853-A1A0-29582012A660}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{607E137F-25F3-4853-A1A0-29582012A660}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
