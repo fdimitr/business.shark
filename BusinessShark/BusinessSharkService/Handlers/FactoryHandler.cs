@@ -15,7 +15,7 @@ namespace BusinessSharkService.Handlers
 
         public override void StartCalculation(Factory factory)
         {
-            Debug.Assert(factory.ProductDefinition != null, "factory.ProductDefinition != null");
+            Debug.Assert(factory.ProductDefinition != null);
             if (factory.WarehouseInput.Count == 0)
             {
                 return; // No product to produce or no resources available
@@ -33,7 +33,7 @@ namespace BusinessSharkService.Handlers
                     // Take resources for production
                     var listForQualityCalc = new List<QualityItem>();
                     
-                    foreach (var unit in factory.ProductDefinition.ProductionUnits ?? Enumerable.Empty<ComponentUnit>())
+                    foreach (var unit in factory.ProductDefinition.ProductionUnits)
                     {
                         var item = factory.WarehouseInput[unit.ComponentDefinitionId];
                         item.Quantity -= unit.ProductionQuantity;
@@ -118,7 +118,7 @@ namespace BusinessSharkService.Handlers
             return true;
         }
 
-        internal double CalculateProductionQuality(Factory factory, List<QualityItem> qualityItems)
+        internal static double CalculateProductionQuality(Factory factory, List<QualityItem> qualityItems)
         {
             var itemDef = factory.ProductDefinition;
             if (itemDef is null || factory.Tools is null || factory.Workers is null)
@@ -132,7 +132,7 @@ namespace BusinessSharkService.Handlers
                    + factory.Workers!.TechLevel * itemDef.WorkerImpactQuality;
         }
 
-        internal double CalculateProductionQuantity(Factory factory)
+        internal static double CalculateProductionQuantity(Factory factory)
         {
             var itemDef = factory.ProductDefinition;
             if (itemDef is null || factory.Tools is null || factory.Workers is null)

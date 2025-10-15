@@ -66,7 +66,6 @@ namespace BusinessSharkService.Handlers
                     }
                 }
             }
-
         }
 
         internal static double CalculateWarehouseQuality(double existingQuantity, double existingQuality, double addedQuantity, double addedQuality)
