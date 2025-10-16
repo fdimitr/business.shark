@@ -2,10 +2,10 @@
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Handlers;
-using NUnit.Framework;
 
 namespace BusinessSharkTests.Handlers
 {
+    [TestFixture]
     public partial class FactoryHandlerTests
     {
         private Factory CreateFactory(

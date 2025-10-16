@@ -2,12 +2,13 @@
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.DataAccess.Models.Location;
+using BusinessSharkService.Handlers.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Frozen;
 
 namespace BusinessSharkService.Handlers
 {
-    public class WorldHandler
+    public class WorldHandler : IWorldHandler
     {
         public List<Country> Countries { get; set; } = new();
 

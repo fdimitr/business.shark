@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using BusinessSharkService.CoreServices;
 using BusinessSharkService.Handlers;
+using BusinessSharkService.Handlers.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
@@ -74,7 +75,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddSingleton(new JwtTokenService(jwtKey, jwtIssuer));
 builder.Services.AddGrpc();
 
-builder.Services.AddScoped<WorldHandler>();
+builder.Services.AddScoped<IWorldHandler, WorldHandler>();
 builder.Services.AddHostedService<CalculationService>();
 
 var app = builder.Build();

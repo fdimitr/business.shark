@@ -1,10 +1,11 @@
 ﻿using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
+using BusinessSharkService.Handlers.Interfaces;
 
 namespace BusinessSharkService.Handlers
 {
-    public abstract class BaseDivisionHandler<T>(WorldHandler worldHandler) where T: BaseDivision
+    public abstract class BaseDivisionHandler<T>(IWorldHandler worldHandler) where T: BaseDivision
     {
         public abstract void StartCalculation(T baseDivision);
         public abstract void CompleteCalculation(T baseDivision);

@@ -1,10 +1,12 @@
 ﻿using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
+using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Handlers;
 using NUnit.Framework;
 
 namespace BusinessSharkTests.Handlers
 {
+    [TestFixture]
     public partial class FactoryHandlerTests
     {
         private Factory CreateFactory(
@@ -49,6 +51,8 @@ namespace BusinessSharkTests.Handlers
                 factoryTechLevel: 2,
                 toolTechLevel: null,
                 workerTechLevel: 4);
+
+            factory.ProductDefinition = ProductDefinitions[ProductType.Bed];
             var result = FactoryHandler.CalculateProductionQuantity(factory);
             Assert.That(result, Is.EqualTo(0));
         }
@@ -60,6 +64,8 @@ namespace BusinessSharkTests.Handlers
                 factoryTechLevel: 2,
                 toolTechLevel: 3,
                 workerTechLevel: null);
+
+            factory.ProductDefinition = ProductDefinitions[ProductType.Bed];
             var result = FactoryHandler.CalculateProductionQuantity(factory);
             Assert.That(result, Is.EqualTo(0));
         }
@@ -72,6 +78,15 @@ namespace BusinessSharkTests.Handlers
                 factoryTechLevel: 2,
                 toolTechLevel: 3,
                 workerTechLevel: 4);
+            factory.ProductDefinition = new ProductDefinition
+            {
+                ProductDefinitionId = (int)ProductType.Bed,
+                Name = ProductType.Bed.ToString(),
+                BaseProductionCount = 10,
+                TechImpactQuantity = 1.5,
+                ToolImpactQuantity = 2,
+                WorkerImpactQuantity = 0.5
+            };
 
             // When
             var result = FactoryHandler.CalculateProductionQuantity(factory);
@@ -89,6 +104,17 @@ namespace BusinessSharkTests.Handlers
                 factoryTechLevel: 5,
                 toolTechLevel: 7,
                 workerTechLevel: 9);
+
+            factory.ProductDefinition = new ProductDefinition
+            {
+                ProductDefinitionId = (int)ProductType.Bed,
+                Name = ProductType.Bed.ToString(),
+                BaseProductionCount = 1,
+                TechImpactQuantity = 0,
+                ToolImpactQuantity = 0,
+                WorkerImpactQuantity = 0
+            };
+
             var result = FactoryHandler.CalculateProductionQuantity(factory);
             Assert.That(result, Is.EqualTo(0));
         }

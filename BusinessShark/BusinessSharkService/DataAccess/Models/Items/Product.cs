@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 namespace BusinessSharkService.DataAccess.Models.Items
 {
     [Comment("They represent product located in warehouses and participating in production")]
+    [PrimaryKey(nameof(DivisionId), nameof(ProductDefinitionId))]
     public class Product : ICloneable
     {
-        [Key] 
-        public int ProductId { get; set; }
+        public int DivisionId { get; set; }
 
         public int ProductDefinitionId { get; set; }
         public ProductDefinition? ProductDefinition { get; set; }

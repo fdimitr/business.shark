@@ -2,10 +2,11 @@
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
+using BusinessSharkService.Handlers.Interfaces;
 
 namespace BusinessSharkService.Handlers
 {
-    public class FactoryHandler(WorldHandler worldHandler) : BaseDivisionHandler<Factory>(worldHandler)
+    public class FactoryHandler(IWorldHandler worldHandler) : BaseDivisionHandler<Factory>(worldHandler)
     {
         internal struct QualityItem(double quality, double qualityImpact)
         {
@@ -35,7 +36,7 @@ namespace BusinessSharkService.Handlers
                     
                     foreach (var unit in factory.ProductDefinition.ProductionUnits)
                     {
-                        var item = factory.WarehouseInput[unit.ComponentDefinitionId];
+                        factory.WarehouseInput.TryGetItem(unit.ComponentDefinitionId, out var item);
                         item.Quantity -= unit.ProductionQuantity;
                         listForQualityCalc.Add(new QualityItem(item.Quality, unit.QualityImpact));
                     }
