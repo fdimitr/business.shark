@@ -1,9 +1,12 @@
-﻿using BusinessSharkService.DataAccess.Models.Items;
+﻿using BusinessSharkService;
+using BusinessSharkService.DataAccess.Models.Items;
 
 namespace BusinessSharkTests.Handlers
 {
     public class BaseHandlerTests
     {
+        protected const float Tolerant = 0.0001f;
+
         protected Dictionary<ProductType, ProductDefinition> ProductDefinitions =
             new Dictionary<ProductType, ProductDefinition>
             {
@@ -25,7 +28,7 @@ namespace BusinessSharkTests.Handlers
 
                         BaseProductionPrice = 0,
                         DeliveryPrice = new decimal(40.0),
-                        ProductionUnits =
+                        ComponentUnits =
                         [
                             new ComponentUnit
                             {

@@ -1,4 +1,5 @@
-﻿using BusinessSharkService.DataAccess.Models;
+﻿using BusinessSharkService;
+using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Handlers;
@@ -65,7 +66,7 @@ namespace BusinessSharkTests.Handlers
         [Test]
         public void CalculateProductionQuality_ReturnsSum_WhenQualityItemsEmpty()
         {
-            var def = ProductDefinitions[ProductType.Bed];
+            var def = (ProductDefinition)ProductDefinitions[ProductType.Bed].Clone();
             def.TechImpactQuality = 1.5;
             def.ToolImpactQuality = 2.0;
             def.WorkerImpactQuality = 0.5;
@@ -81,7 +82,7 @@ namespace BusinessSharkTests.Handlers
         [Test]
         public void CalculateProductionQuality_ComputesFullFormula_WithMultipleQualityItems()
         {
-            var def = ProductDefinitions[ProductType.Bed];
+            var def = (ProductDefinition)ProductDefinitions[ProductType.Bed].Clone();
             def.TechImpactQuality = 1.5;
             def.ToolImpactQuality = 2.0;
             def.WorkerImpactQuality = 0.5;

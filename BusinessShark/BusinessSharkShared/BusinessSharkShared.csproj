@@ -15,10 +15,17 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>    
+    <None Remove="Protos\greet.proto" />
+    <None Remove="Protos\auth.proto" />
+    <None Remove="Protos\product_definition.proto" />
+  </ItemGroup>
+  
   <ItemGroup>
     <SupportedPlatform Include="browser" />
     <Protobuf Include="Protos\greet.proto"/>
     <Protobuf Include="Protos\auth.proto"/>
+    <Protobuf Include="Protos\product_definition.proto"/>
   </ItemGroup>
 
 </Project>

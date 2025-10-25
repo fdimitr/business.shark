@@ -1,13 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessSharkService.DataAccess.Models.Items
 {
     [Comment("They represent product definition and properties")]
-    public class ProductDefinition
+    public class ProductDefinition : ICloneable
     {
         [Key]
         public int ProductDefinitionId { get; set; }
+
+        public int ProductCategoryId { get; set; }
+
+        public ProductCategory? Category { get; set; }
 
         [Required]
         [StringLength(30)]
@@ -18,7 +23,7 @@ namespace BusinessSharkService.DataAccess.Models.Items
         public double Volume { get; set; }
 
         [Comment("Components of production item")]
-        public List<ComponentUnit> ProductionUnits { get; set; } = new();
+        public List<ComponentUnit> ComponentUnits { get; set; } = new();
 
         // Production counts might be fractional; double is safer for accumulation.
         [Comment("The basic quantity of production")]
@@ -50,21 +55,50 @@ namespace BusinessSharkService.DataAccess.Models.Items
         [Comment("Сoefficient of influence of workers on the quantity of production of a given item")]
         public double WorkerImpactQuantity { get; set; }
 
+        [StringLength(50)]
+        public string? IconPath { get; set; }
+
+        [StringLength(50)]
+        public string? ImagePath { get; set; }
+
+        [Timestamp]
+        [Column("xmin", TypeName = "xid")]
+        public uint TimeStamp { get; set; }
+
         // Thresholds: monetary -> decimal, attractiveness coefficient -> double.
-        public double MinAttractivenessThreshold { get; set; } = 0d;
-        public decimal MaxPriceThreshold { get; set; } = decimal.MaxValue;
+        //public double MinAttractivenessThreshold { get; set; } = 0d;
+        //public decimal MaxPriceThreshold { get; set; } = decimal.MaxValue;
 
         // Demand coefficient
         public double Necessity { get; set; }
 
+
+
+
         public void CheckQualityTotalImpact()
         {
-            var totalImpact = ProductionUnits.Sum(p => p.QualityImpact)
+            var totalImpact = ComponentUnits.Sum(p => p.QualityImpact)
                               + TechImpactQuality
                               + ToolImpactQuality
                               + WorkerImpactQuality;
             if (Math.Abs(totalImpact - 1d) > 1e-9)
                 throw new Exception($"Item: {Name}. The total coefficient of influence on quality should be equal to 1. But now it equals {totalImpact}");
+        }
+
+        public object Clone()
+        {
+            var clone = (ProductDefinition)this.MemberwiseClone();
+            // Deep clone ProductionUnits
+            clone.ComponentUnits = ComponentUnits
+                .Select(unit => new ComponentUnit
+                {
+                    ProductDefinitionId = unit.ProductDefinitionId,
+                    ComponentDefinitionId = unit.ComponentDefinitionId,
+                    ProductionQuantity = unit.ProductionQuantity,
+                    QualityImpact = unit.QualityImpact
+                })
+                .ToList();
+            return clone;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace BusinessSharkService.Handlers
                     // Take resources for production
                     var listForQualityCalc = new List<QualityItem>();
                     
-                    foreach (var unit in factory.ProductDefinition.ProductionUnits)
+                    foreach (var unit in factory.ProductDefinition.ComponentUnits)
                     {
                         factory.WarehouseInput.TryGetItem(unit.ComponentDefinitionId, out var item);
                         item.Quantity -= unit.ProductionQuantity;
@@ -107,7 +107,7 @@ namespace BusinessSharkService.Handlers
         {
             if (factory.ProductDefinition == null) return false;
 
-            foreach (var unit in factory.ProductDefinition.ProductionUnits)
+            foreach (var unit in factory.ProductDefinition.ComponentUnits)
             {
                 if (!factory.WarehouseInput.TryGetItem(unit.ComponentDefinitionId, out Product item) ||
                     item.Quantity < unit.ProductionQuantity)

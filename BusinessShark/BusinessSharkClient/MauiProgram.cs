@@ -1,4 +1,6 @@
-﻿using Grpc.Net.Client;
+﻿using BusinessSharkClient.Logic;
+using Grpc.Core.Interceptors;
+using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
@@ -29,10 +31,12 @@ namespace BusinessSharkClient
             {
                 HttpHandler = handler
             });
+            var invoker = channel.Intercept(new Interceptors.SecurityInterceptor());
 
-            builder.Services.AddScoped(services => new BusinessSharkService.Greeter.GreeterClient(channel));
+            builder.Services.AddScoped(services => new BusinessSharkService.Greeter.GreeterClient(invoker));
             builder.Services.AddScoped(services => new BusinessSharkService.AuthService.AuthServiceClient(channel));
-
+            builder.Services.AddScoped(services => new BusinessSharkService.ProductDefinitionService.ProductDefinitionServiceClient(invoker));
+            builder.Services.AddSingleton<GlobalDataProvider>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

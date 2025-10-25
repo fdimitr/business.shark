@@ -76,6 +76,7 @@ builder.Services.AddSingleton(new JwtTokenService(jwtKey, jwtIssuer));
 builder.Services.AddGrpc();
 
 builder.Services.AddScoped<IWorldHandler, WorldHandler>();
+builder.Services.AddScoped<ProductDefinitionHandler>();
 builder.Services.AddHostedService<CalculationService>();
 
 var app = builder.Build();
@@ -87,6 +88,7 @@ app.UseCors();
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 
 // Configure the HTTP request pipeline.
+app.MapGrpcService<ProductDefinitionGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<AuthGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<GreeterService>().EnableGrpcWeb();
 

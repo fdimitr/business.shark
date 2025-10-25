@@ -33,10 +33,10 @@
         ContentTemplate="{DataTemplate local:View.LoginView}"
         Route="LoginView" />
     
-    <!--<ShellContent
+    <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />-->
+        Route="MainPage" />
 
     <FlyoutItem Title="Office" Icon="office80x80.png" >
         <ShellContent

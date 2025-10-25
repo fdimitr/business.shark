@@ -24,7 +24,7 @@ namespace BusinessSharkService.Handlers
                             targetItem = (Product)item.Clone();
                         }
 
-                        var sourceItem = fromDivision.WarehouseOutput[route.ProductDefinitionId];
+                        fromDivision.WarehouseOutput.TryGetItem(route.ProductDefinitionId, out var sourceItem);
 
                         if (item.Quantity >= route.DeliveryCount)
                         {

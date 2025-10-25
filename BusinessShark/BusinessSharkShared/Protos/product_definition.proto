@@ -1,0 +1,41 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "BusinessSharkService";
+
+package product_definition;
+
+service ProductDefinitionService {
+  rpc Sync (ProductDefinitionRequest) returns (ProductDefinitionResponse);
+}
+
+message ProductDefinitionRequest {
+  uint32 Timestamp = 1;
+}
+
+message ComponentUnitGrpc {
+  int32 ComponentDefinitionId = 1;     
+  double ProductionQuantity = 2;
+  double QualityImpact = 3;
+}
+
+message ProductDefinitionGrpc {
+  int32	ProductDefinitionId = 1;
+  string Name = 2;
+  double Volume = 3;
+  double BaseProductionCount = 4;
+  double BaseProductionPrice = 5;
+  double TechImpactQuality = 6;
+  double ToolImpactQuality = 7;
+  double WorkerImpactQuality = 8;	
+  double TechImpactQuantity = 9;
+  double ToolImpactQuantity = 10;
+  double WorkerImpactQuantity = 11;
+  double DeliveryPrice = 12;
+  bytes Icon = 13;
+  bytes Image = 14;
+  repeated ComponentUnitGrpc ComponentUnits = 15;
+}
+
+message ProductDefinitionResponse {
+	repeated ProductDefinitionGrpc ProductDefinitions = 1;
+}

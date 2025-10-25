@@ -27,5 +27,6 @@ namespace BusinessSharkService.DataAccess.Models.Location
         public int LandTax { get; set; } = 0;
 
         public List<Factory> Factories { get; set; } = new();
+        public List<Storage> Storages { get; set; } = new();
     }
 }

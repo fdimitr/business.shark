@@ -1,4 +1,5 @@
-﻿using BusinessSharkService.DataAccess.Models;
+﻿using BusinessSharkService;
+using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Handlers;
@@ -9,6 +10,8 @@ namespace BusinessSharkTests.Handlers
     [TestFixture]
     public partial class FactoryHandlerTests
     {
+        private const float Tolerance = 0.0001f;
+
         private Factory CreateFactory(
             double factoryTechLevel,
             double? toolTechLevel,

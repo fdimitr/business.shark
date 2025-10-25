@@ -9,7 +9,7 @@ namespace BusinessSharkService.Handlers.Interfaces
     {
         List<Country> Countries { get; set; }
         Dictionary<int, BaseDivision> Divisions { get; set; }
-        FrozenDictionary<int, ProductDefinition> ItemDefinitions { get; set; }
+        FrozenDictionary<int, ProductDefinition> ProductDefinitions { get; set; }
 
         Task Calculate(CancellationToken stoppingToken);
         void FillDivisions();

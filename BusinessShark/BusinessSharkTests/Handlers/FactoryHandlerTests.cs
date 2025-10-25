@@ -1,4 +1,5 @@
-﻿using BusinessSharkService.DataAccess.Models;
+﻿using BusinessSharkService;
+using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
@@ -11,8 +12,6 @@ namespace BusinessSharkTests.Handlers
     [TestFixture]
     public partial class FactoryHandlerTests : BaseHandlerTests
     {
-        private const float Tolerant = 0.0001f;
-
         private Factory CreateFactoryWithResources(ProductDefinition productDef, float techLevel = 1.0f, float toolTechLevel = 1.0f, float workerTechLevel = 1.0f)
         {
             var tools = new Tools { TechLevel = toolTechLevel, TotalQuantity = 1 };
@@ -57,5 +56,128 @@ namespace BusinessSharkTests.Handlers
             Assert.That(item.ProcessingQuantity, Is.EqualTo(1));
             Assert.That(item.ProcessingQuality, Is.EqualTo(2.6).Within(Tolerant));
         }
+
+        [Test]
+        public void StartCalculation_DoesNotProduce_WhenResourcesInsufficient()
+        {
+            // Arrange
+            var factory = CreateFactoryWithResources(ProductDefinitions[ProductType.Bed]);
+            factory.WarehouseInput[(int)ProductType.Wood].Quantity = 0; // Insufficient wood
+
+            var worldHandlerMock = new Mock<IWorldHandler>();
+            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+
+            // Act
+            factoryHandler.StartCalculation(factory);
+            
+            // Assert
+            Assert.That(factory.WarehouseOutput, Is.Empty);
+        }
+
+        [Test]
+        public void StartCalculation_DoesNotProduce_WhenResourcesAbsent()
+        {
+            // Arrange
+            var factory = CreateFactoryWithResources(ProductDefinitions[ProductType.Bed]);
+            factory.WarehouseInput.Clear(); // No resources
+
+            var worldHandlerMock = new Mock<IWorldHandler>();
+            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+
+            // Act
+            factoryHandler.StartCalculation(factory);
+
+            // Assert
+            Assert.That(factory.WarehouseOutput, Is.Empty);
+        }
+
+        [Test]
+        public void StartCalculation_CompletesProduction_In_Few_Cycles()
+        {
+            // Arrange
+            var productDef = (ProductDefinition)ProductDefinitions[ProductType.Bed].Clone();
+            productDef.BaseProductionCount = 0.5;
+            var factory = CreateFactoryWithResources(productDef);
+
+            var worldHandlerMock = new Mock<IWorldHandler>();
+            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+
+            // Act
+            factoryHandler.StartCalculation(factory);
+            factoryHandler.CompleteCalculation(factory);
+            factoryHandler.StartCalculation(factory);
+            factoryHandler.CompleteCalculation(factory);
+
+            // Assert
+            factory.WarehouseOutput.TryGetItem((int)ProductType.Bed, out var item);
+            Assert.That(item, Is.Not.Null);
+            Assert.That(item.ProcessingQuantity, Is.EqualTo(0));
+            Assert.That(item.ProcessingQuality, Is.EqualTo(0));
+            Assert.That(item.Quantity, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void StartCalculation_OverProduction_TwoCycles_WithoutChangesInItems()
+        {
+            // Arrange
+            var productDef = (ProductDefinition)ProductDefinitions[ProductType.Bed].Clone();
+            productDef.BaseProductionCount = 0.5;
+            var factory = CreateFactoryWithResources(productDef);
+            factory.Workers!.TechLevel = 3.0; // Increase worker tech level to boost production
+            factory.Tools!.TechLevel = 3.0;   // Increase tool tech level to boost production
+
+            var worldHandlerMock = new Mock<IWorldHandler>();
+            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+
+            // Act
+            factoryHandler.StartCalculation(factory);
+            factoryHandler.CompleteCalculation(factory);
+            factoryHandler.StartCalculation(factory);
+            factoryHandler.CompleteCalculation(factory);
+
+
+            // Assert
+            factory.WarehouseOutput.TryGetItem((int)ProductType.Bed, out var item);
+            Assert.That(item, Is.Not.Null);
+            Assert.That(item.Quantity, Is.EqualTo(2));
+            Assert.That(factory.ProgressProduction, Is.EqualTo(0.4).Within(Tolerance));
+        }
+
+
+        [Test]
+        public void StartCalculation_OverProduction_TwoCycles_WithChangesInItems()
+        {
+            // Arrange
+            var productDef = (ProductDefinition)ProductDefinitions[ProductType.Bed].Clone();
+            productDef.BaseProductionCount = 0.5;
+            var factory = CreateFactoryWithResources(productDef);
+            factory.Workers!.TechLevel = 3.0; // Increase worker tech level to boost production
+            factory.Tools!.TechLevel = 3.0;   // Increase tool tech level to boost production
+
+            var worldHandlerMock = new Mock<IWorldHandler>();
+            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+
+
+            // Act
+            factory.WarehouseInput[(int)ProductType.Wood].Quality = 2.0f;
+            factoryHandler.StartCalculation(factory);
+            factoryHandler.CompleteCalculation(factory);
+
+            var firstCycleQuality = factory.ProgressQuality;
+
+            factory.WarehouseInput[(int)ProductType.Wood].Quality = 4.0f;
+            factoryHandler.StartCalculation(factory);
+            factoryHandler.CompleteCalculation(factory);
+
+            var secondCycleQuality = factory.ProgressQuality;
+
+            // Assert
+            factory.WarehouseOutput.TryGetItem((int)ProductType.Bed, out var item);
+            Assert.That(item, Is.Not.Null);
+            Assert.That(firstCycleQuality, Is.LessThan(secondCycleQuality));
+            Assert.That(item.Quality, Is.EqualTo((firstCycleQuality + secondCycleQuality) / 2).Within(Tolerance));
+            Assert.That(factory.ProgressProduction, Is.EqualTo(0.4).Within(Tolerance));
+        }
+
     }
 }

@@ -11,7 +11,6 @@ namespace BusinessSharkService.DataAccess.Models.Items
         public int ProductDefinitionId { get; set; }
 
         [Comment("The identifier of the product that is involved in the production process as a component.")]
-        [ForeignKey("ProductDefinitionId")]
         public int ComponentDefinitionId { get; set; }
 
         [Comment("The amount of component required to produce one unit of item")]
@@ -19,5 +18,7 @@ namespace BusinessSharkService.DataAccess.Models.Items
 
         [Comment("The impact of this component on the quality of the final product")]
         public double QualityImpact { get; set; }
+
+        public ProductDefinition? ProductDefinition { get; set; }
     }
 }
