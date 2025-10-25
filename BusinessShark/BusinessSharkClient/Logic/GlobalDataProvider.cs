@@ -6,22 +6,42 @@ namespace BusinessSharkClient.Logic
     public class GlobalDataProvider
     {
         public List<ProductDefinitionModel> ProductDefinitions { get; set; } = new List<ProductDefinitionModel>();
+        public List<ProductCategoryModel> ProductCategories { get; set; } = new List<ProductCategoryModel>();
 
         private ProductDefinitionService.ProductDefinitionServiceClient _productDefinitionClient;
-        private Google.Protobuf.Collections.RepeatedField<ProductDefinitionGrpc>? _productDefinitionsGrpc = null;
+        private ProductCategoryService.ProductCategoryServiceClient _productCategoryClient;
 
-        public GlobalDataProvider(ProductDefinitionService.ProductDefinitionServiceClient productDefinitionClient)
+        public GlobalDataProvider(ProductDefinitionService.ProductDefinitionServiceClient productDefinitionClient,
+            ProductCategoryService.ProductCategoryServiceClient productCategoryClient)
         {
-            ; _productDefinitionClient = productDefinitionClient;
+            _productDefinitionClient = productDefinitionClient;
+            _productCategoryClient = productCategoryClient;
         }
 
         public async Task LoadData()
         {
-            var response = await _productDefinitionClient.SyncAsync(new ProductDefinitionRequest { Timestamp = 0 });
-            if (response == null) return;
+            // Product Category
+            var responseCategory = await _productCategoryClient.LoadAsync(new Google.Protobuf.WellKnownTypes.Empty());
+            if (responseCategory == null) return;
+
+            ProductCategories.Clear();
+            foreach (var catGrpc in responseCategory.ProductCategories)
+            {
+                var catModel = new ProductCategoryModel
+                {
+                    ProductCategoryId = catGrpc.ProductCategoryId,
+                    Name = catGrpc.Name,
+                    SortOrder = catGrpc.SortOrder
+                };
+                ProductCategories.Add(catModel);
+            }
+
+            // Product Definition
+            var responseDefinition = await _productDefinitionClient.SyncAsync(new ProductDefinitionRequest { Timestamp = 0 });
+            if (responseDefinition == null) return;
 
             ProductDefinitions.Clear();
-            foreach (var defGrpc in response.ProductDefinitions)
+            foreach (var defGrpc in responseDefinition.ProductDefinitions)
             {
                 var defModel = new ProductDefinitionModel(defGrpc.ProductDefinitionId, defGrpc.Name)
                 {

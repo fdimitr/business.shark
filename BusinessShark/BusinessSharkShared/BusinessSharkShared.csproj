@@ -19,6 +19,7 @@
     <None Remove="Protos\greet.proto" />
     <None Remove="Protos\auth.proto" />
     <None Remove="Protos\product_definition.proto" />
+    <None Remove="Protos\category.proto" />
   </ItemGroup>
   
   <ItemGroup>
@@ -26,6 +27,7 @@
     <Protobuf Include="Protos\greet.proto"/>
     <Protobuf Include="Protos\auth.proto"/>
     <Protobuf Include="Protos\product_definition.proto"/>
+    <Protobuf Include="Protos\category.proto"/>
   </ItemGroup>
 
 </Project>

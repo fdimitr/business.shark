@@ -1,0 +1,20 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "BusinessSharkService";
+import "google/protobuf/empty.proto";
+
+package category;
+
+service ProductCategoryService {
+  rpc Load(google.protobuf.Empty) returns (ProductCategoryResponse);
+}
+
+message ProductCategoryGrpc {
+  int32	ProductCategoryId = 1;
+  string Name = 2;
+  int32  SortOrder = 3;
+}
+
+message ProductCategoryResponse {
+	repeated ProductCategoryGrpc ProductCategories = 1;
+}

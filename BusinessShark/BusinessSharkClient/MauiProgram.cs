@@ -36,6 +36,8 @@ namespace BusinessSharkClient
             builder.Services.AddScoped(services => new BusinessSharkService.Greeter.GreeterClient(invoker));
             builder.Services.AddScoped(services => new BusinessSharkService.AuthService.AuthServiceClient(channel));
             builder.Services.AddScoped(services => new BusinessSharkService.ProductDefinitionService.ProductDefinitionServiceClient(invoker));
+            builder.Services.AddScoped(services => new BusinessSharkService.ProductCategoryService.ProductCategoryServiceClient(invoker));
+
             builder.Services.AddSingleton<GlobalDataProvider>();
 #if DEBUG
             builder.Logging.AddDebug();
