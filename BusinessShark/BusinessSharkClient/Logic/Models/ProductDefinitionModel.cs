@@ -2,15 +2,9 @@
 {
     public class ProductDefinitionModel
     {
-        public ProductDefinitionModel(int id, string name) 
-        { 
-            ProductCategoryId = id;
-            Name = name;
-        }
-
         public int ProductDefinitionId { get; set; }
         public int ProductCategoryId { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public double Volume { get; set; }
         public List<ComponentUnitModel> ComponentUnits { get; set; } = new();
 
@@ -21,8 +15,8 @@
         public double TechImpactQuality { get; set; }
         public double ToolImpactQuality { get; set; }
         public double WorkerImpactQuality { get; set; }
-        public double TechImpactQuantity { get; set; }
 
+        public double TechImpactQuantity { get; set; }
         public double ToolImpactQuantity { get; set; }
         public double WorkerImpactQuantity { get; set; }
 

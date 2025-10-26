@@ -9,6 +9,23 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ControlTemplate x:Key="PageWithStatusBar">
+                <Grid RowDefinitions="*,Auto">
+                    <ContentPresenter Grid.Row="0" />
+                    <Border Grid.Row="1" 
+                            BackgroundColor="{DynamicResource Secondary}"
+                            Stroke="{DynamicResource Secondary}"
+                            Padding="5">
+                        <HorizontalStackLayout HorizontalOptions="Fill" VerticalOptions="Center">
+                        <!--<Label Text="{Binding Source={x:Reference appShell}, Path=BindingContext.ConnectionStatus}" />
+                        <Label Text="{Binding Source={x:Reference appShell}, Path=BindingContext.LastSync, StringFormat=' Updated: {0:T}'}" />-->
+                            <Label Text="Status: " TextColor="Black" />
+                            <Label Text="Online" TextColor="Red"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+            </ControlTemplate>
         </ResourceDictionary>
     </Application.Resources>
+    
 </Application>

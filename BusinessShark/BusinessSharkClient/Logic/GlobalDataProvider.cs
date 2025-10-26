@@ -43,10 +43,15 @@ namespace BusinessSharkClient.Logic
             ProductDefinitions.Clear();
             foreach (var defGrpc in responseDefinition.ProductDefinitions)
             {
-                var defModel = new ProductDefinitionModel(defGrpc.ProductDefinitionId, defGrpc.Name)
+                var defModel = new ProductDefinitionModel
                 {
+                    ProductDefinitionId = defGrpc.ProductDefinitionId,                    
+                    ProductCategoryId = defGrpc.ProductCategoryId,
+                    Name = defGrpc.Name,
+
                     BaseProductionCount = defGrpc.BaseProductionCount,
                     DeliveryPrice = (decimal)defGrpc.DeliveryPrice,
+                    Volume = defGrpc.Volume,
 
                     TechImpactQuality = defGrpc.TechImpactQuality,
                     ToolImpactQuality = defGrpc.ToolImpactQuality,
@@ -59,6 +64,7 @@ namespace BusinessSharkClient.Logic
                     Image = ImageSource.FromStream(() => new MemoryStream(defGrpc.Image.ToByteArray())),
                     ComponentUnits = defGrpc.ComponentUnits.Select(cuGrpc => new ComponentUnitModel
                     {
+                        ProductDefinitionId = defGrpc.ProductDefinitionId,
                         ComponentDefinitionId = cuGrpc.ComponentDefinitionId,
                         ProductionQuantity = cuGrpc.ProductionQuantity,
                         QualityImpact = cuGrpc.QualityImpact

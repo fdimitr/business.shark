@@ -80,6 +80,9 @@
 	  <Compile Update="View\DocumentationView.xaml.cs">
 	    <DependentUpon>DocumentationView.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="View\ProductDefinitionView.xaml.cs">
+	    <DependentUpon>ProductDefinitionView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\WorldView.xaml.cs">
 	    <DependentUpon>WorldView.xaml</DependentUpon>
 	  </Compile>
@@ -102,6 +105,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\OfficeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\ProductDefinitionView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\ProductListView.xaml">

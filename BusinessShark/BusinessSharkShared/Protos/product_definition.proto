@@ -20,20 +20,21 @@ message ComponentUnitGrpc {
 
 message ProductDefinitionGrpc {
   int32	ProductDefinitionId = 1;
-  string Name = 2;
-  double Volume = 3;
-  double BaseProductionCount = 4;
-  double BaseProductionPrice = 5;
-  double TechImpactQuality = 6;
-  double ToolImpactQuality = 7;
-  double WorkerImpactQuality = 8;	
-  double TechImpactQuantity = 9;
-  double ToolImpactQuantity = 10;
-  double WorkerImpactQuantity = 11;
-  double DeliveryPrice = 12;
-  bytes Icon = 13;
-  bytes Image = 14;
-  repeated ComponentUnitGrpc ComponentUnits = 15;
+  int32	ProductCategoryId = 2;
+  string Name = 3;
+  double Volume = 4;
+  double BaseProductionCount = 5;
+  double BaseProductionPrice = 6;
+  double TechImpactQuality = 7;
+  double ToolImpactQuality = 8;
+  double WorkerImpactQuality = 9;	
+  double TechImpactQuantity = 10;
+  double ToolImpactQuantity = 11;
+  double WorkerImpactQuantity = 12;
+  double DeliveryPrice = 13;
+  bytes Icon = 14;
+  bytes Image = 15;
+  repeated ComponentUnitGrpc ComponentUnits = 16;
 }
 
 message ProductDefinitionResponse {

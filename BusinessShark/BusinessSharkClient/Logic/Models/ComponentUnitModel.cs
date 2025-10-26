@@ -6,5 +6,8 @@
         public int ComponentDefinitionId { get; set; }
         public double ProductionQuantity { get; set; }
         public double QualityImpact { get; set; }
+
+        public ImageSource? Image { get; set; }
+        public string? Name { get; set; }
     }
 }

@@ -22,11 +22,11 @@
                     Text="{Binding Title}"
                     VerticalOptions="Center"
                     FontSize="18"
-                    TextColor="{DynamicResource ShellForegroundColor}" />                
+                    TextColor="{DynamicResource ShellForegroundColor}" />
             </Grid>
         </DataTemplate>
     </Shell.ItemTemplate>
-
+   
     <ShellContent
         Title="Login"
         IsVisible="False"

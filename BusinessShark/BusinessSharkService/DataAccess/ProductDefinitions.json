@@ -63,7 +63,7 @@
     "DeliveryPrice": 0.1,
     "Volume": 0.05,
     "IconPath": "Resources\\Products\\Icons\\icon_cooper_ore.png",
-    "ImagePath": "Resources\\Products\\Images\\iron_cooper_ore.png"
+    "ImagePath": "Resources\\Products\\Images\\cooper_ore.png"
   },
   {
     "ProductDefinitionId": 12,
@@ -74,7 +74,7 @@
     "DeliveryPrice": 0.4,
     "Volume": 0.02,
     "IconPath": "Resources\\Products\\Icons\\icon_quartz.png",
-    "ImagePath": "Resources\\Products\\Images\\iron_quartz.png"
+    "ImagePath": "Resources\\Products\\Images\\quartz.png"
   },
   {
     "ProductDefinitionId": 5,

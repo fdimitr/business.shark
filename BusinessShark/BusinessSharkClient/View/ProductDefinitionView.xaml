@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BusinessSharkClient.View.ProductDefinitionView"
+             xmlns:models="clr-namespace:BusinessSharkClient.Logic.Models"             
+             x:DataType="models:ProductDefinitionModel"
+             Title="Product Definition"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}">
+
+    <!-- 
+    This page displays detailed information about a product.
+    It includes a custom navigation bar, product attributes, coefficient groups,
+    and a list of components.
+    -->
+
+    <ContentPage.Resources>
+        <!-- Define styles for consistent look and feel -->
+        <Style x:Key="HeaderLabel" TargetType="Label">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+        </Style>
+
+        <Style x:Key="GroupBorder" TargetType="Border">
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 10" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray800}}" />
+            <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}" />
+            <Setter Property="Margin" Value="0,0,0,0" />
+        </Style>
+
+        <Style x:Key="PropertyGrid" TargetType="Grid">
+            <Setter Property="ColumnDefinitions" Value="Auto,*" />
+            <Setter Property="Margin" Value="0,2" />
+        </Style>
+
+        <Style x:Key="PropertyLabel" TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+        </Style>
+
+        <Style x:Key="PropertyValue" TargetType="Label">
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="End" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+        </Style>
+
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- 1. Custom Navigation Bar -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Padding="5,5" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray950}}">
+            <ImageButton x:Name="BackButton"
+                         Source="arrow_dropleft_48_w.png" 
+                         Clicked="OnBackButtonClicked"
+                         HeightRequest="30"
+                         WidthRequest="30"
+                         VerticalOptions="Center"
+                         HorizontalOptions="Start"
+                         Aspect="AspectFit">
+                <!-- Use a standard back arrow icon (e.g., from FontAwesome or a .png) -->
+                <!-- As a fallback, we can use text -->
+                <ImageButton.Triggers>
+                    <Trigger TargetType="ImageButton" Property="Source" Value="back_icon.png">
+                        <Setter Property="BackgroundColor" Value="Transparent" />
+                    </Trigger>
+                </ImageButton.Triggers>
+            </ImageButton>
+
+            <Label Grid.Column="1"
+                   Text="Product Details"
+                   TextColor="{StaticResource White}"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+        </Grid>
+
+        <!-- 2. Main Content ScrollView -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="10" Spacing="5">
+
+
+                <!-- Product Header: Image and Name -->
+                <Grid 
+                    ColumnDefinitions="Auto, *"
+                    RowDefinitions="Auto,Auto">
+                    <Label x:Name="ProductName"
+                           Text="{Binding Name, FallbackValue='Sample Product'}"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"
+                           LineBreakMode="WordWrap"
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2" />
+
+                    <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        Background="{x:Null}"
+                        HeightRequest="110"
+                        WidthRequest="110"
+                        Padding="0"
+                        StrokeShape="RoundRectangle 10"
+                        Grid.Row="1"
+                        Grid.Column="0">
+                        <Image x:Name="ProductImage"
+                            Source="{Binding Image, FallbackValue='https://placehold.co/80x80/663399/FFFFFF?text=Product'}"
+                            Aspect="AspectFill"
+                            HeightRequest="100"
+                            WidthRequest="100" />
+                    </Border>
+                    <!-- Base Info -->
+                    <Border Style="{StaticResource GroupBorder}"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="10,0,0,0">
+                        <VerticalStackLayout>
+                            <Grid Style="{StaticResource PropertyGrid}">
+                                <Label Text="Volume Occupied:" Style="{StaticResource PropertyLabel}" />
+                                <Label x:Name="ProductVolume" Text="{Binding Volume, StringFormat='{}{0:F2}', FallbackValue='10 m³'}" Style="{StaticResource PropertyValue}" />
+                            </Grid>
+                            <Grid Style="{StaticResource PropertyGrid}">
+                                <Label Text="Base Cost:" Style="{StaticResource PropertyLabel}" />
+                                <Label x:Name="BaseCost" Text="{Binding BaseProductionPrice, StringFormat='{}{0:F2}', FallbackValue='$150.00'}" Style="{StaticResource PropertyValue}" />
+                            </Grid>
+                            <Grid Style="{StaticResource PropertyGrid}">
+                                <Label Text="Base Production Qty:" Style="{StaticResource PropertyLabel}" />
+                                <Label x:Name="BaseProductionQty" Text="{Binding BaseProductionCount, StringFormat='{}{0:F2}', FallbackValue='100 units'}" Style="{StaticResource PropertyValue}" />
+                            </Grid>
+                            <Grid Style="{StaticResource PropertyGrid}">
+                                <Label Text="Transportation Cost:" Style="{StaticResource PropertyLabel}" />
+                                <Label x:Name="TransportCost" Text="{Binding DeliveryPrice, StringFormat='{}{0:F2}', FallbackValue='$25.00'}" Style="{StaticResource PropertyValue}" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+
+
+                <!-- Quality Coefficients Group -->
+                <Label Text="Quality Coefficients" Style="{StaticResource HeaderLabel}" />
+                <Border Style="{StaticResource GroupBorder}">
+                    <VerticalStackLayout>
+                        <Grid Style="{StaticResource PropertyGrid}">
+                            <Label Text="Technology Impact:" Style="{StaticResource PropertyLabel}" />
+                            <Label x:Name="QualityTechImpact" Text="{Binding TechImpactQuality, StringFormat='{}{0:F2}', FallbackValue='1.2'}" Style="{StaticResource PropertyValue}" />
+                        </Grid>
+                        <Grid Style="{StaticResource PropertyGrid}">
+                            <Label Text="Tool Impact:" Style="{StaticResource PropertyLabel}" />
+                            <Label x:Name="QualityToolImpact" Text="{Binding ToolImpactQuality, StringFormat='{}{0:F2}', FallbackValue='1.0'}" Style="{StaticResource PropertyValue}" />
+                        </Grid>
+                        <Grid Style="{StaticResource PropertyGrid}">
+                            <Label Text="Worker Impact:" Style="{StaticResource PropertyLabel}" />
+                            <Label x:Name="QualityWorkerImpact" Text="{Binding WorkerImpactQuality, StringFormat='{}{0:F2}', FallbackValue='1.1'}" Style="{StaticResource PropertyValue}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Quantity Coefficients Group -->
+                <Label Text="Quantity Coefficients" Style="{StaticResource HeaderLabel}" />
+                <Border Style="{StaticResource GroupBorder}">
+                    <VerticalStackLayout>
+                        <Grid Style="{StaticResource PropertyGrid}">
+                            <Label Text="Technology Impact:" Style="{StaticResource PropertyLabel}" />
+                            <Label x:Name="QuantityTechImpact" Text="{Binding TechImpactQuantity, StringFormat='{}{0:F2}', FallbackValue='1.5'}" Style="{StaticResource PropertyValue}" />
+                        </Grid>
+                        <Grid Style="{StaticResource PropertyGrid}">
+                            <Label Text="Tool Impact:" Style="{StaticResource PropertyLabel}" />
+                            <Label x:Name="QuantityToolImpact" Text="{Binding ToolImpactQuantity, StringFormat='{}{0:F2}', FallbackValue='1.1'}" Style="{StaticResource PropertyValue}" />
+                        </Grid>
+                        <Grid Style="{StaticResource PropertyGrid}">
+                            <Label Text="Worker Impact:" Style="{StaticResource PropertyLabel}" />
+                            <Label x:Name="QuantityWorkerImpact" Text="{Binding WorkerImpactQuantity, StringFormat='{}{0:F2}', FallbackValue='0.9'}" Style="{StaticResource PropertyValue}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Components List -->
+                <Label Text="Components" Style="{StaticResource HeaderLabel}" x:Name="ComponentHeader"/>
+                <CollectionView x:Name="ComponentsCollection"
+                                ItemsSource="{Binding ComponentUnits}"
+                                SelectionMode="Single"
+                                SelectionChanged="OnComponentSelected"
+                                ItemsLayout="HorizontalList">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ComponentUnitModel">
+                            <Border HeightRequest="130" WidthRequest="100" Style="{StaticResource GroupBorder}">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray900}}"
+                                            StrokeThickness="1"
+                                            Background="{x:Null}"
+                                            HeightRequest="60"
+                                            WidthRequest="60"
+                                            Padding="0"
+                                            StrokeShape="RoundRectangle 8"
+                                            HorizontalOptions="Center">
+                                        <Image Source="{Binding Image, FallbackValue='https://placehold.co/60x60/339966/FFFFFF?text=Comp'}"
+                                               Aspect="AspectFill"
+                                               HeightRequest="60"
+                                               WidthRequest="60" />
+                                    </Border>
+                                    <Label Text="{Binding Name}"
+                                           FontSize="12"
+                                           HorizontalOptions="Center"
+                                           HorizontalTextAlignment="Center"
+                                           LineBreakMode="TailTruncation" />
+                                    <HorizontalStackLayout>
+                                        <Label Text="Quantity: " FontSize="11" />
+                                        <Label Text="{Binding ProductionQuantity, StringFormat='{}{0:F2}'}" FontSize="12" />
+                                    </HorizontalStackLayout>   
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

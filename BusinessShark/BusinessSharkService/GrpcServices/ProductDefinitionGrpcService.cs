@@ -25,6 +25,7 @@ namespace BusinessSharkService.GrpcServices
             response.ProductDefinitions.AddRange(productDefinitions.ConvertAll(pd => new ProductDefinitionGrpc
             {
                 ProductDefinitionId = pd.ProductDefinitionId,
+                ProductCategoryId = pd.ProductCategoryId,
                 Name = pd.Name,
                 Volume = pd.Volume,
                 BaseProductionCount = pd.BaseProductionCount,
@@ -39,7 +40,17 @@ namespace BusinessSharkService.GrpcServices
 
                 DeliveryPrice = (double)pd.DeliveryPrice,
                 Image = ByteString.CopyFrom(GetImage(pd.ImagePath)),
-                Icon = ByteString.CopyFrom(GetImage(pd.IconPath))
+                Icon = ByteString.CopyFrom(GetImage(pd.IconPath)),
+
+                ComponentUnits =
+                {
+                    pd.ComponentUnits.ConvertAll(cu => new ComponentUnitGrpc
+                    {
+                        ProductionQuantity = cu.ProductionQuantity,
+                        ComponentDefinitionId = cu.ComponentDefinitionId,
+                        QualityImpact = cu.QualityImpact,                        
+                    })
+                },
             }));
 
             return response;
