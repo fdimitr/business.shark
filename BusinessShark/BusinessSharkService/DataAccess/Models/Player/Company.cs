@@ -1,4 +1,5 @@
 ﻿using BusinessSharkService.DataAccess.Models.Divisions;
+using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 
 namespace BusinessSharkService.DataAccess.Models.Player
 {
@@ -10,5 +11,11 @@ namespace BusinessSharkService.DataAccess.Models.Player
         public Player? Player { get; set; }
 
         public List<Factory> Factories { get; set; } = new();
+        public List<Storage> Storages { get; set; } = new();
+        public List<Mine> Mines { get; set; } = new();
+        public List<Sawmill> Sawmills { get; set; } = new();
+
+        public double Balance { get; set; }
     }
 }
+

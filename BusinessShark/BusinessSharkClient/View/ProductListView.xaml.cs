@@ -18,15 +18,16 @@ public partial class ProductListView : ContentPage
 
     private void LoadPageData(object? sender, EventArgs e)
     {
-        // ProductList.ItemsSource = _globalDataProvider.ProductDefinitions;
-
-        var dataSource = _globalDataProvider.ProductDefinitions.GroupBy(p => p.ProductCategoryId).ToDictionary(g => g.Key, g => g.ToList());
-
-        foreach (var category in dataSource)
+        if (MainContainer.Children.Count == 0)
         {
-            var categoryName = _globalDataProvider.ProductCategories.FirstOrDefault(c => c.ProductCategoryId == category.Key)?.Name ?? "Uncategorized";
-            var categoryTable = CreateCategoryTable(categoryName, category.Value);
-            MainContainer.Children.Add(categoryTable);
+            var dataSource = _globalDataProvider.ProductDefinitions.GroupBy(p => p.ProductCategoryId).ToDictionary(g => g.Key, g => g.ToList());
+
+            foreach (var category in dataSource)
+            {
+                var categoryName = _globalDataProvider.ProductCategories.FirstOrDefault(c => c.ProductCategoryId == category.Key)?.Name ?? "Uncategorized";
+                var categoryTable = CreateCategoryTable(categoryName, category.Value);
+                MainContainer.Children.Add(categoryTable);
+            }
         }
     }
     private IView CreateCategoryTable(string categoryName, List<ProductDefinitionModel> productDefinitions)

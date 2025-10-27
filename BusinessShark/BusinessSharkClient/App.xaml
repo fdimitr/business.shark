@@ -1,27 +1,53 @@
 ﻿<?xml version = "1.0" encoding = "UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:BusinessSharkClient.Converters"
              xmlns:local="clr-namespace:BusinessSharkClient"
              x:Class="BusinessSharkClient.App">
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <ControlTemplate x:Key="PageWithStatusBar">
+            <converters:AmountToColorConverter x:Key="AmountToColorConverter" />
+            <converters:NumberWithSpacesConverter x:Key="NumberWithSpacesConverter" />
+            <ControlTemplate x:Key="PageWithStatusBar"
+                             xmlns:local="clr-namespace:BusinessSharkClient">
                 <Grid RowDefinitions="*,Auto">
-                    <ContentPresenter Grid.Row="0" />
-                    <Border Grid.Row="1" 
+                    <ContentPresenter Grid.Row="0" Loaded="OnLoad" />
+                    <Border Grid.Row="1"
                             BackgroundColor="{DynamicResource Secondary}"
                             Stroke="{DynamicResource Secondary}"
                             Padding="5">
-                        <HorizontalStackLayout HorizontalOptions="Fill" VerticalOptions="Center">
-                        <!--<Label Text="{Binding Source={x:Reference appShell}, Path=BindingContext.ConnectionStatus}" />
-                        <Label Text="{Binding Source={x:Reference appShell}, Path=BindingContext.LastSync, StringFormat=' Updated: {0:T}'}" />-->
-                            <Label Text="Status: " TextColor="Black" />
-                            <Label Text="Online" TextColor="Red"/>
-                        </HorizontalStackLayout>
+                        <Grid ColumnDefinitions ="Auto,Auto,*" RowDefinitions="Auto">
+                            <HorizontalStackLayout Grid.Column="0" Grid.Row="0">
+                                <Label Text="Balance: " TextColor="Black" FontSize="14"/>
+                                <Label Text="{Binding Source={x:Static local:App.Summary}, Path=Balance, Converter={StaticResource NumberWithSpacesConverter}}"
+                                       TextColor="DarkOrange"
+                                       FontSize="14"
+                                       FontAttributes="Bold"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Grid.Column="1" Grid.Row="0">
+                                <Label Text="Profit: " TextColor="Black" Margin="10,0,0,0" FontSize="14"/>
+                                <Label
+                                    Text="{Binding Source={x:Static local:App.Summary}, Path=Profit, Converter={StaticResource NumberWithSpacesConverter}}"
+                                    TextColor="{Binding Source={x:Static local:App.Summary}, Path=Profit, Converter={StaticResource AmountToColorConverter}}"
+                                    FontAttributes="Bold"
+                                    FontSize="14" />
+                            </HorizontalStackLayout>
+
+                            <ImageButton
+                                Grid.Column="2"
+                                Grid.Row="0"
+                                HorizontalOptions="End"
+                                Source ="refresh.png"
+                                MinimumWidthRequest="24"
+                                MinimumHeightRequest="24"
+                                Aspect ="Center"
+                                Clicked="OnRefreshClicked"/>
+                        </Grid>
                     </Border>
                 </Grid>
             </ControlTemplate>

@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "BusinessSharkService";
+
+package summary;
+
+service SummaryService {
+  rpc Load(SummaryRequest) returns (SummaryResponse);
+}
+
+message SummaryRequest {
+  int32 PlayerId = 1;
+}
+
+message SummaryResponse {
+  double Balance = 1;
+  double Expenses = 2;
+  double Income = 3;
+}

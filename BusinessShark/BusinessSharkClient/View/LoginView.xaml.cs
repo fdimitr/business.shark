@@ -36,6 +36,7 @@ public partial class LoginView : ContentPage
             {
                 await SecureStorage.Default.SetAsync("access_token", loginResult.AccessToken);
                 await SecureStorage.Default.SetAsync("current_user", EmailEntry.Text);
+                await SecureStorage.Default.SetAsync("player_id", loginResult.PlayerId.ToString());
 
                 ShowPopup("Synchronizing data ....");
                 await _globalDataProvider.LoadData();

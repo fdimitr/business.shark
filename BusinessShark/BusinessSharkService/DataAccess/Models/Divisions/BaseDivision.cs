@@ -13,6 +13,8 @@ namespace BusinessSharkService.DataAccess.Models.Divisions
         [StringLength(30)]
         public required string Name { get; set; }
 
+        public int PlyerId { get; set; }   
+
         [StringLength(300)]
         public string? Description { get; set; }
 

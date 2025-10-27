@@ -1,4 +1,5 @@
-﻿using BusinessSharkService.Helpers;
+﻿using BusinessSharkService.Handlers;
+using BusinessSharkService.Helpers;
 using Grpc.Core;
 
 namespace BusinessSharkService.GrpcServices;
@@ -6,24 +7,27 @@ namespace BusinessSharkService.GrpcServices;
 public class AuthGrpcService : AuthService.AuthServiceBase
 {
     private readonly JwtTokenService _jwt;
+    private readonly PlayerHandler _playerHandler;
 
-    public AuthGrpcService(JwtTokenService jwt)
+    public AuthGrpcService(JwtTokenService jwt, PlayerHandler playerHandler)
     {
         _jwt = jwt;
+        _playerHandler = playerHandler;
     }
 
-    public override Task<AuthResponse> Login(LoginRequest request, ServerCallContext context)
+    public async override Task<AuthResponse> Login(LoginRequest request, ServerCallContext context)
     {
-        // ⚠️ In real applications, validate credentials against a user store.
-        if (request.Username == "admin" && request.Password == "12345")
+        var player = await _playerHandler.GetByLoginAsync(request.Username);
+        if (player != null && PasswordHelper.VerifyPassword(request.Password, player.Password))
         {
             var (access, refresh) = _jwt.GenerateTokens(request.Username);
-            return Task.FromResult(new AuthResponse
+            return new AuthResponse
             {
                 AccessToken = access,
                 RefreshToken = refresh,
-                ExpiresIn = DateTime.UtcNow.AddMinutes(15).ToString("O")
-            });
+                ExpiresIn = DateTime.UtcNow.AddMinutes(15).ToString("O"),
+                PlayerId = player.PlayerId
+            };
         }
 
         throw new RpcException(new Status(StatusCode.Unauthenticated, "Invalid credentials"));

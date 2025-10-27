@@ -1,8 +1,10 @@
 ﻿using BusinessSharkService.Handlers;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BusinessSharkService.GrpcServices
 {
+    [Authorize]
     public class ProductCategoryGrpService : ProductCategoryService.ProductCategoryServiceBase
     {
         private readonly ILogger<ProductDefinitionGrpcService> _logger;

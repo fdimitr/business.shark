@@ -78,6 +78,9 @@ builder.Services.AddGrpc();
 builder.Services.AddScoped<IWorldHandler, WorldHandler>();
 builder.Services.AddScoped<ProductDefinitionHandler>();
 builder.Services.AddScoped<ProductCategoryHandler>();
+builder.Services.AddScoped<SummaryHandler>();
+builder.Services.AddScoped<PlayerHandler>();
+
 builder.Services.AddHostedService<CalculationService>();
 
 var app = builder.Build();
@@ -89,6 +92,7 @@ app.UseCors();
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 
 // Configure the HTTP request pipeline.
+app.MapGrpcService<SummaryGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<ProductCategoryGrpService>().EnableGrpcWeb();
 app.MapGrpcService<ProductDefinitionGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<AuthGrpcService>().EnableGrpcWeb();
