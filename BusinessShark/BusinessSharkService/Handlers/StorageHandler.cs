@@ -3,7 +3,7 @@ using BusinessSharkService.Handlers.Interfaces;
 
 namespace BusinessSharkService.Handlers
 {
-    public class StorageHandler(IWorldHandler worldHandler) : BaseDivisionHandler<Storage>(worldHandler)
+    public class StorageHandler(IWorldContext worldHandler) : BaseDivisionHandler<Storage>(worldHandler)
     {
         public override void CompleteCalculation(Storage baseDivision)
         {

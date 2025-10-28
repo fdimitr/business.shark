@@ -5,19 +5,16 @@ namespace BusinessSharkService.Handlers
 {
     public class CountryHandler
     {
-        private readonly DataContext _dataContext;
         private readonly FactoryHandler _factoryHandler;
         private readonly StorageHandler _storageHandler;
         private readonly MineHandler _mineHandler;
         private readonly SawmillHandler _sawmillHandler;
 
-        public CountryHandler(DataContext dataContext, 
-            FactoryHandler factoryHandler,
+        public CountryHandler(FactoryHandler factoryHandler,
             StorageHandler storageHandler,
             MineHandler mineHandler,
             SawmillHandler sawmillHandler)
         {
-            _dataContext = dataContext;
             _factoryHandler = factoryHandler;
             _storageHandler = storageHandler;
             _mineHandler = mineHandler;

@@ -17,6 +17,5 @@ namespace BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers
         public Tools? ToolPark { get; set; }
 
         public int WorkersId { get; set; }
-        public Workers? Workers { get; set; }
     }
 }

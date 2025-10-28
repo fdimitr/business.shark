@@ -3,7 +3,7 @@ using BusinessSharkService.Handlers.Interfaces;
 
 namespace BusinessSharkService.Handlers
 {
-    public class MineHandler(IWorldHandler worldHandler) : BaseDivisionHandler<Mine>(worldHandler)
+    public class MineHandler(IWorldContext worldHandler) : BaseDivisionHandler<Mine>(worldHandler)
     {
         public override void StartCalculation(Mine baseDivision)
         {

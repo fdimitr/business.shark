@@ -7,11 +7,11 @@ namespace BusinessSharkTests.Handlers
     {
         protected const float Tolerant = 0.0001f;
 
-        protected Dictionary<ProductType, ProductDefinition> ProductDefinitions =
-            new Dictionary<ProductType, ProductDefinition>
+        protected Dictionary<int, ProductDefinition> ProductDefinitions =
+            new Dictionary<int, ProductDefinition>
             {
                 {
-                    ProductType.Bed, new ProductDefinition
+                    (int)ProductType.Bed, new ProductDefinition
                     {
                         ProductDefinitionId = (int)ProductType.Bed,
                         Name = ProductType.Bed.ToString(),
@@ -49,7 +49,7 @@ namespace BusinessSharkTests.Handlers
                     }
                 },
                 {
-                    ProductType.Wood, new ProductDefinition
+                    (int)ProductType.Wood, new ProductDefinition
                     {
                         ProductDefinitionId = (int)ProductType.Wood,
                         Name = ProductType.Wood.ToString(),
@@ -66,7 +66,7 @@ namespace BusinessSharkTests.Handlers
                     }
                 },
                 {
-                    ProductType.Leather, new ProductDefinition
+                    (int)ProductType.Leather, new ProductDefinition
                     {
                         ProductDefinitionId = (int)ProductType.Leather,
                         Name = ProductType.Leather.ToString(),

@@ -5,13 +5,11 @@ using System.Collections.Frozen;
 
 namespace BusinessSharkService.Handlers.Interfaces
 {
-    public interface IWorldHandler
+    public interface IWorldContext
     {
         List<Country> Countries { get; set; }
         Dictionary<int, BaseDivision> Divisions { get; set; }
         FrozenDictionary<int, ProductDefinition> ProductDefinitions { get; set; }
-
-        Task Calculate(CancellationToken stoppingToken);
         void FillDivisions();
     }
 }

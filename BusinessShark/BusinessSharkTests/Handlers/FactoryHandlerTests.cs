@@ -44,9 +44,9 @@ namespace BusinessSharkTests.Handlers
         public void StartCalculation_ProducesItem_WhenResourcesAvailable()
         {
             // Arrange
-            var worldHandlerMock = new Mock<IWorldHandler>();
-            var factory = CreateFactoryWithResources(ProductDefinitions[ProductType.Bed]);
-            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+            var worldContextMock = new Mock<IWorldContext>();
+            var factory = CreateFactoryWithResources(ProductDefinitions[(int)ProductType.Bed]);
+            var factoryHandler = new FactoryHandler(worldContextMock.Object);
             // Act
             factoryHandler.StartCalculation(factory);
 
@@ -61,11 +61,11 @@ namespace BusinessSharkTests.Handlers
         public void StartCalculation_DoesNotProduce_WhenResourcesInsufficient()
         {
             // Arrange
-            var factory = CreateFactoryWithResources(ProductDefinitions[ProductType.Bed]);
+            var factory = CreateFactoryWithResources(ProductDefinitions[(int)ProductType.Bed]);
             factory.WarehouseInput[(int)ProductType.Wood].Quantity = 0; // Insufficient wood
 
-            var worldHandlerMock = new Mock<IWorldHandler>();
-            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+            var worldContextMock = new Mock<IWorldContext>();
+            var factoryHandler = new FactoryHandler(worldContextMock.Object);
 
             // Act
             factoryHandler.StartCalculation(factory);
@@ -78,11 +78,11 @@ namespace BusinessSharkTests.Handlers
         public void StartCalculation_DoesNotProduce_WhenResourcesAbsent()
         {
             // Arrange
-            var factory = CreateFactoryWithResources(ProductDefinitions[ProductType.Bed]);
+            var factory = CreateFactoryWithResources(ProductDefinitions[(int)ProductType.Bed]);
             factory.WarehouseInput.Clear(); // No resources
 
-            var worldHandlerMock = new Mock<IWorldHandler>();
-            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+            var worldContextMock = new Mock<IWorldContext>();
+            var factoryHandler = new FactoryHandler(worldContextMock.Object);
 
             // Act
             factoryHandler.StartCalculation(factory);
@@ -95,12 +95,12 @@ namespace BusinessSharkTests.Handlers
         public void StartCalculation_CompletesProduction_In_Few_Cycles()
         {
             // Arrange
-            var productDef = (ProductDefinition)ProductDefinitions[ProductType.Bed].Clone();
+            var productDef = (ProductDefinition)ProductDefinitions[(int)ProductType.Bed].Clone();
             productDef.BaseProductionCount = 0.5;
             var factory = CreateFactoryWithResources(productDef);
 
-            var worldHandlerMock = new Mock<IWorldHandler>();
-            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+            var worldContextMock = new Mock<IWorldContext>();
+            var factoryHandler = new FactoryHandler(worldContextMock.Object);
 
             // Act
             factoryHandler.StartCalculation(factory);
@@ -120,14 +120,14 @@ namespace BusinessSharkTests.Handlers
         public void StartCalculation_OverProduction_TwoCycles_WithoutChangesInItems()
         {
             // Arrange
-            var productDef = (ProductDefinition)ProductDefinitions[ProductType.Bed].Clone();
+            var productDef = (ProductDefinition)ProductDefinitions[(int)ProductType.Bed].Clone();
             productDef.BaseProductionCount = 0.5;
             var factory = CreateFactoryWithResources(productDef);
             factory.Workers!.TechLevel = 3.0; // Increase worker tech level to boost production
             factory.Tools!.TechLevel = 3.0;   // Increase tool tech level to boost production
 
-            var worldHandlerMock = new Mock<IWorldHandler>();
-            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+            var worldContextMock = new Mock<IWorldContext>();
+            var factoryHandler = new FactoryHandler(worldContextMock.Object);
 
             // Act
             factoryHandler.StartCalculation(factory);
@@ -148,14 +148,14 @@ namespace BusinessSharkTests.Handlers
         public void StartCalculation_OverProduction_TwoCycles_WithChangesInItems()
         {
             // Arrange
-            var productDef = (ProductDefinition)ProductDefinitions[ProductType.Bed].Clone();
+            var productDef = (ProductDefinition)ProductDefinitions[(int)ProductType.Bed].Clone();
             productDef.BaseProductionCount = 0.5;
             var factory = CreateFactoryWithResources(productDef);
             factory.Workers!.TechLevel = 3.0; // Increase worker tech level to boost production
             factory.Tools!.TechLevel = 3.0;   // Increase tool tech level to boost production
 
-            var worldHandlerMock = new Mock<IWorldHandler>();
-            var factoryHandler = new FactoryHandler(worldHandlerMock.Object);
+            var worldContextMock = new Mock<IWorldContext>();
+            var factoryHandler = new FactoryHandler(worldContextMock.Object);
 
 
             // Act

@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace BusinessSharkService.DataAccess
 {
-    public sealed class DataContext : DbContext
+    public class DataContext : DbContext
     {
         public DbSet<BaseDivision> Divisions { get; set; }
         public DbSet<Factory> Factories { get; set; }

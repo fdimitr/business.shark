@@ -14,11 +14,7 @@ namespace BusinessSharkService.Handlers
 
         public async Task StartCalculation(CancellationToken stoppingToken, City city)
         {
-            foreach (var storage in city.Storages)
-            {
-                
-            }
-
+            await Task.CompletedTask;
         }
     }
 }

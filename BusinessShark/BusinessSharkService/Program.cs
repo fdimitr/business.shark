@@ -1,15 +1,16 @@
 using BusinessSharkService.Constants;
+using BusinessSharkService.CoreServices;
 using BusinessSharkService.DataAccess;
-using BusinessSharkService.Helpers;
 using BusinessSharkService.GrpcServices;
+using BusinessSharkService.Handlers;
+using BusinessSharkService.Handlers.Context;
+using BusinessSharkService.Handlers.Interfaces;
+using BusinessSharkService.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
-using BusinessSharkService.CoreServices;
-using BusinessSharkService.Handlers;
-using BusinessSharkService.Handlers.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
@@ -74,8 +75,9 @@ builder.Services.AddGrpc();
 // ==================================
 
 builder.Services.AddSingleton(new JwtTokenService(jwtKey, jwtIssuer));
-builder.Services.AddSingleton<IWorldHandler, WorldHandler>();
+builder.Services.AddSingleton<IWorldContext, WorldContext>();
 
+builder.Services.AddScoped<WorldHandler>();
 builder.Services.AddScoped<ProductDefinitionHandler>();
 builder.Services.AddScoped<ProductCategoryHandler>();
 builder.Services.AddScoped<SummaryHandler>();

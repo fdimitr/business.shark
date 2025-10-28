@@ -42,7 +42,7 @@ namespace BusinessSharkTests.Handlers
         [Test]
         public void CalculateProductionQuality_ReturnsZero_WhenToolsIsNull()
         {
-            var def = ProductDefinitions[ProductType.Bed];
+            var def = ProductDefinitions[(int)ProductType.Bed];
             var factory = CreateFactory(def: def, factoryTechLevel: 5, tools: null, workers: CreateWorkers(4));
             var qualityItems = new List<FactoryHandler.QualityItem> { new FactoryHandler.QualityItem { Quality = 10, QualityImpact = 0.2 } };
 
@@ -54,7 +54,7 @@ namespace BusinessSharkTests.Handlers
         [Test]
         public void CalculateProductionQuality_ReturnsZero_WhenWorkersIsNull()
         {
-            var def = ProductDefinitions[ProductType.Bed];
+            var def = ProductDefinitions[(int)ProductType.Bed];
             var factory = CreateFactory(def: def, factoryTechLevel: 5, tools: CreateTools(3), workers: null);
             var qualityItems = new List<FactoryHandler.QualityItem> { new FactoryHandler.QualityItem { Quality = 10, QualityImpact = 0.2 } };
 
@@ -66,7 +66,7 @@ namespace BusinessSharkTests.Handlers
         [Test]
         public void CalculateProductionQuality_ReturnsSum_WhenQualityItemsEmpty()
         {
-            var def = (ProductDefinition)ProductDefinitions[ProductType.Bed].Clone();
+            var def = (ProductDefinition)ProductDefinitions[(int)ProductType.Bed].Clone();
             def.TechImpactQuality = 1.5;
             def.ToolImpactQuality = 2.0;
             def.WorkerImpactQuality = 0.5;
@@ -82,7 +82,7 @@ namespace BusinessSharkTests.Handlers
         [Test]
         public void CalculateProductionQuality_ComputesFullFormula_WithMultipleQualityItems()
         {
-            var def = (ProductDefinition)ProductDefinitions[ProductType.Bed].Clone();
+            var def = (ProductDefinition)ProductDefinitions[(int)ProductType.Bed].Clone();
             def.TechImpactQuality = 1.5;
             def.ToolImpactQuality = 2.0;
             def.WorkerImpactQuality = 0.5;

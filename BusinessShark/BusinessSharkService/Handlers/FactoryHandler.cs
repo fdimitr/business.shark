@@ -6,7 +6,7 @@ using BusinessSharkService.Handlers.Interfaces;
 
 namespace BusinessSharkService.Handlers
 {
-    public class FactoryHandler(IWorldHandler worldHandler) : BaseDivisionHandler<Factory>(worldHandler)
+    public class FactoryHandler(IWorldContext worldHandler) : BaseDivisionHandler<Factory>(worldHandler)
     {
         internal struct QualityItem(double quality, double qualityImpact)
         {

@@ -25,7 +25,7 @@ namespace BusinessSharkService.CoreServices
             int delayMs = Convert.ToInt32(TimeSpan.FromMinutes(_configuration.GetValue<int>(ConfigKey.CalculatePeriodMinutes)).TotalMilliseconds);
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var worldHandler = scope.ServiceProvider.GetRequiredService<IWorldHandler>();
+                var worldHandler = scope.ServiceProvider.GetRequiredService<WorldHandler>();
 
                 while (!stoppingToken.IsCancellationRequested)
                 {

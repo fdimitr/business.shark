@@ -5,7 +5,7 @@ using BusinessSharkService.Handlers.Interfaces;
 
 namespace BusinessSharkService.Handlers
 {
-    public abstract class BaseDivisionHandler<T>(IWorldHandler worldHandler) where T: BaseDivision
+    public abstract class BaseDivisionHandler<T>(IWorldContext worldContext) where T: BaseDivision
     {
         public abstract void StartCalculation(T baseDivision);
         public abstract void CompleteCalculation(T baseDivision);
@@ -14,7 +14,7 @@ namespace BusinessSharkService.Handlers
         {
             foreach (var route in baseDivision.DeliveryRoutes)
             {
-                var fromDivision = worldHandler.Divisions[route.DivisionId];
+                var fromDivision = worldContext.Divisions[route.DivisionId];
                 if (fromDivision.WarehouseOutput.TryGetItem(route.ProductDefinitionId, out var item))
                 {
                     if (item is { Quantity: > 0 })

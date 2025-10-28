@@ -55,7 +55,7 @@ namespace BusinessSharkTests.Handlers
                 toolTechLevel: null,
                 workerTechLevel: 4);
 
-            factory.ProductDefinition = ProductDefinitions[ProductType.Bed];
+            factory.ProductDefinition = ProductDefinitions[(int)ProductType.Bed];
             var result = FactoryHandler.CalculateProductionQuantity(factory);
             Assert.That(result, Is.EqualTo(0));
         }
@@ -68,7 +68,7 @@ namespace BusinessSharkTests.Handlers
                 toolTechLevel: 3,
                 workerTechLevel: null);
 
-            factory.ProductDefinition = ProductDefinitions[ProductType.Bed];
+            factory.ProductDefinition = ProductDefinitions[(int)ProductType.Bed];
             var result = FactoryHandler.CalculateProductionQuantity(factory);
             Assert.That(result, Is.EqualTo(0));
         }

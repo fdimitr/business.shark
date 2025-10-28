@@ -1,14 +1,12 @@
 ﻿using BusinessSharkService;
-using BusinessSharkService.DataAccess;
 using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.Extensions;
 using BusinessSharkService.Handlers;
-using Microsoft.EntityFrameworkCore;
-using Moq;
-using System.Reflection.Metadata;
+using BusinessSharkService.Handlers.Context;
+using System.Collections.Frozen;
 
 namespace BusinessSharkTests.Handlers
 {
@@ -18,7 +16,7 @@ namespace BusinessSharkTests.Handlers
         private Storage _toDivision;
         private Product _fromProduct;
         private Product _toProduct;
-        private WorldHandler _worldHandler;
+        WorldContext _worldContext;
 
         [SetUp]
         public void SetUp()
@@ -42,14 +40,14 @@ namespace BusinessSharkTests.Handlers
             {
                 Quality = 10,
                 Quantity = 100,
-                ProductDefinitionId = ProductDefinitions[ProductType.Wood].ProductDefinitionId
+                ProductDefinitionId = ProductDefinitions[(int)ProductType.Wood].ProductDefinitionId
             };
 
             _toProduct = new Product
             {
                 Quality = 5,
                 Quantity = 50,
-                ProductDefinitionId = ProductDefinitions[ProductType.Wood].ProductDefinitionId
+                ProductDefinitionId = ProductDefinitions[(int)ProductType.Wood].ProductDefinitionId
             };  
 
             _fromDivision.WarehouseOutput.Add(_fromProduct);
@@ -59,9 +57,12 @@ namespace BusinessSharkTests.Handlers
             city.Storages.Add(_fromDivision);
             city.Storages.Add(_toDivision);
 
-            _worldHandler = new WorldHandler(CreateMockedDataContext()); 
-            _worldHandler.Countries.Add(country);
-            _worldHandler.FillDivisions();
+            _worldContext = new WorldContext
+            {
+                ProductDefinitions = ProductDefinitions.ToFrozenDictionary(),
+                Countries = new List<Country> { country }
+            };
+            _worldContext.FillDivisions();
         }
 
         [Test]
@@ -76,7 +77,7 @@ namespace BusinessSharkTests.Handlers
             };
             _toDivision.DeliveryRoutes.Add(route);
 
-            StorageHandler storageHandler = new StorageHandler(_worldHandler);
+            StorageHandler storageHandler = new StorageHandler(_worldContext);
 
             // Act
             storageHandler.StartTransferItems(_toDivision);
@@ -103,7 +104,7 @@ namespace BusinessSharkTests.Handlers
             };
             _toDivision.DeliveryRoutes.Add(route);
 
-            StorageHandler storageHandler = new StorageHandler(_worldHandler);
+            StorageHandler storageHandler = new StorageHandler(_worldContext);
 
             // Act
             storageHandler.StartTransferItems(_toDivision);
@@ -130,7 +131,7 @@ namespace BusinessSharkTests.Handlers
             };
             _toDivision.DeliveryRoutes.Add(route);
 
-            StorageHandler storageHandler = new StorageHandler(_worldHandler);
+            StorageHandler storageHandler = new StorageHandler(_worldContext);
             storageHandler.StartTransferItems(_toDivision);
 
             _toDivision.WarehouseInput.TryGetItem((int)ProductType.Wood, out var targetItem);
@@ -144,25 +145,6 @@ namespace BusinessSharkTests.Handlers
             Assert.That(targetItem.Quality, Is.EqualTo(6.875).Within(Tolerant));
             Assert.That(targetItem.ProcessingQuantity, Is.EqualTo(0));
             Assert.That(targetItem.ProcessingQuality, Is.EqualTo(0));
-        }
-
-        private DataContext CreateMockedDataContext()
-        {
-            var mockSet = new Mock<DbSet<ProductDefinition>>();
-
-            var quaryableDefinitions = ProductDefinitions.Values.ToList().AsQueryable();
-
-            mockSet.As<IQueryable<ProductDefinition>>().Setup(m => m.Provider).Returns(quaryableDefinitions.Provider);
-            mockSet.As<IQueryable<ProductDefinition>>().Setup(m => m.Expression).Returns(quaryableDefinitions.Expression);
-            mockSet.As<IQueryable<ProductDefinition>>().Setup(m => m.ElementType).Returns(quaryableDefinitions.ElementType);
-            mockSet.As<IQueryable<ProductDefinition>>().Setup(m => m.GetEnumerator()).Returns(() => quaryableDefinitions.GetEnumerator());
-            
-            //mockSet.Object.AddRange(ProductDefinitions.Values);
-
-            var mockContext = new Mock<DataContext>();
-            mockContext.Setup(m => m.ProductDefinitions).Returns(mockSet.Object);
-
-            return mockContext.Object;
         }
     }
 }
