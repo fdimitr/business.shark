@@ -20,7 +20,6 @@
         public double ToolImpactQuantity { get; set; }
         public double WorkerImpactQuantity { get; set; }
 
-        public ImageSource? Icon { get; set; }
         public ImageSource? Image { get; set; }
 
         public uint TimeStamp { get; set; }

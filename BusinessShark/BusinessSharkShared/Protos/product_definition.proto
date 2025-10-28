@@ -32,8 +32,7 @@ message ProductDefinitionGrpc {
   double ToolImpactQuantity = 11;
   double WorkerImpactQuantity = 12;
   double DeliveryPrice = 13;
-  bytes Icon = 14;
-  bytes Image = 15;
+  bytes Image = 14;
   repeated ComponentUnitGrpc ComponentUnits = 16;
 }
 

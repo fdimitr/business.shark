@@ -60,7 +60,6 @@ namespace BusinessSharkClient.Logic
 
                     ToolImpactQuantity = defGrpc.ToolImpactQuantity,
                     WorkerImpactQuantity = defGrpc.WorkerImpactQuantity,
-                    Icon = ImageSource.FromStream(() => new MemoryStream(defGrpc.Icon.ToByteArray())),
                     Image = ImageSource.FromStream(() => new MemoryStream(defGrpc.Image.ToByteArray())),
                     ComponentUnits = defGrpc.ComponentUnits.Select(cuGrpc => new ComponentUnitModel
                     {

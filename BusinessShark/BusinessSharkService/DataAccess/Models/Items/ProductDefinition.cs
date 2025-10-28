@@ -56,9 +56,6 @@ namespace BusinessSharkService.DataAccess.Models.Items
         public double WorkerImpactQuantity { get; set; }
 
         [StringLength(50)]
-        public string? IconPath { get; set; }
-
-        [StringLength(50)]
         public string? ImagePath { get; set; }
 
         [Timestamp]

@@ -95,7 +95,7 @@ public partial class ProductListView : ContentPage
 
                 var image = new Image
                 {
-                    Source = product.Icon,
+                    Source = product.Image,
                     HeightRequest = 40,
                     WidthRequest = 40,
                     Aspect = Aspect.AspectFit

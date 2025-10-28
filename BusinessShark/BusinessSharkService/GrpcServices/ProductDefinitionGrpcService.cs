@@ -40,7 +40,6 @@ namespace BusinessSharkService.GrpcServices
 
                 DeliveryPrice = (double)pd.DeliveryPrice,
                 Image = ByteString.CopyFrom(GetImage(pd.ImagePath)),
-                Icon = ByteString.CopyFrom(GetImage(pd.IconPath)),
 
                 ComponentUnits =
                 {
@@ -48,7 +47,7 @@ namespace BusinessSharkService.GrpcServices
                     {
                         ProductionQuantity = cu.ProductionQuantity,
                         ComponentDefinitionId = cu.ComponentDefinitionId,
-                        QualityImpact = cu.QualityImpact,                        
+                        QualityImpact = cu.QualityImpact,
                     })
                 },
             }));
