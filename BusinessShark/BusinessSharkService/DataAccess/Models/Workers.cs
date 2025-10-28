@@ -9,6 +9,8 @@ namespace BusinessSharkService.DataAccess.Models
         [Key]
         public int WorkersId { get; set; }
 
+        public int DivisionId { get; set; }
+
         [Comment("The total number of workers involved in production.")]
         public int TotalQuantity { get; set; }
 

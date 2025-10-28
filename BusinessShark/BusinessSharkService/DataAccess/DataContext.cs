@@ -9,21 +9,23 @@ using Newtonsoft.Json;
 
 namespace BusinessSharkService.DataAccess
 {
-    public class DataContext : DbContext
+    public sealed class DataContext : DbContext
     {
-        public DbSet<ProductCategory> Categories { get; set; }
-        public DbSet<Country> Countries { get; set; }
-        public DbSet<City> Cities { get; set; }
-        public DbSet<ComponentUnit> ComponentUnits { get; set; }
-        public virtual DbSet<ProductDefinition> ProductDefinitions { get; set; }
-        public DbSet<Product> Items { get; set; }
-        public DbSet<DeliveryRoute> DeliveryRoutes { get; set; }
-        public DbSet<Tools> Tools { get; set; }
-        public DbSet<Workers> Workers { get; set; }
+        public DbSet<BaseDivision> Divisions { get; set; }
         public DbSet<Factory> Factories { get; set; }
         public DbSet<Storage> Storages { get; set; }
         public DbSet<Mine> Mines { get; set; }
         public DbSet<Sawmill> Sawmills { get; set; }
+
+        public DbSet<ProductCategory> Categories { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<ComponentUnit> ComponentUnits { get; set; }
+        public DbSet<ProductDefinition> ProductDefinitions { get; set; }
+        public DbSet<Product> Items { get; set; }
+        public DbSet<DeliveryRoute> DeliveryRoutes { get; set; }
+        public DbSet<Tools> Tools { get; set; }
+        public DbSet<Workers> Workers { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<FinancialTransaction> FinancialTransactions { get; set; }

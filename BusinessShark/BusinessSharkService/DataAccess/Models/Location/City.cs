@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BusinessSharkService.DataAccess.Models.Divisions;
+using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSharkService.DataAccess.Models.Location
@@ -28,5 +29,7 @@ namespace BusinessSharkService.DataAccess.Models.Location
 
         public List<Factory> Factories { get; set; } = new();
         public List<Storage> Storages { get; set; } = new();
+        public List<Mine> Mines { get; set; } = new();
+        public List<Sawmill> Sawmills { get; set; } = new();
     }
 }

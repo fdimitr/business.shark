@@ -22,11 +22,6 @@ namespace BusinessSharkService.DataAccess.Models.Divisions
         [Comment("Technology level of the factory, affects quality and quantity of production")]
         public double TechLevel { get; set; }
 
-        public int ToolsId { get; set; }
-        public Tools? Tools { get; set; }
-
-        public int WorkersId { get; set; }
-        public Workers? Workers { get; set; }
 
         internal bool IsProductionCompleted { get; set; } = true;
 

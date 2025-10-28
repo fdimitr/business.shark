@@ -8,6 +8,9 @@ namespace BusinessSharkService.DataAccess.Models
     {
         [Key]
         public int ToolsId { get; set; }
+
+        public int DivisionId { get; set; }
+
         public int TotalQuantity { get; set; }
 
         [Comment("Technology level of the tools, influencing their effectiveness.")]

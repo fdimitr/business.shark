@@ -13,7 +13,8 @@ namespace BusinessSharkService.DataAccess.Models.Divisions
         [StringLength(30)]
         public required string Name { get; set; }
 
-        public int PlyerId { get; set; }   
+        public int PlayerId { get; set; }
+        public int CityId { get; set; }
 
         [StringLength(300)]
         public string? Description { get; set; }
@@ -32,6 +33,9 @@ namespace BusinessSharkService.DataAccess.Models.Divisions
 
         public List<DeliveryRoute> DeliveryRoutes { get; set; } = new();
 
+        public Tools? Tools { get; set; }
+
+        public Workers? Workers { get; set; }
 
     }
 }

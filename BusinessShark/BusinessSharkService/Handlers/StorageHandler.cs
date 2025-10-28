@@ -7,12 +7,10 @@ namespace BusinessSharkService.Handlers
     {
         public override void CompleteCalculation(Storage baseDivision)
         {
-            throw new NotImplementedException();
         }
 
         public override void StartCalculation(Storage baseDivision)
         {
-            throw new NotImplementedException();
         }
     }
 }

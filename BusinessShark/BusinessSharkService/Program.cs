@@ -70,15 +70,18 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddAuthorization();
+builder.Services.AddGrpc();
 // ==================================
 
 builder.Services.AddSingleton(new JwtTokenService(jwtKey, jwtIssuer));
-builder.Services.AddGrpc();
+builder.Services.AddSingleton<IWorldHandler, WorldHandler>();
 
-builder.Services.AddScoped<IWorldHandler, WorldHandler>();
 builder.Services.AddScoped<ProductDefinitionHandler>();
 builder.Services.AddScoped<ProductCategoryHandler>();
 builder.Services.AddScoped<SummaryHandler>();
+builder.Services.AddScoped<CountryHandler>();
+builder.Services.AddScoped<CityHandler>();
+builder.Services.AddScoped<StorageHandler>();
 builder.Services.AddScoped<PlayerHandler>();
 
 builder.Services.AddHostedService<CalculationService>();
