@@ -1,5 +1,4 @@
 ﻿using BusinessSharkService.DataAccess;
-using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.DataAccess.Models.Player;
 using Microsoft.EntityFrameworkCore;
 

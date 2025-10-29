@@ -28,7 +28,7 @@ namespace BusinessSharkService.Handlers
             return new CurrentSummary
             {
                 Balance = company.Balance,
-                Income = lastTransaction != null ? lastTransaction.SalesProductsAmount : 0,
+                Income = lastTransaction?.SalesProductsAmount ?? 0,
                 Expenses = lastTransaction != null ? lastTransaction.PurchasedProductsAmount +
                            lastTransaction.TransportCostsAmount +
                            lastTransaction.EmployeeSalariesAmount +

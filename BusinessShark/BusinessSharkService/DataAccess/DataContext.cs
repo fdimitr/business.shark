@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace BusinessSharkService.DataAccess
 {
-    public class DataContext : DbContext
+    public sealed class DataContext : DbContext
     {
         public DbSet<BaseDivision> BaseDivisions { get; set; }
         public DbSet<Factory> Factories { get; set; }
@@ -31,9 +31,9 @@ namespace BusinessSharkService.DataAccess
         public DbSet<Company> Companies { get; set; }
         public DbSet<FinancialTransaction> FinancialTransactions { get; set; }
 
-        public DataContext() : base()
+        public DataContext()
         {
-            if (Database != null) Database.Migrate();
+            Database.Migrate();
         }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)

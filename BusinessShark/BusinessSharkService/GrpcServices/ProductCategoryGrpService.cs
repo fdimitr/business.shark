@@ -16,7 +16,7 @@ namespace BusinessSharkService.GrpcServices
             _productCategoryHandler = productCategoryHandler;
         }
 
-        public async override Task<ProductCategoryResponse> Load(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
+        public override async Task<ProductCategoryResponse> Load(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
         {             
             var productCategories = await _productCategoryHandler.LoadAsync();
             var response = new ProductCategoryResponse();

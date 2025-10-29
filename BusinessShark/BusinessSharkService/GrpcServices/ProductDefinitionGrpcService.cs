@@ -17,7 +17,7 @@ namespace BusinessSharkService.GrpcServices
             _productDefinitionHandler = productDefinitionHandler;
         }
 
-        public async override Task<ProductDefinitionResponse> Sync(ProductDefinitionRequest request, ServerCallContext context)
+        public override async Task<ProductDefinitionResponse> Sync(ProductDefinitionRequest request, ServerCallContext context)
         {
             var productDefinitions = await _productDefinitionHandler.PreloadProductDefinitionsAsync(request.Timestamp);
 
@@ -58,7 +58,7 @@ namespace BusinessSharkService.GrpcServices
         private byte[] GetImage(string? path)
         {
             if (string.IsNullOrWhiteSpace(path))
-                return Array.Empty<byte>();
+                return [];
 
             try
             {
@@ -70,16 +70,16 @@ namespace BusinessSharkService.GrpcServices
 
                 if (!File.Exists(fullPath))
                 {
-                    _logger?.LogWarning("Image file not found: {Path}", fullPath);
-                    return Array.Empty<byte>();
+                    _logger.LogWarning("Image file not found: {Path}", fullPath);
+                    return [];
                 }
 
                 return File.ReadAllBytes(fullPath);
             }
             catch (Exception ex)
             {
-                _logger?.LogWarning(ex, "Failed to load image at path '{Path}'", path);
-                return Array.Empty<byte>();
+                _logger.LogWarning(ex, "Failed to load image at path '{Path}'", path);
+                return [];
             }
         }
 

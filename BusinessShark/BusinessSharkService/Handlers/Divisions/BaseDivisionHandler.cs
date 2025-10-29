@@ -17,16 +17,16 @@ namespace BusinessSharkService.Handlers.Divisions
             foreach (var route in baseDivision.DeliveryRoutes)
             {
                 var fromDivision = worldContext.Divisions[route.DivisionId];
-                if (fromDivision.WarehouseOutput.TryGetItem(route.ProductDefinitionId, out var item))
+                if (fromDivision.WarehouseProductOutput.TryGetItem(route.ProductDefinitionId, out var item))
                 {
                     if (item is { Quantity: > 0 })
                     {
-                        if (!baseDivision.WarehouseInput.TryGetItem(route.ProductDefinitionId, out var targetItem))
+                        if (!baseDivision.WarehouseProductInput.TryGetItem(route.ProductDefinitionId, out var targetItem))
                         {
                             targetItem = (WarehouseProduct)item.Clone();
                         }
 
-                        fromDivision.WarehouseOutput.TryGetItem(route.ProductDefinitionId, out var sourceItem);
+                        fromDivision.WarehouseProductOutput.TryGetItem(route.ProductDefinitionId, out var sourceItem);
 
                         if (item.Quantity >= route.DeliveryCount)
                         {
@@ -56,7 +56,7 @@ namespace BusinessSharkService.Handlers.Divisions
         {
             foreach (var route in baseDivision.DeliveryRoutes)
             {
-                if (baseDivision.WarehouseInput.TryGetItem(route.ProductDefinitionId, out var item))
+                if (baseDivision.WarehouseProductInput.TryGetItem(route.ProductDefinitionId, out var item))
                 {
                     if (item.ProcessingQuantity > 0)
                     {

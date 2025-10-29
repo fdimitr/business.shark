@@ -17,7 +17,7 @@ namespace BusinessSharkService.Handlers.Divisions
         public override void StartCalculation(Factory factory)
         {
             Debug.Assert(factory.ProductDefinition != null);
-            if (factory.WarehouseInput.Count == 0)
+            if (factory.WarehouseProductOutput == null ||factory.WarehouseProductInput == null || factory.WarehouseProductInput.Count == 0)
             {
                 return; // No product to produce or no resources available
             }
@@ -36,7 +36,7 @@ namespace BusinessSharkService.Handlers.Divisions
                     
                     foreach (var unit in factory.ProductDefinition.ComponentUnits)
                     {
-                        factory.WarehouseInput.TryGetItem(unit.ComponentDefinitionId, out var item);
+                        factory.WarehouseProductInput.TryGetItem(unit.ComponentDefinitionId, out var item);
                         item.Quantity -= unit.ProductionQuantity;
                         listForQualityCalc.Add(new QualityItem(item.Quality, unit.QualityImpact));
                     }
@@ -62,14 +62,14 @@ namespace BusinessSharkService.Handlers.Divisions
                 var productionCount = (int)Math.Truncate(factory.ProgressProduction);
                 factory.ProgressProduction -= productionCount;
 
-                if (factory.WarehouseOutput.TryGetItem(factory.ProductDefinition.ProductDefinitionId, out WarehouseProduct storedItem))
+                if (factory.WarehouseProductOutput.TryGetItem(factory.ProductDefinition.ProductDefinitionId, out WarehouseProduct storedItem))
                 {
                     storedItem.ProcessingQuality = factory.ProgressQuality;
                     storedItem.ProcessingQuantity += productionCount;
                 }
                 else
                 {
-                    factory.WarehouseOutput.Add(new WarehouseProduct
+                    factory.WarehouseProductOutput.Add(new WarehouseProduct
                     {
                         ProductDefinitionId = factory.ProductDefinitionId,
                         ProductDefinition = factory.ProductDefinition,
@@ -87,7 +87,7 @@ namespace BusinessSharkService.Handlers.Divisions
 
         public override void CompleteCalculation(Factory factory)
         {
-            if (factory.ProductDefinition != null && factory.WarehouseOutput.TryGetItem(factory.ProductDefinitionId, out var item))
+            if (factory.ProductDefinition != null && factory.WarehouseProductOutput.TryGetItem(factory.ProductDefinitionId, out var item))
             {
                 if (item.ProcessingQuantity == 0)
                 {
@@ -109,7 +109,7 @@ namespace BusinessSharkService.Handlers.Divisions
 
             foreach (var unit in factory.ProductDefinition.ComponentUnits)
             {
-                if (!factory.WarehouseInput.TryGetItem(unit.ComponentDefinitionId, out WarehouseProduct item) ||
+                if (!factory.WarehouseProductInput.TryGetItem(unit.ComponentDefinitionId, out WarehouseProduct item) ||
                     item.Quantity < unit.ProductionQuantity)
                 {
                     return false;

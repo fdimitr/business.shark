@@ -34,9 +34,9 @@ namespace BusinessSharkService.DataAccess.Models.Location
         public int LandTax { get; set; } = 0;
 
         public List<BaseDivision> BaseDivisions { get; set; } = new();
-        public List<Factory> Factories => BaseDivisions.OfType<Factory>().ToList();
-        public List<DistributionCenter> Storages => BaseDivisions.OfType<DistributionCenter>().ToList();
-        public List<Mine> Mines => BaseDivisions.OfType<Mine>().ToList();
-        public List<Sawmill> Sawmills => BaseDivisions.OfType<Sawmill>().ToList();
+        public IReadOnlyList<Factory> Factories => BaseDivisions.OfType<Factory>().ToList();
+        public IReadOnlyList<DistributionCenter> DistributionCenters => BaseDivisions.OfType<DistributionCenter>().ToList();
+        public IReadOnlyList<Mine> Mines => BaseDivisions.OfType<Mine>().ToList();
+        public IReadOnlyList<Sawmill> Sawmills => BaseDivisions.OfType<Sawmill>().ToList();
     }
 }

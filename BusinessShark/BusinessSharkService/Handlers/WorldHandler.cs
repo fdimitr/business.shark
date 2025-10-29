@@ -37,8 +37,8 @@ namespace BusinessSharkService.Handlers
                 foreach (var city in country.Cities)
                 {
                     city.BaseDivisions = await _dbContext.BaseDivisions.Where(s => s.CityId == city.CityId)
-                        .Include(s=>s.WarehouseOutput)
-                        .Include(s=>s.WarehouseInput)
+                        .Include(s=>s.WarehouseProductOutput)
+                        .Include(s=>s.WarehouseProductInput)
                         .Include(s=>s.DeliveryRoutes)
                         .Include(f => f.Employees)
                         .Include(f => f.Tools)
@@ -49,17 +49,7 @@ namespace BusinessSharkService.Handlers
 
         public async Task SaveCalculationData()
         {
-            foreach (var country in _worldContext.Countries)
-            {
-                foreach (var city in country.Cities)
-                {
-                    //_dbContext.Storages.UpdateRange(city.Storages);
-                    //_dbContext.Factories.UpdateRange(city.Factories);
-                    //_dbContext.Mines.UpdateRange(city.Mines);
-                    //_dbContext.Sawmills.UpdateRange(city.Sawmills);
-                    await _dbContext.SaveChangesAsync();
-                }
-            }
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task Calculate(CancellationToken stoppingToken)

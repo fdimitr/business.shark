@@ -1,5 +1,4 @@
-﻿using BusinessSharkService.DataAccess;
-using BusinessSharkService.DataAccess.Models.Location;
+﻿using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.Handlers.Divisions;
 
 namespace BusinessSharkService.Handlers
@@ -31,7 +30,7 @@ namespace BusinessSharkService.Handlers
                     _factoryHandler.StartCalculation(factory);
                 }
 
-                foreach (var storage in city.Storages)
+                foreach (var storage in city.DistributionCenters)
                 {
                     _storageHandler.StartCalculation(storage);
                 }
@@ -54,7 +53,7 @@ namespace BusinessSharkService.Handlers
                 {
                     _factoryHandler.CompleteCalculation(factory);
                 }
-                foreach (var storage in city.Storages)
+                foreach (var storage in city.DistributionCenters)
                 {
                     _storageHandler.CompleteCalculation(storage);
                 }

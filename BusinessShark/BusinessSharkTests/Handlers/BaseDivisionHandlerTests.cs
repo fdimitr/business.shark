@@ -33,8 +33,40 @@ namespace BusinessSharkTests.Handlers
                 Name = "TestCity"
             };
 
-            _fromDivision = new DistributionCenter { Name = "From Division" };
-            _toDivision = new DistributionCenter { Name = "To Division" };
+            _fromDivision = new DistributionCenter
+            {
+                Name = "From Division",
+                CityId = 1,
+                Warehouses =
+                [
+                    new Warehouse
+                    {
+                        Type = (int)WarehouseType.Input
+                    },
+
+                    new Warehouse
+                    {
+                        Type = (int)WarehouseType.Output
+                    }
+                ]
+            };
+            _toDivision = new DistributionCenter
+            {
+                Name = "To Division",
+                CityId = 1,
+                Warehouses =
+                [
+                    new Warehouse
+                    {
+                        Type = (int)WarehouseType.Input
+                    },
+
+                    new Warehouse
+                    {
+                        Type = (int)WarehouseType.Output
+                    }
+                ]
+            };
 
             _fromProduct = new WarehouseProduct
             {
@@ -50,17 +82,17 @@ namespace BusinessSharkTests.Handlers
                 ProductDefinitionId = ProductDefinitions[(int)ProductType.Wood].ProductDefinitionId
             };  
 
-            _fromDivision.WarehouseOutput.Add(_fromProduct);
-            _toDivision.WarehouseInput.Add(_toProduct);
+            _fromDivision.WarehouseProductOutput!.Add(_fromProduct);
+            _toDivision.WarehouseProductInput!.Add(_toProduct);
 
             country.Cities.Add(city);
-            city.Storages.Add(_fromDivision);
-            city.Storages.Add(_toDivision);
+            city.BaseDivisions.Add(_fromDivision);
+            city.BaseDivisions.Add(_toDivision);
 
             _worldContext = new WorldContext
             {
                 ProductDefinitions = ProductDefinitions.ToFrozenDictionary(),
-                Countries = new List<Country> { country }
+                Countries = [country]
             };
             _worldContext.FillDivisions();
         }
@@ -83,10 +115,10 @@ namespace BusinessSharkTests.Handlers
             storageHandler.StartTransferItems(_toDivision);
 
             // Assert
-            _toDivision.WarehouseInput.TryGetItem((int)ProductType.Wood, out var targetItem);
+            _toDivision.WarehouseProductInput.TryGetItem((int)ProductType.Wood, out var targetItem);
             Assert.That(targetItem.ProcessingQuantity, Is.EqualTo(30));
 
-            _fromDivision.WarehouseOutput.TryGetItem((int)ProductType.Wood, out var outputItem);
+            _fromDivision.WarehouseProductOutput.TryGetItem((int)ProductType.Wood, out var outputItem);
             Assert.That(outputItem, Is.Not.Null);
             Assert.That(outputItem.Quantity, Is.EqualTo(70));
             Assert.That(targetItem.ProcessingQuality, Is.EqualTo(10));
@@ -110,10 +142,10 @@ namespace BusinessSharkTests.Handlers
             storageHandler.StartTransferItems(_toDivision);
 
             // Assert
-            _toDivision.WarehouseInput.TryGetItem((int)ProductType.Wood, out var targetItem);
+            _toDivision.WarehouseProductInput.TryGetItem((int)ProductType.Wood, out var targetItem);
             Assert.That(targetItem.ProcessingQuantity, Is.EqualTo(100));
 
-            _fromDivision.WarehouseOutput.TryGetItem((int)ProductType.Wood, out var outputItem);
+            _fromDivision.WarehouseProductOutput.TryGetItem((int)ProductType.Wood, out var outputItem);
             Assert.That(outputItem, Is.Not.Null);
             Assert.That(outputItem.Quantity, Is.EqualTo(0));
         }
@@ -134,7 +166,7 @@ namespace BusinessSharkTests.Handlers
             DistributionCenterHandler storageHandler = new DistributionCenterHandler(_worldContext);
             storageHandler.StartTransferItems(_toDivision);
 
-            _toDivision.WarehouseInput.TryGetItem((int)ProductType.Wood, out var targetItem);
+            _toDivision.WarehouseProductInput.TryGetItem((int)ProductType.Wood, out var targetItem);
             int prevQuantity = targetItem.Quantity;
 
             // Act

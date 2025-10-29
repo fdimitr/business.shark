@@ -3,7 +3,7 @@ using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
-using BusinessSharkService.Handlers;
+using BusinessSharkService.Handlers.Divisions;
 using BusinessSharkService.Handlers.Interfaces;
 using Moq;
 
@@ -23,15 +23,26 @@ namespace BusinessSharkTests.Handlers
                 ProductDefinition = productDef,
                 TechLevel = techLevel,
                 Tools = tools,
-                Workers = workers,
+                Employees = workers,
+                Warehouses =
+                [
+                    new Warehouse
+                    {
+                        Type = (int)WarehouseType.Input
+                    },
+                    new Warehouse
+                    {
+                        Type = (int)WarehouseType.Output
+                    }
+                ]
             };
 
-            foreach (var defintion in ProductDefinitions)
+            foreach (var definition in ProductDefinitions)
             {
-                factory.WarehouseInput.Add(new WarehouseProduct
+                factory.WarehouseProductInput!.Add(new WarehouseProduct
                 {
-                    ProductDefinitionId = (int)defintion.Key,
-                    ProductDefinition = defintion.Value,
+                    ProductDefinitionId = definition.Key,
+                    ProductDefinition = definition.Value,
                     Quantity = 100,
                     Quality = 5
                 });
@@ -51,7 +62,7 @@ namespace BusinessSharkTests.Handlers
             factoryHandler.StartCalculation(factory);
 
             // Assert
-            factory.WarehouseOutput.TryGetItem((int)ProductType.Bed, out var item);
+            factory.WarehouseProductOutput.TryGetItem((int)ProductType.Bed, out var item);
             Assert.That(item, Is.Not.Null);
             Assert.That(item.ProcessingQuantity, Is.EqualTo(1));
             Assert.That(item.ProcessingQuality, Is.EqualTo(2.6).Within(Tolerant));
@@ -62,7 +73,7 @@ namespace BusinessSharkTests.Handlers
         {
             // Arrange
             var factory = CreateFactoryWithResources(ProductDefinitions[(int)ProductType.Bed]);
-            factory.WarehouseInput[(int)ProductType.Wood].Quantity = 0; // Insufficient wood
+            factory.WarehouseProductInput![(int)ProductType.Wood].Quantity = 0; // Insufficient wood
 
             var worldContextMock = new Mock<IWorldContext>();
             var factoryHandler = new FactoryHandler(worldContextMock.Object);
@@ -71,7 +82,7 @@ namespace BusinessSharkTests.Handlers
             factoryHandler.StartCalculation(factory);
             
             // Assert
-            Assert.That(factory.WarehouseOutput, Is.Empty);
+            Assert.That(factory.WarehouseProductOutput, Is.Empty);
         }
 
         [Test]
@@ -79,7 +90,7 @@ namespace BusinessSharkTests.Handlers
         {
             // Arrange
             var factory = CreateFactoryWithResources(ProductDefinitions[(int)ProductType.Bed]);
-            factory.WarehouseInput.Clear(); // No resources
+            factory.WarehouseProductInput!.Clear(); // No resources
 
             var worldContextMock = new Mock<IWorldContext>();
             var factoryHandler = new FactoryHandler(worldContextMock.Object);
@@ -88,7 +99,7 @@ namespace BusinessSharkTests.Handlers
             factoryHandler.StartCalculation(factory);
 
             // Assert
-            Assert.That(factory.WarehouseOutput, Is.Empty);
+            Assert.That(factory.WarehouseProductOutput, Is.Empty);
         }
 
         [Test]
@@ -109,7 +120,7 @@ namespace BusinessSharkTests.Handlers
             factoryHandler.CompleteCalculation(factory);
 
             // Assert
-            factory.WarehouseOutput.TryGetItem((int)ProductType.Bed, out var item);
+            factory.WarehouseProductOutput.TryGetItem((int)ProductType.Bed, out var item);
             Assert.That(item, Is.Not.Null);
             Assert.That(item.ProcessingQuantity, Is.EqualTo(0));
             Assert.That(item.ProcessingQuality, Is.EqualTo(0));
@@ -123,7 +134,7 @@ namespace BusinessSharkTests.Handlers
             var productDef = (ProductDefinition)ProductDefinitions[(int)ProductType.Bed].Clone();
             productDef.BaseProductionCount = 0.5;
             var factory = CreateFactoryWithResources(productDef);
-            factory.Workers!.TechLevel = 3.0; // Increase worker tech level to boost production
+            factory.Employees!.TechLevel = 3.0; // Increase worker tech level to boost production
             factory.Tools!.TechLevel = 3.0;   // Increase tool tech level to boost production
 
             var worldContextMock = new Mock<IWorldContext>();
@@ -137,7 +148,7 @@ namespace BusinessSharkTests.Handlers
 
 
             // Assert
-            factory.WarehouseOutput.TryGetItem((int)ProductType.Bed, out var item);
+            factory.WarehouseProductOutput.TryGetItem((int)ProductType.Bed, out var item);
             Assert.That(item, Is.Not.Null);
             Assert.That(item.Quantity, Is.EqualTo(2));
             Assert.That(factory.ProgressProduction, Is.EqualTo(0.4).Within(Tolerance));
@@ -151,7 +162,7 @@ namespace BusinessSharkTests.Handlers
             var productDef = (ProductDefinition)ProductDefinitions[(int)ProductType.Bed].Clone();
             productDef.BaseProductionCount = 0.5;
             var factory = CreateFactoryWithResources(productDef);
-            factory.Workers!.TechLevel = 3.0; // Increase worker tech level to boost production
+            factory.Employees!.TechLevel = 3.0; // Increase worker tech level to boost production
             factory.Tools!.TechLevel = 3.0;   // Increase tool tech level to boost production
 
             var worldContextMock = new Mock<IWorldContext>();
@@ -159,20 +170,20 @@ namespace BusinessSharkTests.Handlers
 
 
             // Act
-            factory.WarehouseInput[(int)ProductType.Wood].Quality = 2.0f;
+            factory.WarehouseProductInput![(int)ProductType.Wood].Quality = 2.0f;
             factoryHandler.StartCalculation(factory);
             factoryHandler.CompleteCalculation(factory);
 
             var firstCycleQuality = factory.ProgressQuality;
 
-            factory.WarehouseInput[(int)ProductType.Wood].Quality = 4.0f;
+            factory.WarehouseProductInput[(int)ProductType.Wood].Quality = 4.0f;
             factoryHandler.StartCalculation(factory);
             factoryHandler.CompleteCalculation(factory);
 
             var secondCycleQuality = factory.ProgressQuality;
 
             // Assert
-            factory.WarehouseOutput.TryGetItem((int)ProductType.Bed, out var item);
+            factory.WarehouseProductOutput.TryGetItem((int)ProductType.Bed, out var item);
             Assert.That(item, Is.Not.Null);
             Assert.That(firstCycleQuality, Is.LessThan(secondCycleQuality));
             Assert.That(item.Quality, Is.EqualTo((firstCycleQuality + secondCycleQuality) / 2).Within(Tolerance));

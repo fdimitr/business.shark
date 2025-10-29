@@ -47,8 +47,7 @@ namespace BusinessSharkService.Handlers.Divisions
         public override void StartCalculation(Sawmill sawmill)
         {
             if (sawmill is null) throw new ArgumentNullException(nameof(sawmill));
-            if (sawmill.ProductDefinition is null) return;
-            if (sawmill.WarehouseInput is null) sawmill.WarehouseInput = new List<WarehouseProduct>();
+            if (sawmill.ProductDefinition is null || sawmill.WarehouseProductInput is null) return;
 
             // Calculate production quality and quantity
             var quality = CalculateProductionQuality(sawmill);
@@ -61,9 +60,9 @@ namespace BusinessSharkService.Handlers.Divisions
             var addedQuantity = (int)Math.Round(adjustedQuantity);
 
             // Add to temporary warehouse to the end of calculation process
-            sawmill.WarehouseInput.Add(new WarehouseProduct
+            sawmill.WarehouseProductInput.Add(new WarehouseProduct
             {
-                DivisionId = sawmill.DivisionId,
+                WarehouseId = sawmill.InputWarehouse!.WarehouseId,
                 ProductDefinitionId = sawmill.ProductDefinitionId,
                 Quality = quality,
                 Quantity = addedQuantity
@@ -77,26 +76,31 @@ namespace BusinessSharkService.Handlers.Divisions
         /// <param name="sawmill">The sawmill division to complete calculation for.</param>
         public override void CompleteCalculation(Sawmill sawmill)
         {
+            if (sawmill is null) throw new ArgumentNullException(nameof(sawmill));
+            if (sawmill.ProductDefinition is null 
+                || sawmill.WarehouseProductInput is null
+                || sawmill.WarehouseProductOutput is null)  return;
+
             // Try to get the product just produced in the input warehouse
-            if (sawmill.WarehouseInput.TryGetItem(sawmill.ProductDefinitionId, out var addedItem))
+            if (sawmill.WarehouseProductInput.TryGetItem(sawmill.ProductDefinitionId, out var addedItem))
             {
                 // If the output warehouse already contains this product, update its quantity and quality
-                if (sawmill.WarehouseOutput.TryGetItem(sawmill.ProductDefinitionId, out var item))
+                if (sawmill.WarehouseProductOutput.TryGetItem(sawmill.ProductDefinitionId, out var item))
                 {
                     // Calculate new average quality based on existing and added quantities/qualities
                     var newQuality = CalculateWarehouseQuality(item.Quantity, item.Quality, addedItem.Quantity, addedItem.Quality);
                     item.Quality = newQuality;
                     // Add all produced quantities from input warehouse to output warehouse
-                    item.Quantity += sawmill.WarehouseInput.Sum(i => i.Quantity);
+                    item.Quantity += sawmill.WarehouseProductInput.Sum(i => i.Quantity);
                 }
                 else
                 {
                     // If product does not exist in output warehouse, add it as a new entry
                     var totalQuantity = addedItem.Quantity;
                     var averageQuality = addedItem.Quality;
-                    sawmill.WarehouseOutput.Add(new WarehouseProduct
+                    sawmill.WarehouseProductOutput.Add(new WarehouseProduct
                     {
-                        DivisionId = sawmill.DivisionId,
+                        WarehouseId = sawmill.OutputWarehouse!.WarehouseId,
                         ProductDefinitionId = sawmill.ProductDefinitionId,
                         Quality = averageQuality,
                         Quantity = totalQuantity
@@ -109,7 +113,7 @@ namespace BusinessSharkService.Handlers.Divisions
                 // Deduct used raw materials from reserves
                 sawmill.RawMaterialReserves -= addedItem.Quantity;
                 // Clear the input warehouse after transferring items
-                sawmill.WarehouseInput.Clear();
+                sawmill.WarehouseProductInput.Clear();
             }
         }
 

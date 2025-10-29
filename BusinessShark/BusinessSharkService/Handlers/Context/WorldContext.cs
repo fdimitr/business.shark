@@ -26,7 +26,7 @@ namespace BusinessSharkService.Handlers.Context
 
             var storages = Countries
                 .SelectMany(c => c.Cities)
-                .SelectMany(city => city.Storages);
+                .SelectMany(city => city.DistributionCenters);
 
             var mines = Countries
                 .SelectMany(c => c.Cities)
@@ -37,16 +37,15 @@ namespace BusinessSharkService.Handlers.Context
                 .SelectMany(city => city.Sawmills);
 
             var divisions = factories
-                .Cast<BaseDivision>()
                 .Concat(storages.Cast<BaseDivision>())
-                .Concat(mines.Cast<BaseDivision>())
-                .Concat(sawmills.Cast<BaseDivision>());
+                .Concat(mines)
+                .Concat(sawmills);
 
             // Deduplicate by DivisionId (take first) then freeze.
             Divisions = divisions
                 .GroupBy(f => f.DivisionId)
                 .Select(g => g.First())
-                .ToDictionary(f => f.DivisionId, f => (BaseDivision)f);
+                .ToDictionary(f => f.DivisionId, f => f);
         }
     }
 }

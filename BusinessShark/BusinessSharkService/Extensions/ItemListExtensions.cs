@@ -8,15 +8,14 @@ namespace BusinessSharkService.Extensions
         /// Tries to get an Item from the list by its ItemId.
         /// Returns true if found; otherwise false. The found item is placed into the out parameter.
         /// </summary>
-        public static bool TryGetItem(this List<WarehouseProduct> items, int itemDefintiionId, out WarehouseProduct item)
+        public static bool TryGetItem(this List<WarehouseProduct>? items, int itemDefinitionId, out WarehouseProduct item)
         {
             ArgumentNullException.ThrowIfNull(items);
 
             // Simple linear scan; avoids LINQ allocation and permits early exit.
-            for (var i = 0; i < items.Count; i++)
+            foreach (var current in items)
             {
-                var current = items[i];
-                if (current.ProductDefinitionId == itemDefintiionId)
+                if (current.ProductDefinitionId == itemDefinitionId)
                 {
                     item = current;
                     return true;
