@@ -11,6 +11,8 @@ namespace BusinessSharkService.DataAccess.Models.Location
         [Key]
         public int CityId { get; set; }
 
+        public int CountryId { get; set; }
+
         [Required]
         [StringLength(30)]
         public required string Name { get; set; }
@@ -21,15 +23,20 @@ namespace BusinessSharkService.DataAccess.Models.Location
         [Comment("The wealth level")]
         public int WealthLevel { get; set; } = 0;
 
+        public int Population { get; set; } = 0;
+
+        public double AverageSalary { get; set; } = 0;
+
         [Comment("Base Land price in the city")]
         public int BaseLandPrice { get; set; } = 0;
 
         [Comment("Land tax in the city")]
         public int LandTax { get; set; } = 0;
 
-        public List<Factory> Factories { get; set; } = new();
-        public List<Storage> Storages { get; set; } = new();
-        public List<Mine> Mines { get; set; } = new();
-        public List<Sawmill> Sawmills { get; set; } = new();
+        public List<BaseDivision> BaseDivisions { get; set; } = new();
+        public List<Factory> Factories => BaseDivisions.OfType<Factory>().ToList();
+        public List<DistributionCenter> Storages => BaseDivisions.OfType<DistributionCenter>().ToList();
+        public List<Mine> Mines => BaseDivisions.OfType<Mine>().ToList();
+        public List<Sawmill> Sawmills => BaseDivisions.OfType<Sawmill>().ToList();
     }
 }

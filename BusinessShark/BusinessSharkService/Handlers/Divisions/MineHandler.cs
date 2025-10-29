@@ -1,7 +1,7 @@
 ﻿using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using BusinessSharkService.Handlers.Interfaces;
 
-namespace BusinessSharkService.Handlers
+namespace BusinessSharkService.Handlers.Divisions
 {
     public class MineHandler(IWorldContext worldHandler) : BaseDivisionHandler<Mine>(worldHandler)
     {
@@ -11,6 +11,11 @@ namespace BusinessSharkService.Handlers
 
         public override void CompleteCalculation(Mine baseDivision)
         {
+        }
+
+        public override void CalculateCosts(Mine baseDivision)
+        {
+            throw new NotImplementedException();
         }
     }
 }

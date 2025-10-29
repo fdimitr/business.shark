@@ -8,7 +8,7 @@ namespace BusinessSharkService.Extensions
         /// Tries to get an Item from the list by its ItemId.
         /// Returns true if found; otherwise false. The found item is placed into the out parameter.
         /// </summary>
-        public static bool TryGetItem(this List<Product> items, int itemDefintiionId, out Product item)
+        public static bool TryGetItem(this List<WarehouseProduct> items, int itemDefintiionId, out WarehouseProduct item)
         {
             ArgumentNullException.ThrowIfNull(items);
 

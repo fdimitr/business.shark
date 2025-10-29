@@ -15,7 +15,7 @@ namespace BusinessSharkTests.Handlers
         private Factory CreateFactoryWithResources(ProductDefinition productDef, float techLevel = 1.0f, float toolTechLevel = 1.0f, float workerTechLevel = 1.0f)
         {
             var tools = new Tools { TechLevel = toolTechLevel, TotalQuantity = 1 };
-            var workers = new Workers { TechLevel = workerTechLevel, TotalQuantity = 1 };
+            var workers = new Employees { TechLevel = workerTechLevel, TotalQuantity = 1 };
             var factory = new Factory{
                 DivisionId = 1,
                 Name = "TestFactory",
@@ -28,7 +28,7 @@ namespace BusinessSharkTests.Handlers
 
             foreach (var defintion in ProductDefinitions)
             {
-                factory.WarehouseInput.Add(new Product
+                factory.WarehouseInput.Add(new WarehouseProduct
                 {
                     ProductDefinitionId = (int)defintion.Key,
                     ProductDefinition = defintion.Value,

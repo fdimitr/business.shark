@@ -11,7 +11,7 @@ namespace BusinessSharkService.DataAccess.Models.Player
         public Player? Player { get; set; }
 
         public List<Factory> Factories { get; set; } = new();
-        public List<Storage> Storages { get; set; } = new();
+        public List<DistributionCenter> Storages { get; set; } = new();
         public List<Mine> Mines { get; set; } = new();
         public List<Sawmill> Sawmills { get; set; } = new();
 

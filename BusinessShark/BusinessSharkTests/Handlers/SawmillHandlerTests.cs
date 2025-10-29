@@ -1,7 +1,7 @@
 ﻿using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using BusinessSharkService.DataAccess.Models.Items;
-using BusinessSharkService.Handlers;
+using BusinessSharkService.Handlers.Divisions;
 using BusinessSharkService.Handlers.Interfaces;
 using Moq;
 
@@ -41,9 +41,9 @@ namespace BusinessSharkTests.Handlers
                 RawMaterialReserves = 100,
                 TechLevel = 1.5,
                 Tools = new Tools { TechLevel = 1.2 },
-                Workers = new Workers { TechLevel = 1.1 },
-                WarehouseInput = new List<Product>(),
-                WarehouseOutput = new List<Product>()
+                Workers = new Employees { TechLevel = 1.1 },
+                WarehouseInput = new List<WarehouseProduct>(),
+                WarehouseOutput = new List<WarehouseProduct>()
             };
         }
 

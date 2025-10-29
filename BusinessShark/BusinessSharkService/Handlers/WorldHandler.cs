@@ -1,5 +1,4 @@
 ﻿using BusinessSharkService.DataAccess;
-using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.Handlers.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Frozen;
@@ -37,28 +36,12 @@ namespace BusinessSharkService.Handlers
             {
                 foreach (var city in country.Cities)
                 {
-                    city.Storages = await _dbContext.Storages.Where(s => s.CityId == city.CityId)
+                    city.BaseDivisions = await _dbContext.BaseDivisions.Where(s => s.CityId == city.CityId)
                         .Include(s=>s.WarehouseOutput)
                         .Include(s=>s.WarehouseInput)
                         .Include(s=>s.DeliveryRoutes)
-                        .Include(f => f.Workers)
-                        .ToListAsync();
-                    city.Factories = await _dbContext.Factories.Where(f => f.CityId == city.CityId)
-                        .Include(f=> f.WarehouseOutput)
-                        .Include(f=> f.WarehouseInput)
-                        .Include(f=> f.DeliveryRoutes)
-                        .Include(f=> f.Workers)
-                        .Include(f=> f.Tools)
-                        .ToListAsync();
-                    city.Mines = await _dbContext.Mines.Where(m => m.CityId == city.CityId)
-                        .Include(m =>m.WarehouseOutput)
-                        .Include(m => m.WarehouseInput)
-                        .Include(f => f.Workers)
-                        .ToListAsync();
-                    city.Sawmills = await _dbContext.Sawmills.Where(s => s.CityId == city.CityId)
-                        .Include(s => s.WarehouseOutput)
-                        .Include(s => s.WarehouseInput)
-                        .Include(f => f.Workers)
+                        .Include(f => f.Employees)
+                        .Include(f => f.Tools)
                         .ToListAsync();
                 }
             }

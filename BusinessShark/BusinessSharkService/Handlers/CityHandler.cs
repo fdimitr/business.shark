@@ -1,5 +1,6 @@
 ﻿using BusinessSharkService.DataAccess;
 using BusinessSharkService.DataAccess.Models.Location;
+using BusinessSharkService.Handlers.Divisions;
 
 namespace BusinessSharkService.Handlers
 {
@@ -7,7 +8,7 @@ namespace BusinessSharkService.Handlers
     {
         private readonly DataContext _dataContext;
 
-        public CityHandler(DataContext dataContext, StorageHandler storageHandler)
+        public CityHandler(DataContext dataContext, DistributionCenterHandler storageHandler)
         {
             _dataContext = dataContext;
         }

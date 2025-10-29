@@ -3,10 +3,37 @@ using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
 using BusinessSharkService.Handlers.Interfaces;
 
-namespace BusinessSharkService.Handlers
+namespace BusinessSharkService.Handlers.Divisions
 {
-    public class SawmillHandler(IWorldContext worldHandler) : BaseDivisionHandler<Sawmill>(worldHandler)
+    public class SawmillHandler(IWorldContext worldContext) : BaseDivisionHandler<Sawmill>(worldContext)
     {
+        public override void CalculateCosts(Sawmill sawmill)
+        {
+            if (sawmill is null) throw new ArgumentNullException(nameof(sawmill));
+
+            double maintenanceCostsAmount = 0;
+            if (sawmill.Tools != null)
+            {
+                maintenanceCostsAmount = sawmill.Tools.MaintenanceCostsAmount;
+                sawmill.Tools.MaintenanceCostsAmount = 0; // Reset after accounting for costs
+            }
+
+            sawmill.SawmillTransactions = new SawmillTransactions
+            {
+                DivisionId = sawmill.DivisionId,
+                TransactionDate = DateTime.UtcNow,
+                SalesProductsAmount = 0.0,
+                PlantingAmount = sawmill.PlantingCosts,
+                EmployeeSalariesAmount = sawmill.Employees != null ? sawmill.Employees.SalaryPerEmployee * sawmill.Employees.TotalQuantity : 0,
+                MaintenanceCostsAmount = maintenanceCostsAmount,
+                RentalCostsAmount = sawmill.RentalCost,
+                EmployeeTrainingAmount = 0.0
+            };
+
+            sawmill.PlantingCosts = 0.0; // Reset planting costs after accounting for them
+
+        }
+
         /// <summary>
         /// Initiates the calculation process for a given sawmill, determining the production quality and quantity.
         /// </summary>
@@ -21,7 +48,7 @@ namespace BusinessSharkService.Handlers
         {
             if (sawmill is null) throw new ArgumentNullException(nameof(sawmill));
             if (sawmill.ProductDefinition is null) return;
-            if (sawmill.WarehouseInput is null) sawmill.WarehouseInput = new List<Product>();
+            if (sawmill.WarehouseInput is null) sawmill.WarehouseInput = new List<WarehouseProduct>();
 
             // Calculate production quality and quantity
             var quality = CalculateProductionQuality(sawmill);
@@ -34,7 +61,7 @@ namespace BusinessSharkService.Handlers
             var addedQuantity = (int)Math.Round(adjustedQuantity);
 
             // Add to temporary warehouse to the end of calculation process
-            sawmill.WarehouseInput.Add(new Product
+            sawmill.WarehouseInput.Add(new WarehouseProduct
             {
                 DivisionId = sawmill.DivisionId,
                 ProductDefinitionId = sawmill.ProductDefinitionId,
@@ -67,7 +94,7 @@ namespace BusinessSharkService.Handlers
                     // If product does not exist in output warehouse, add it as a new entry
                     var totalQuantity = addedItem.Quantity;
                     var averageQuality = addedItem.Quality;
-                    sawmill.WarehouseOutput.Add(new Product
+                    sawmill.WarehouseOutput.Add(new WarehouseProduct
                     {
                         DivisionId = sawmill.DivisionId,
                         ProductDefinitionId = sawmill.ProductDefinitionId,
@@ -76,6 +103,9 @@ namespace BusinessSharkService.Handlers
                     });
                 }
 
+                // Recalculate costs after completing production
+                CalculateCosts(sawmill);
+
                 // Deduct used raw materials from reserves
                 sawmill.RawMaterialReserves -= addedItem.Quantity;
                 // Clear the input warehouse after transferring items
@@ -83,10 +113,12 @@ namespace BusinessSharkService.Handlers
             }
         }
 
+
+
         internal static double CalculateProductionQuality(Sawmill sawmill)
         {
             var itemDef = sawmill.ProductDefinition;
-            if (itemDef is null || sawmill.Tools is null || sawmill.Workers is null)
+            if (itemDef is null || sawmill.Tools is null || sawmill.Employees is null)
             {
                 return 0;
             }
@@ -94,20 +126,20 @@ namespace BusinessSharkService.Handlers
             return sawmill.ResourceDepositQuality *
                 (sawmill.TechLevel * itemDef.TechImpactQuality +
                 sawmill.Tools!.TechLevel * itemDef.ToolImpactQuality +
-                sawmill.Workers!.TechLevel * itemDef.WorkerImpactQuality);
+                sawmill.Employees!.TechLevel * itemDef.WorkerImpactQuality);
         }
 
         internal static double CalculateProductionQuantity(Sawmill sawmill)
         {
             var itemDef = sawmill.ProductDefinition;
-            if (itemDef is null || sawmill.Tools is null || sawmill.Workers is null)
+            if (itemDef is null || sawmill.Tools is null || sawmill.Employees is null)
             {
                 return 0;
             }
 
             var quantity = sawmill.TechLevel * itemDef.TechImpactQuantity +
                 sawmill.Tools.TechLevel * itemDef.ToolImpactQuantity +
-                sawmill.Workers.TechLevel * itemDef.WorkerImpactQuantity;
+                sawmill.Employees.TechLevel * itemDef.WorkerImpactQuantity;
             return itemDef.BaseProductionCount * quantity;
         }
     }

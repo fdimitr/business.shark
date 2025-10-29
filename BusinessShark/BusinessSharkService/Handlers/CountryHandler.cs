@@ -1,17 +1,18 @@
 ﻿using BusinessSharkService.DataAccess;
 using BusinessSharkService.DataAccess.Models.Location;
+using BusinessSharkService.Handlers.Divisions;
 
 namespace BusinessSharkService.Handlers
 {
     public class CountryHandler
     {
         private readonly FactoryHandler _factoryHandler;
-        private readonly StorageHandler _storageHandler;
+        private readonly DistributionCenterHandler _storageHandler;
         private readonly MineHandler _mineHandler;
         private readonly SawmillHandler _sawmillHandler;
 
         public CountryHandler(FactoryHandler factoryHandler,
-            StorageHandler storageHandler,
+            DistributionCenterHandler storageHandler,
             MineHandler mineHandler,
             SawmillHandler sawmillHandler)
         {

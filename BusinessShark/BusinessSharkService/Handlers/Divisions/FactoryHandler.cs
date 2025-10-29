@@ -4,9 +4,9 @@ using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
 using BusinessSharkService.Handlers.Interfaces;
 
-namespace BusinessSharkService.Handlers
+namespace BusinessSharkService.Handlers.Divisions
 {
-    public class FactoryHandler(IWorldContext worldHandler) : BaseDivisionHandler<Factory>(worldHandler)
+    public class FactoryHandler(IWorldContext worldContext) : BaseDivisionHandler<Factory>(worldContext)
     {
         internal struct QualityItem(double quality, double qualityImpact)
         {
@@ -62,14 +62,14 @@ namespace BusinessSharkService.Handlers
                 var productionCount = (int)Math.Truncate(factory.ProgressProduction);
                 factory.ProgressProduction -= productionCount;
 
-                if (factory.WarehouseOutput.TryGetItem(factory.ProductDefinition.ProductDefinitionId, out Product storedItem))
+                if (factory.WarehouseOutput.TryGetItem(factory.ProductDefinition.ProductDefinitionId, out WarehouseProduct storedItem))
                 {
                     storedItem.ProcessingQuality = factory.ProgressQuality;
                     storedItem.ProcessingQuantity += productionCount;
                 }
                 else
                 {
-                    factory.WarehouseOutput.Add(new Product
+                    factory.WarehouseOutput.Add(new WarehouseProduct
                     {
                         ProductDefinitionId = factory.ProductDefinitionId,
                         ProductDefinition = factory.ProductDefinition,
@@ -109,7 +109,7 @@ namespace BusinessSharkService.Handlers
 
             foreach (var unit in factory.ProductDefinition.ComponentUnits)
             {
-                if (!factory.WarehouseInput.TryGetItem(unit.ComponentDefinitionId, out Product item) ||
+                if (!factory.WarehouseInput.TryGetItem(unit.ComponentDefinitionId, out WarehouseProduct item) ||
                     item.Quantity < unit.ProductionQuantity)
                 {
                     return false;
@@ -122,7 +122,7 @@ namespace BusinessSharkService.Handlers
         internal static double CalculateProductionQuality(Factory factory, List<QualityItem> qualityItems)
         {
             var itemDef = factory.ProductDefinition;
-            if (itemDef is null || factory.Tools is null || factory.Workers is null)
+            if (itemDef is null || factory.Tools is null || factory.Employees is null)
             {
                 return 0;
             }
@@ -130,21 +130,26 @@ namespace BusinessSharkService.Handlers
             return qualityItems.Sum(e => e.Quality * e.QualityImpact)
                    + factory.TechLevel * itemDef.TechImpactQuality
                    + factory.Tools!.TechLevel * itemDef.ToolImpactQuality
-                   + factory.Workers!.TechLevel * itemDef.WorkerImpactQuality;
+                   + factory.Employees!.TechLevel * itemDef.WorkerImpactQuality;
         }
 
         internal static double CalculateProductionQuantity(Factory factory)
         {
             var itemDef = factory.ProductDefinition;
-            if (itemDef is null || factory.Tools is null || factory.Workers is null)
+            if (itemDef is null || factory.Tools is null || factory.Employees is null)
             {
                 return 0;
             }
 
             var quantity = factory.TechLevel * itemDef.TechImpactQuantity
                            + factory.Tools.TechLevel * itemDef.ToolImpactQuantity
-                           + factory.Workers.TechLevel * itemDef.WorkerImpactQuantity;
+                           + factory.Employees.TechLevel * itemDef.WorkerImpactQuantity;
             return itemDef.BaseProductionCount * quantity;
+        }
+
+        public override void CalculateCosts(Factory baseDivision)
+        {
+            throw new NotImplementedException();
         }
     }
 }

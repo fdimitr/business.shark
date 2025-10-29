@@ -1,6 +1,7 @@
 ﻿using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.DataAccess.Models.Location;
+using BusinessSharkService.DataAccess.Models.Player;
 using BusinessSharkService.Handlers.Interfaces;
 using System.Collections.Frozen;
 
@@ -11,6 +12,7 @@ namespace BusinessSharkService.Handlers.Context
         public List<Country> Countries { get; set; } = new();
         public required FrozenDictionary<int, ProductDefinition> ProductDefinitions { get; set; }
         public Dictionary<int, BaseDivision> Divisions { get; set; } = new();
+        public FinancialTransaction Transaction { get; set; } = new();
 
         /// <summary>
         /// Builds the Divisions frozen dictionary from all Countries -> Cities -> Factories.

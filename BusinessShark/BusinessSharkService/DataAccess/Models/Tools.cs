@@ -7,8 +7,6 @@ namespace BusinessSharkService.DataAccess.Models
     public class Tools
     {
         [Key]
-        public int ToolsId { get; set; }
-
         public int DivisionId { get; set; }
 
         public int TotalQuantity { get; set; }
@@ -20,6 +18,8 @@ namespace BusinessSharkService.DataAccess.Models
         public double Deprecation { get; set; }
 
         public int ActiveQuantity => (int)Math.Round(TotalQuantity * Deprecation);
+
+        public double MaintenanceCostsAmount { get; set; }
 
     }
 }

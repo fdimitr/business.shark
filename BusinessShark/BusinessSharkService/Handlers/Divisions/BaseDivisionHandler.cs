@@ -3,12 +3,14 @@ using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
 using BusinessSharkService.Handlers.Interfaces;
 
-namespace BusinessSharkService.Handlers
+namespace BusinessSharkService.Handlers.Divisions
 {
     public abstract class BaseDivisionHandler<T>(IWorldContext worldContext) where T: BaseDivision
     {
         public abstract void StartCalculation(T baseDivision);
         public abstract void CompleteCalculation(T baseDivision);
+        public abstract void CalculateCosts(T baseDivision);
+
 
         public void StartTransferItems(T baseDivision)
         {
@@ -21,7 +23,7 @@ namespace BusinessSharkService.Handlers
                     {
                         if (!baseDivision.WarehouseInput.TryGetItem(route.ProductDefinitionId, out var targetItem))
                         {
-                            targetItem = (Product)item.Clone();
+                            targetItem = (WarehouseProduct)item.Clone();
                         }
 
                         fromDivision.WarehouseOutput.TryGetItem(route.ProductDefinitionId, out var sourceItem);
@@ -79,7 +81,7 @@ namespace BusinessSharkService.Handlers
             return weightedSum / totalWeight;
         }
 
-        internal static double CalculateWarehouseQuality(Product item)
+        internal static double CalculateWarehouseQuality(WarehouseProduct item)
         {
             return CalculateWarehouseQuality(item.Quantity, item.Quality, item.ProcessingQuantity, item.ProcessingQuality);
         }

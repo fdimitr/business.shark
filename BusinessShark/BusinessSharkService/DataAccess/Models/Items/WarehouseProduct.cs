@@ -1,12 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BusinessSharkService.DataAccess.Models.Divisions;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace BusinessSharkService.DataAccess.Models.Items
 {
     [Comment("They represent product located in warehouses and participating in production")]
-    [PrimaryKey(nameof(DivisionId), nameof(ProductDefinitionId))]
-    public class Product : ICloneable
+    public class WarehouseProduct : ICloneable
     {
-        public int DivisionId { get; set; }
+        [Key]
+        public int WarehouseProductId { get; set; }
+        public int WarehouseId { get; set; }
+        public Warehouse? Warehouse { get; set; }
 
         public int ProductDefinitionId { get; set; }
         public ProductDefinition? ProductDefinition { get; set; }
@@ -38,7 +42,7 @@ namespace BusinessSharkService.DataAccess.Models.Items
 
         public object Clone()
         {
-            return new Product
+            return new WarehouseProduct
             {
                 ProductDefinitionId = this.ProductDefinitionId,
                 ProductDefinition = this.ProductDefinition,

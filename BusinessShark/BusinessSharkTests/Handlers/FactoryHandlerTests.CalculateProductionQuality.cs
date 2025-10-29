@@ -2,7 +2,7 @@
 using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
-using BusinessSharkService.Handlers;
+using BusinessSharkService.Handlers.Divisions;
 
 namespace BusinessSharkTests.Handlers
 {
@@ -13,25 +13,25 @@ namespace BusinessSharkTests.Handlers
             ProductDefinition? def = null,
             int factoryTechLevel = 0,
             Tools? tools = null,
-            Workers? workers = null)
+            Employees? employees = null)
         {
             return new Factory
             {
                 ProductDefinition = def,
                 TechLevel = factoryTechLevel,
                 Tools = tools,
-                Workers = workers,
+                Employees = employees,
                 Name = string.Empty
             };
         }
 
         private Tools CreateTools(int techLevel) => new Tools { TechLevel = techLevel };
-        private Workers CreateWorkers(int techLevel) => new Workers { TechLevel = techLevel };
+        private Employees Createemployees(int techLevel) => new Employees { TechLevel = techLevel };
 
         [Test]
         public void CalculateProductionQuality_ReturnsZero_WhenProductDefinitionIsNull()
         {
-            var factory = CreateFactory(def: null, factoryTechLevel: 5, tools: CreateTools(3), workers: CreateWorkers(4));
+            var factory = CreateFactory(def: null, factoryTechLevel: 5, tools: CreateTools(3), employees: Createemployees(4));
             var qualityItems = new List<FactoryHandler.QualityItem> { new FactoryHandler.QualityItem { Quality = 10, QualityImpact = 0.2 } };
 
             var result = FactoryHandler.CalculateProductionQuality(factory, qualityItems);
@@ -43,7 +43,7 @@ namespace BusinessSharkTests.Handlers
         public void CalculateProductionQuality_ReturnsZero_WhenToolsIsNull()
         {
             var def = ProductDefinitions[(int)ProductType.Bed];
-            var factory = CreateFactory(def: def, factoryTechLevel: 5, tools: null, workers: CreateWorkers(4));
+            var factory = CreateFactory(def: def, factoryTechLevel: 5, tools: null, employees: Createemployees(4));
             var qualityItems = new List<FactoryHandler.QualityItem> { new FactoryHandler.QualityItem { Quality = 10, QualityImpact = 0.2 } };
 
             var result = FactoryHandler.CalculateProductionQuality(factory, qualityItems);
@@ -55,7 +55,7 @@ namespace BusinessSharkTests.Handlers
         public void CalculateProductionQuality_ReturnsZero_WhenWorkersIsNull()
         {
             var def = ProductDefinitions[(int)ProductType.Bed];
-            var factory = CreateFactory(def: def, factoryTechLevel: 5, tools: CreateTools(3), workers: null);
+            var factory = CreateFactory(def: def, factoryTechLevel: 5, tools: CreateTools(3), employees: null);
             var qualityItems = new List<FactoryHandler.QualityItem> { new FactoryHandler.QualityItem { Quality = 10, QualityImpact = 0.2 } };
 
             var result = FactoryHandler.CalculateProductionQuality(factory, qualityItems);
@@ -70,7 +70,7 @@ namespace BusinessSharkTests.Handlers
             def.TechImpactQuality = 1.5;
             def.ToolImpactQuality = 2.0;
             def.WorkerImpactQuality = 0.5;
-            var factory = CreateFactory(def: def, factoryTechLevel: 2, tools: CreateTools(3), workers: CreateWorkers(4));
+            var factory = CreateFactory(def: def, factoryTechLevel: 2, tools: CreateTools(3), employees: Createemployees(4));
             var qualityItems = new List<FactoryHandler.QualityItem>(); // sum part = 0
 
             // Expected = 2*1.5 + 3*2.0 + 4*0.5 = 3 + 6 + 2 = 11
@@ -86,7 +86,7 @@ namespace BusinessSharkTests.Handlers
             def.TechImpactQuality = 1.5;
             def.ToolImpactQuality = 2.0;
             def.WorkerImpactQuality = 0.5;
-            var factory = CreateFactory(def: def, factoryTechLevel: 2, tools: CreateTools(3), workers: CreateWorkers(4));
+            var factory = CreateFactory(def: def, factoryTechLevel: 2, tools: CreateTools(3), employees: Createemployees(4));
             var qualityItems = new List<FactoryHandler.QualityItem>
                 {
                     new FactoryHandler.QualityItem { Quality = 10, QualityImpact = 0.1 }, // 1.0

@@ -4,18 +4,18 @@ using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.Extensions;
-using BusinessSharkService.Handlers;
 using BusinessSharkService.Handlers.Context;
+using BusinessSharkService.Handlers.Divisions;
 using System.Collections.Frozen;
 
 namespace BusinessSharkTests.Handlers
 {
     internal class BaseDivisionHandlerTests : BaseHandlerTests
     {
-        private Storage _fromDivision;
-        private Storage _toDivision;
-        private Product _fromProduct;
-        private Product _toProduct;
+        private DistributionCenter _fromDivision;
+        private DistributionCenter _toDivision;
+        private WarehouseProduct _fromProduct;
+        private WarehouseProduct _toProduct;
         WorldContext _worldContext;
 
         [SetUp]
@@ -33,17 +33,17 @@ namespace BusinessSharkTests.Handlers
                 Name = "TestCity"
             };
 
-            _fromDivision = new Storage { Name = "From Division" };
-            _toDivision = new Storage { Name = "To Division" };
+            _fromDivision = new DistributionCenter { Name = "From Division" };
+            _toDivision = new DistributionCenter { Name = "To Division" };
 
-            _fromProduct = new Product
+            _fromProduct = new WarehouseProduct
             {
                 Quality = 10,
                 Quantity = 100,
                 ProductDefinitionId = ProductDefinitions[(int)ProductType.Wood].ProductDefinitionId
             };
 
-            _toProduct = new Product
+            _toProduct = new WarehouseProduct
             {
                 Quality = 5,
                 Quantity = 50,
@@ -77,7 +77,7 @@ namespace BusinessSharkTests.Handlers
             };
             _toDivision.DeliveryRoutes.Add(route);
 
-            StorageHandler storageHandler = new StorageHandler(_worldContext);
+            DistributionCenterHandler storageHandler = new DistributionCenterHandler(_worldContext);
 
             // Act
             storageHandler.StartTransferItems(_toDivision);
@@ -104,7 +104,7 @@ namespace BusinessSharkTests.Handlers
             };
             _toDivision.DeliveryRoutes.Add(route);
 
-            StorageHandler storageHandler = new StorageHandler(_worldContext);
+            DistributionCenterHandler storageHandler = new DistributionCenterHandler(_worldContext);
 
             // Act
             storageHandler.StartTransferItems(_toDivision);
@@ -131,7 +131,7 @@ namespace BusinessSharkTests.Handlers
             };
             _toDivision.DeliveryRoutes.Add(route);
 
-            StorageHandler storageHandler = new StorageHandler(_worldContext);
+            DistributionCenterHandler storageHandler = new DistributionCenterHandler(_worldContext);
             storageHandler.StartTransferItems(_toDivision);
 
             _toDivision.WarehouseInput.TryGetItem((int)ProductType.Wood, out var targetItem);
