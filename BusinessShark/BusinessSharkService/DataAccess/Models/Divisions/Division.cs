@@ -35,13 +35,16 @@ namespace BusinessSharkService.DataAccess.Models.Divisions
         [Comment("Warehouses for the division")]
         public List<Warehouse>? Warehouses { get; set; }
 
-        public DivisionTransactions? DivisionTransactions { get; set; }
+        public List<DivisionTransactions>? DivisionTransactions { get; set; }
 
         public List<DeliveryRoute> DeliveryRoutes { get; set; } = new();
 
         public Tools? Tools { get; set; }
 
         public Employees? Employees { get; set; }
+
+        [NotMapped]
+        internal DivisionTransactions CurrentTransactions { get; set; } = new();
 
         [NotMapped]
         public Warehouse InputWarehouse

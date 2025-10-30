@@ -3,6 +3,7 @@ using BusinessSharkService.DataAccess.Models.Player;
 using BusinessSharkService.Handlers.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Frozen;
+using System.Diagnostics;
 
 namespace BusinessSharkService.Handlers
 {
@@ -58,13 +59,17 @@ namespace BusinessSharkService.Handlers
         {
             try
             {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
                 await LoadCalculationData();
                 _worldContext.FillDivisions();
 
                 StartCalculation(stoppingToken);
                 CompleteCalculation(stoppingToken);
 
-                SummarizingСalculation(stoppingToken);
+                stopwatch.Stop();
+                SummarizingСalculation(stoppingToken, stopwatch.ElapsedMilliseconds);
 
                 if (!stoppingToken.IsCancellationRequested)
                 {
@@ -101,7 +106,7 @@ namespace BusinessSharkService.Handlers
         /// data from each division within a company, and creates a new financial transaction record for each company.
         /// The operation can be cancelled by signaling the provided <paramref name="stoppingToken"/>.</remarks>
         /// <param name="stoppingToken">A token to monitor for cancellation requests, which can be used to stop the operation prematurely.</param>
-        private void SummarizingСalculation(CancellationToken stoppingToken)
+        private void SummarizingСalculation(CancellationToken stoppingToken, long calculationMillisecond)
         {
             foreach(var company in _dbContext.Companies)
             {
@@ -115,7 +120,7 @@ namespace BusinessSharkService.Handlers
                 foreach(var division in company.Divisions)
                 {
                     // Here you can add summarizing logic for each division
-                    var divTran = division.DivisionTransactions;
+                    var divTran = division.CurrentTransactions;
                     if (divTran == null) continue;
 
                     financialTransactions.SalesProductsAmount += divTran.SalesProductsAmount;
@@ -131,7 +136,22 @@ namespace BusinessSharkService.Handlers
                     financialTransactions.ReplenishmentAmount += divTran.ReplenishmentAmount;
                 }
 
+                financialTransactions.CalculationMilliseconds = calculationMillisecond;
                 _dbContext.FinancialTransactions.Add(financialTransactions);
+
+                var total = financialTransactions.SalesProductsAmount
+                            - financialTransactions.PurchasedProductsAmount
+                            - financialTransactions.TransportCostsAmount
+                            - financialTransactions.EmployeeSalariesAmount
+                            - financialTransactions.MaintenanceCostsAmount
+                            - financialTransactions.IncomeTaxAmount
+                            - financialTransactions.RentalCostsAmount
+                            - financialTransactions.EmployeeTrainingAmount
+                            - financialTransactions.CustomAmount
+                            - financialTransactions.AdvertisingCostsAmount
+                            - financialTransactions.ReplenishmentAmount;
+
+                company.Balance += total;
             }
         }
 

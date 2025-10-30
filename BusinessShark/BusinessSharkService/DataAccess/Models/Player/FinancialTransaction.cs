@@ -24,5 +24,6 @@ namespace BusinessSharkService.DataAccess.Models.Player
 
         // Сost of Replenishment of Raw Materials
         public double ReplenishmentAmount { get; set; }
+        public long CalculationMilliseconds { get; set; }
     }
 }

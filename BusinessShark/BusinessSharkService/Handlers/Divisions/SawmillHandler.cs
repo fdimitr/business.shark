@@ -2,6 +2,7 @@
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
 using BusinessSharkService.Handlers.Interfaces;
+using System.Diagnostics;
 
 namespace BusinessSharkService.Handlers.Divisions
 {
@@ -18,7 +19,7 @@ namespace BusinessSharkService.Handlers.Divisions
                 sawmill.Tools.MaintenanceCostsAmount = 0; // Reset after accounting for costs
             }
 
-            sawmill.DivisionTransactions = new DivisionTransactions
+            sawmill.CurrentTransactions = new DivisionTransactions
             {
                 DivisionId = sawmill.DivisionId,
                 TransactionDate = DateTime.UtcNow,
@@ -27,8 +28,14 @@ namespace BusinessSharkService.Handlers.Divisions
                 EmployeeSalariesAmount = sawmill.Employees != null ? sawmill.Employees.SalaryPerEmployee * sawmill.Employees.TotalQuantity : 0,
                 MaintenanceCostsAmount = maintenanceCostsAmount,
                 RentalCostsAmount = sawmill.RentalCost,
-                EmployeeTrainingAmount = 0.0
+                EmployeeTrainingAmount = 0.0,
             };
+            
+            if (sawmill.DivisionTransactions == null)
+            {
+                sawmill.DivisionTransactions = new List<DivisionTransactions>();
+            }
+            sawmill.DivisionTransactions.Add(sawmill.CurrentTransactions);
 
             sawmill.PlantingCosts = 0.0; // Reset planting costs after accounting for them
 
@@ -117,6 +124,7 @@ namespace BusinessSharkService.Handlers.Divisions
                 // Clear the input warehouse after transferring items
                 sawmill.WarehouseProductInput.Clear();
             }
+            
         }
 
 

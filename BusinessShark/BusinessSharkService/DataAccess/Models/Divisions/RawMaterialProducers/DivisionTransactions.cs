@@ -7,7 +7,7 @@ namespace BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers
         [Key]
         public int DivisionTransactionsId { get; set; }
         public int DivisionId { get; set; }
-        public Division? Division { get; set; }
+        public Division? Division { get; set; } = null!;
         public DateTime TransactionDate { get; set; }
 
         public double SalesProductsAmount { get; set; }

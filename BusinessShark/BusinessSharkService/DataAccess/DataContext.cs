@@ -55,9 +55,9 @@ namespace BusinessSharkService.DataAccess
             modelBuilder.Entity<Country>().ToTable("Countries");
 
             modelBuilder.Entity<Division>()
-                .HasOne(d=>d.City)
-                .WithMany(c=>c.Divisions)
-                .HasForeignKey(d=>d.CityId)
+                .HasOne(d => d.City)
+                .WithMany(c => c.Divisions)
+                .HasForeignKey(d => d.CityId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Division>()
@@ -86,25 +86,6 @@ namespace BusinessSharkService.DataAccess
                 .HasColumnType("xid")
                 .ValueGeneratedOnAddOrUpdate();
 
-            // **************** Seeding Admin Player and Company ****************
-
-            modelBuilder.Entity<Player>().HasData(new Player
-            {
-                PlayerId = 1,
-                Name = "Admin",
-                Login = "admin",
-                Password = PasswordHelper.HashPassword("12345"),
-                CreatedDate = DateOnly.FromDateTime(DateTime.UtcNow)
-            });
-
-            modelBuilder.Entity<Company>().HasData(new Company
-            {
-                CompanyId = 1,
-                PlayerId = 1,
-                Name = "Admin Enterprise",
-                Balance = 1000000.0
-            });
-
             // **************** Seeding Product Categories **************************
             modelBuilder.Entity<ProductCategory>().HasData(new ProductCategory
             {
@@ -130,103 +111,96 @@ namespace BusinessSharkService.DataAccess
             string json = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "DataAccess\\ProductDefinitions.json"));
 
             // десериализуем в динамический объект
-            var data = JsonConvert.DeserializeObject<List<ProductDefinition>>(json);
-            if (data == null || data.Count == 0) return;
-
-            // добавляем данные в модель
-            foreach (var productDefinition in data)
             {
-                modelBuilder.Entity<ProductDefinition>().HasData(productDefinition);
+                var data = JsonConvert.DeserializeObject<List<ProductDefinition>>(json);
+                if (data == null || data.Count == 0) return;
 
-                foreach (var componentUnit in productDefinition.ComponentUnits)
+                // добавляем данные в модель
+                foreach (var productDefinition in data)
                 {
-                    componentUnit.ProductDefinitionId = productDefinition.ProductDefinitionId;
-                    // Seeding Component Units
-                    modelBuilder.Entity<ComponentUnit>().HasData(componentUnit);
+                    modelBuilder.Entity<ProductDefinition>().HasData(productDefinition);
+
+                    foreach (var componentUnit in productDefinition.ComponentUnits)
+                    {
+                        componentUnit.ProductDefinitionId = productDefinition.ProductDefinitionId;
+                        // Seeding Component Units
+                        modelBuilder.Entity<ComponentUnit>().HasData(componentUnit);
+                    }
+
+                    productDefinition.ComponentUnits = new(); // чтобы избежать повторного добавления
                 }
+                // *****************************************************************************
 
-                productDefinition.ComponentUnits = new(); // чтобы избежать повторного добавления
+
+                modelBuilder.Entity<Country>().HasData(new Country
+                {
+                    CountryId = 1,
+                    Name = "Ukraine",
+                });
+
+                modelBuilder.Entity<City>().HasData(new City
+                {
+                    CityId = 1,
+                    Name = "Kharkiv",
+                    CountryId = 1,
+                    Population = 1500000,
+                    AverageSalary = 1300.0
+                });
+                modelBuilder.Entity<City>().HasData(new City
+                {
+                    CityId = 2,
+                    Name = "Kyiv",
+                    CountryId = 1,
+                    Population = 3000000,
+                    AverageSalary = 1500.0
+                });
+                modelBuilder.Entity<City>().HasData(new City
+                {
+                    CityId = 3,
+                    Name = "Lviv",
+                    CountryId = 1,
+                    Population = 800000,
+                    AverageSalary = 1200.0
+                });
+
+                // **************** Seeding Test Data (Admin Company) from JSON ****************
+                string filePath = Path.Combine(AppContext.BaseDirectory, "DataAccess\\AdminSeeds.json");
+                var adminSeedData = AdminSeedLoader.LoadAdminSeedData(filePath);
+
+                // Access the deserialized objects
+                List<Player> players = adminSeedData.Players;
+                List<Company> companies = adminSeedData.Companies;
+                List<Sawmill> sawmills = adminSeedData.Sawmills;
+                List<Warehouse> warehouses = adminSeedData.Warehouses;
+                List<Tools> tools = adminSeedData.Tools;
+                List<Employees> employees = adminSeedData.Employees;
+
+                foreach (var player in players)
+                {
+                    modelBuilder.Entity<Player>().HasData(player);
+                }
+                foreach (var company in companies)
+                {
+                    modelBuilder.Entity<Company>().HasData(company);
+                }
+                foreach (var sawmill in sawmills)
+                {
+                    modelBuilder.Entity<Sawmill>().HasData(sawmill);
+                }
+                foreach (var warehouse in warehouses)
+                {
+                    modelBuilder.Entity<Warehouse>().HasData(warehouse);
+                }
+                foreach (var tool in tools)
+                {
+                    modelBuilder.Entity<Tools>().HasData(tool);
+                }
+                foreach (var employee in employees)
+                {
+                    modelBuilder.Entity<Employees>().HasData(employee);
+                }
+                // *****************************************************************************
             }
-
-
-            modelBuilder.Entity<Country>().HasData(new Country
-            {
-                CountryId = 1,
-                Name = "Ukraine",
-            });
-
-            modelBuilder.Entity<City>().HasData(new City
-            {
-                CityId = 1,
-                Name = "Kharkiv",
-                CountryId = 1,
-                Population = 1500000,
-                AverageSalary = 1300.0
-            });
-            modelBuilder.Entity<City>().HasData(new City
-            {
-                CityId = 2,
-                Name = "Kyiv",
-                CountryId = 1,
-                Population = 3000000,
-                AverageSalary = 1500.0
-            });
-            modelBuilder.Entity<City>().HasData(new City
-            {
-                CityId = 3,
-                Name = "Lviv",
-                CountryId = 1,
-                Population = 800000,
-                AverageSalary = 1200.0
-            });
-
-            modelBuilder.Entity<Sawmill>().HasData(new Sawmill
-            {
-                DivisionId = 1,
-                CompanyId = 1,
-                CityId = 1,
-                Name = "Admin Sawmill",
-                TechLevel = 1,
-                RawMaterialReserves = Int32.MaxValue,
-                ProductDefinitionId = 1, // Assuming ProductDefinition with ID 1 exists
-                ResourceDepositQuality = 1.0,
-                VolumeCapacity = 5000,
-                RentalCost = 1000
-            });
-
-            modelBuilder.Entity<Warehouse>().HasData(new Warehouse()
-            {
-                WarehouseId = 1,
-                DivisionId = 1,
-                Type = (int)WarehouseType.Input,
-                VolumeCapacity = 10000,
-            });
-
-            modelBuilder.Entity<Warehouse>().HasData(new Warehouse()
-            {
-                WarehouseId = 2,
-                DivisionId = 1,
-                Type = (int)WarehouseType.Output,
-                VolumeCapacity = 10000,
-            });
-
-            modelBuilder.Entity<Employees>().HasData(new Employees
-            {
-                EmployeesId = 1,
-                DivisionId = 1,
-                TechLevel = 2,
-                SalaryPerEmployee = 500.0,
-                TotalQuantity = 5,
-            });
-
-            modelBuilder.Entity<Tools>().HasData(new Tools
-            {
-                ToolsId = 1,
-                DivisionId = 1,
-                TechLevel = 2,
-                Deprecation = 0.01,
-                TotalQuantity = 5,
-            });
         }
     }
 }
