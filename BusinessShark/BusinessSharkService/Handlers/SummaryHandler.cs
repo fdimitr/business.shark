@@ -21,7 +21,7 @@ namespace BusinessSharkService.Handlers
             }
 
             var lastTransaction = await _dbContext.FinancialTransactions
-                .Where(t => t.PlayerId == playerId)
+                .Where(t => t.CompanyId == company.CompanyId)
                 .OrderByDescending(t => t.TransactionDate)
                 .FirstOrDefaultAsync();
 
@@ -37,7 +37,8 @@ namespace BusinessSharkService.Handlers
                            lastTransaction.RentalCostsAmount +
                            lastTransaction.EmployeeTrainingAmount +
                            lastTransaction.CustomAmount +
-                           lastTransaction.AdvertisingCostsAmount : 0
+                           lastTransaction.AdvertisingCostsAmount +
+                           lastTransaction.RentalCostsAmount : 0
             };
         }
     }

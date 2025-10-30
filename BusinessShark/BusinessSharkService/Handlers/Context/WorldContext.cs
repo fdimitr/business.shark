@@ -11,8 +11,7 @@ namespace BusinessSharkService.Handlers.Context
     {
         public List<Country> Countries { get; set; } = new();
         public required FrozenDictionary<int, ProductDefinition> ProductDefinitions { get; set; }
-        public Dictionary<int, BaseDivision> Divisions { get; set; } = new();
-        public FinancialTransaction Transaction { get; set; } = new();
+        public Dictionary<int, Division> Divisions { get; set; } = new();
 
         /// <summary>
         /// Builds the Divisions frozen dictionary from all Countries -> Cities -> Factories.
@@ -37,7 +36,7 @@ namespace BusinessSharkService.Handlers.Context
                 .SelectMany(city => city.Sawmills);
 
             var divisions = factories
-                .Concat(storages.Cast<BaseDivision>())
+                .Concat(storages.Cast<Division>())
                 .Concat(mines)
                 .Concat(sawmills);
 

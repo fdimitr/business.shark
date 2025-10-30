@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BusinessSharkService.DataAccess.Models.Player
+namespace BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers
 {
-    public class FinancialTransaction
+    public class DivisionTransactions
     {
         [Key]
-        public int FinancialTransactionId { get; set; }
-        public int CompanyId { get; set; }
-        public Company? Company { get; set; }
+        public int DivisionTransactionsId { get; set; }
+        public int DivisionId { get; set; }
+        public Division? Division { get; set; }
         public DateTime TransactionDate { get; set; }
 
         public double SalesProductsAmount { get; set; }

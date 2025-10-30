@@ -6,7 +6,7 @@ using BusinessSharkService.Handlers.Interfaces;
 
 namespace BusinessSharkService.Handlers.Divisions
 {
-    public class FactoryHandler(IWorldContext worldContext) : BaseDivisionHandler<Factory>(worldContext)
+    public class FactoryHandler(IWorldContext worldContext) : DivisionHandler<Factory>(worldContext)
     {
         internal struct QualityItem(double quality, double qualityImpact)
         {
@@ -147,7 +147,7 @@ namespace BusinessSharkService.Handlers.Divisions
             return itemDef.BaseProductionCount * quantity;
         }
 
-        public override void CalculateCosts(Factory baseDivision)
+        public override void CalculateCosts(Factory Division)
         {
             throw new NotImplementedException();
         }

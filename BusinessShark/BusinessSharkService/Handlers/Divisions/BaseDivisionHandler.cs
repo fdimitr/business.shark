@@ -5,23 +5,25 @@ using BusinessSharkService.Handlers.Interfaces;
 
 namespace BusinessSharkService.Handlers.Divisions
 {
-    public abstract class BaseDivisionHandler<T>(IWorldContext worldContext) where T: BaseDivision
+    public abstract class DivisionHandler<T>(IWorldContext worldContext) where T: Division
     {
-        public abstract void StartCalculation(T baseDivision);
-        public abstract void CompleteCalculation(T baseDivision);
-        public abstract void CalculateCosts(T baseDivision);
+        protected IWorldContext WorldContext => worldContext;
+
+        public abstract void StartCalculation(T Division);
+        public abstract void CompleteCalculation(T Division);
+        public abstract void CalculateCosts(T Division);
 
 
-        public void StartTransferItems(T baseDivision)
+        public void StartTransferItems(T Division)
         {
-            foreach (var route in baseDivision.DeliveryRoutes)
+            foreach (var route in Division.DeliveryRoutes)
             {
                 var fromDivision = worldContext.Divisions[route.DivisionId];
                 if (fromDivision.WarehouseProductOutput.TryGetItem(route.ProductDefinitionId, out var item))
                 {
                     if (item is { Quantity: > 0 })
                     {
-                        if (!baseDivision.WarehouseProductInput.TryGetItem(route.ProductDefinitionId, out var targetItem))
+                        if (!Division.WarehouseProductInput.TryGetItem(route.ProductDefinitionId, out var targetItem))
                         {
                             targetItem = (WarehouseProduct)item.Clone();
                         }
@@ -52,11 +54,11 @@ namespace BusinessSharkService.Handlers.Divisions
 
         }
 
-        public void CompleteTransferItems(T baseDivision)
+        public void CompleteTransferItems(T Division)
         {
-            foreach (var route in baseDivision.DeliveryRoutes)
+            foreach (var route in Division.DeliveryRoutes)
             {
-                if (baseDivision.WarehouseProductInput.TryGetItem(route.ProductDefinitionId, out var item))
+                if (Division.WarehouseProductInput.TryGetItem(route.ProductDefinitionId, out var item))
                 {
                     if (item.ProcessingQuantity > 0)
                     {

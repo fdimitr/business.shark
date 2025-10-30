@@ -11,25 +11,25 @@ namespace BusinessSharkService.DataAccess
 {
     public sealed class DataContext : DbContext
     {
-        public DbSet<BaseDivision> BaseDivisions { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Division> Divisions { get; set; }
         public DbSet<Factory> Factories { get; set; }
         public DbSet<DistributionCenter> Storages { get; set; }
         public DbSet<Mine> Mines { get; set; }
         public DbSet<Sawmill> Sawmills { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
-
         public DbSet<ProductCategory> Categories { get; set; }
-        public DbSet<Country> Countries { get; set; }
-        public DbSet<City> Cities { get; set; }
         public DbSet<ComponentUnit> ComponentUnits { get; set; }
         public DbSet<ProductDefinition> ProductDefinitions { get; set; }
-        public DbSet<WarehouseProduct> Items { get; set; }
+        public DbSet<WarehouseProduct> WarehouseProducts { get; set; }
         public DbSet<DeliveryRoute> DeliveryRoutes { get; set; }
         public DbSet<Tools> Tools { get; set; }
         public DbSet<Employees> Employees { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<FinancialTransaction> FinancialTransactions { get; set; }
+        public DbSet<DivisionTransactions> DivisionTransactions { get; set; }
 
         public DataContext()
         {
@@ -45,21 +45,30 @@ namespace BusinessSharkService.DataAccess
             base.OnModelCreating(modelBuilder);
             // Configure relationships and keys if needed
 
-            modelBuilder.Entity<BaseDivision>().ToTable("BaseDivisions");
+            modelBuilder.Entity<Division>().ToTable("Divisions");
             modelBuilder.Entity<Factory>().ToTable("Factories");
             modelBuilder.Entity<DistributionCenter>().ToTable("DistributionCenters");
             modelBuilder.Entity<Mine>().ToTable("Mines");
             modelBuilder.Entity<Sawmill>().ToTable("Sawmills");
+            modelBuilder.Entity<ProductDefinition>().ToTable("ProductDefinitions");
+            modelBuilder.Entity<City>().ToTable("Cities");
+            modelBuilder.Entity<Country>().ToTable("Countries");
 
-            modelBuilder.Entity<BaseDivision>()
+            modelBuilder.Entity<Division>()
                 .HasOne(d=>d.City)
-                .WithMany(c=>c.BaseDivisions)
+                .WithMany(c=>c.Divisions)
                 .HasForeignKey(d=>d.CityId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<BaseDivision>()
+            modelBuilder.Entity<Division>()
+                .HasOne(d => d.Company)
+                .WithMany(c => c.Divisions)
+                .HasForeignKey(d => d.CompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Division>()
                 .HasMany(f => f.Warehouses)
-                .WithOne(w => w.BaseDivision)
+                .WithOne(w => w.Division)
                 .HasForeignKey(w => w.DivisionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -68,6 +77,14 @@ namespace BusinessSharkService.DataAccess
                 .WithOne(p => p.Warehouse)
                 .HasForeignKey(p => p.WarehouseId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProductDefinition>()
+                .Property(p => p.TimeStamp)
+                .IsRowVersion()
+                .IsConcurrencyToken()
+                .HasColumnName("xmin")
+                .HasColumnType("xid")
+                .ValueGeneratedOnAddOrUpdate();
 
             // **************** Seeding Admin Player and Company ****************
 
@@ -87,14 +104,6 @@ namespace BusinessSharkService.DataAccess
                 Name = "Admin Enterprise",
                 Balance = 1000000.0
             });
-
-            modelBuilder.Entity<ProductDefinition>()
-                .Property(p => p.TimeStamp)
-                .IsRowVersion()
-                .IsConcurrencyToken()
-                .HasColumnName("xmin")
-                .HasColumnType("xid")
-                .ValueGeneratedOnAddOrUpdate();
 
             // **************** Seeding Product Categories **************************
             modelBuilder.Entity<ProductCategory>().HasData(new ProductCategory
@@ -174,16 +183,36 @@ namespace BusinessSharkService.DataAccess
             modelBuilder.Entity<Sawmill>().HasData(new Sawmill
             {
                 DivisionId = 1,
+                CompanyId = 1,
                 CityId = 1,
                 Name = "Admin Sawmill",
                 TechLevel = 1,
                 RawMaterialReserves = Int32.MaxValue,
                 ProductDefinitionId = 1, // Assuming ProductDefinition with ID 1 exists
                 ResourceDepositQuality = 1.0,
+                VolumeCapacity = 5000,
+                RentalCost = 1000
+            });
+
+            modelBuilder.Entity<Warehouse>().HasData(new Warehouse()
+            {
+                WarehouseId = 1,
+                DivisionId = 1,
+                Type = (int)WarehouseType.Input,
+                VolumeCapacity = 10000,
+            });
+
+            modelBuilder.Entity<Warehouse>().HasData(new Warehouse()
+            {
+                WarehouseId = 2,
+                DivisionId = 1,
+                Type = (int)WarehouseType.Output,
+                VolumeCapacity = 10000,
             });
 
             modelBuilder.Entity<Employees>().HasData(new Employees
             {
+                EmployeesId = 1,
                 DivisionId = 1,
                 TechLevel = 2,
                 SalaryPerEmployee = 500.0,
@@ -192,6 +221,7 @@ namespace BusinessSharkService.DataAccess
 
             modelBuilder.Entity<Tools>().HasData(new Tools
             {
+                ToolsId = 1,
                 DivisionId = 1,
                 TechLevel = 2,
                 Deprecation = 0.01,

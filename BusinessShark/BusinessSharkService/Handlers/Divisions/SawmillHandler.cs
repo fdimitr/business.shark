@@ -5,7 +5,7 @@ using BusinessSharkService.Handlers.Interfaces;
 
 namespace BusinessSharkService.Handlers.Divisions
 {
-    public class SawmillHandler(IWorldContext worldContext) : BaseDivisionHandler<Sawmill>(worldContext)
+    public class SawmillHandler(IWorldContext worldContext) : DivisionHandler<Sawmill>(worldContext)
     {
         public override void CalculateCosts(Sawmill sawmill)
         {
@@ -18,12 +18,12 @@ namespace BusinessSharkService.Handlers.Divisions
                 sawmill.Tools.MaintenanceCostsAmount = 0; // Reset after accounting for costs
             }
 
-            sawmill.SawmillTransactions = new SawmillTransactions
+            sawmill.DivisionTransactions = new DivisionTransactions
             {
                 DivisionId = sawmill.DivisionId,
                 TransactionDate = DateTime.UtcNow,
                 SalesProductsAmount = 0.0,
-                PlantingAmount = sawmill.PlantingCosts,
+                ReplenishmentAmount = sawmill.PlantingCosts,
                 EmployeeSalariesAmount = sawmill.Employees != null ? sawmill.Employees.SalaryPerEmployee * sawmill.Employees.TotalQuantity : 0,
                 MaintenanceCostsAmount = maintenanceCostsAmount,
                 RentalCostsAmount = sawmill.RentalCost,
@@ -47,7 +47,9 @@ namespace BusinessSharkService.Handlers.Divisions
         public override void StartCalculation(Sawmill sawmill)
         {
             if (sawmill is null) throw new ArgumentNullException(nameof(sawmill));
-            if (sawmill.ProductDefinition is null || sawmill.WarehouseProductInput is null) return;
+            if (sawmill.ProductDefinitionId <= 0 || sawmill.WarehouseProductInput is null) return;
+
+            sawmill.ProductDefinition = WorldContext.ProductDefinitions[sawmill.ProductDefinitionId];
 
             // Calculate production quality and quantity
             var quality = CalculateProductionQuality(sawmill);
@@ -77,7 +79,7 @@ namespace BusinessSharkService.Handlers.Divisions
         public override void CompleteCalculation(Sawmill sawmill)
         {
             if (sawmill is null) throw new ArgumentNullException(nameof(sawmill));
-            if (sawmill.ProductDefinition is null 
+            if (sawmill.ProductDefinitionId <= 0
                 || sawmill.WarehouseProductInput is null
                 || sawmill.WarehouseProductOutput is null)  return;
 

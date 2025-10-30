@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using BusinessSharkService.DataAccess.Models.Divisions;
+﻿using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessSharkService.DataAccess.Models.Location
 {
@@ -33,10 +34,18 @@ namespace BusinessSharkService.DataAccess.Models.Location
         [Comment("Land tax in the city")]
         public int LandTax { get; set; } = 0;
 
-        public List<BaseDivision> BaseDivisions { get; set; } = new();
-        public IReadOnlyList<Factory> Factories => BaseDivisions.OfType<Factory>().ToList();
-        public IReadOnlyList<DistributionCenter> DistributionCenters => BaseDivisions.OfType<DistributionCenter>().ToList();
-        public IReadOnlyList<Mine> Mines => BaseDivisions.OfType<Mine>().ToList();
-        public IReadOnlyList<Sawmill> Sawmills => BaseDivisions.OfType<Sawmill>().ToList();
+        public List<Division> Divisions { get; set; } = new();
+
+        [NotMapped]
+        public IReadOnlyList<Factory> Factories => Divisions.OfType<Factory>().ToList();
+
+        [NotMapped]
+        public IReadOnlyList<DistributionCenter> DistributionCenters => Divisions.OfType<DistributionCenter>().ToList();
+
+        [NotMapped]
+        public IReadOnlyList<Mine> Mines => Divisions.OfType<Mine>().ToList();
+
+        [NotMapped]
+        public IReadOnlyList<Sawmill> Sawmills => Divisions.OfType<Sawmill>().ToList();
     }
 }

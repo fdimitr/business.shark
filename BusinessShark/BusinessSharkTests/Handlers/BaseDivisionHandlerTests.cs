@@ -10,7 +10,7 @@ using System.Collections.Frozen;
 
 namespace BusinessSharkTests.Handlers
 {
-    internal class BaseDivisionHandlerTests : BaseHandlerTests
+    internal class DivisionHandlerTests : BaseHandlerTests
     {
         private DistributionCenter _fromDivision;
         private DistributionCenter _toDivision;
@@ -86,8 +86,8 @@ namespace BusinessSharkTests.Handlers
             _toDivision.WarehouseProductInput!.Add(_toProduct);
 
             country.Cities.Add(city);
-            city.BaseDivisions.Add(_fromDivision);
-            city.BaseDivisions.Add(_toDivision);
+            city.Divisions.Add(_fromDivision);
+            city.Divisions.Add(_toDivision);
 
             _worldContext = new WorldContext
             {

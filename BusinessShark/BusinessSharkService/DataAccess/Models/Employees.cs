@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BusinessSharkService.DataAccess.Models.Divisions;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace BusinessSharkService.DataAccess.Models
@@ -7,7 +8,10 @@ namespace BusinessSharkService.DataAccess.Models
     public class Employees
     {
         [Key]
+        public int EmployeesId { get; set; }
+
         public int DivisionId { get; set; }
+        public Division? Division { get; set; }
 
         [Comment("The total number of workers involved in production.")]
         public int TotalQuantity { get; set; }

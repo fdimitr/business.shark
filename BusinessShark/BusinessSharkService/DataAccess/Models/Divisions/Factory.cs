@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore;
 namespace BusinessSharkService.DataAccess.Models.Divisions
 {
     [Comment("Factory division, produces products from components")]
-    public class Factory : BaseDivision
+    public class Factory : Division
     {
-
         public int ProductDefinitionId { get; set; }
         public ProductDefinition? ProductDefinition { get; set; }
 
@@ -27,3 +26,4 @@ namespace BusinessSharkService.DataAccess.Models.Divisions
 
     }
 }
+    

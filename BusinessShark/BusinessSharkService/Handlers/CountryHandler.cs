@@ -25,21 +25,26 @@ namespace BusinessSharkService.Handlers
         {
             foreach (var city in country.Cities)
             {
+                if (stoppingToken.IsCancellationRequested) break;
                 foreach (var factory in city.Factories)
                 {
+                    if (stoppingToken.IsCancellationRequested)
                     _factoryHandler.StartCalculation(factory);
                 }
 
                 foreach (var storage in city.DistributionCenters)
                 {
+                    if (stoppingToken.IsCancellationRequested) break;
                     _storageHandler.StartCalculation(storage);
                 }
                 foreach (var mine in city.Mines)
                 {
+                    if (stoppingToken.IsCancellationRequested) break;
                     _mineHandler.StartCalculation(mine);
                 }
                 foreach (var sawmill in city.Sawmills)
                 {
+                    if (stoppingToken.IsCancellationRequested) break;
                     _sawmillHandler.StartCalculation(sawmill);
                 }
             }

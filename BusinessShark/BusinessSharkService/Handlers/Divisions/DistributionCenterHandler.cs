@@ -3,18 +3,18 @@ using BusinessSharkService.Handlers.Interfaces;
 
 namespace BusinessSharkService.Handlers.Divisions
 {
-    public class DistributionCenterHandler(IWorldContext worldHandler) : BaseDivisionHandler<DistributionCenter>(worldHandler)
+    public class DistributionCenterHandler(IWorldContext worldHandler) : DivisionHandler<DistributionCenter>(worldHandler)
     {
-        public override void CalculateCosts(DistributionCenter baseDivision)
+        public override void CalculateCosts(DistributionCenter Division)
         {
             throw new NotImplementedException();
         }
 
-        public override void CompleteCalculation(DistributionCenter baseDivision)
+        public override void CompleteCalculation(DistributionCenter Division)
         {
         }
 
-        public override void StartCalculation(DistributionCenter baseDivision)
+        public override void StartCalculation(DistributionCenter Division)
         {
         }
     }

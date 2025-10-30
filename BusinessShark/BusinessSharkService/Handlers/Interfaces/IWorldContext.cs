@@ -9,9 +9,8 @@ namespace BusinessSharkService.Handlers.Interfaces
     public interface IWorldContext
     {
         List<Country> Countries { get; set; }
-        Dictionary<int, BaseDivision> Divisions { get; set; }
+        Dictionary<int, Division> Divisions { get; set; }
         FrozenDictionary<int, ProductDefinition> ProductDefinitions { get; set; }
-        FinancialTransaction Transaction { get; set; }
         void FillDivisions();
     }
 }

@@ -7,6 +7,13 @@
     "BaseProductionPrice": 5,
     "DeliveryPrice": 0.6,
     "Volume": 3,
+    "TechImpactQuality": 0.4,
+    "ToolImpactQuality": 0.3,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.4,
+    "ToolImpactQuantity": 0.3,
+    "WorkerImpactQuantity": 0.3,
     "IconPath": "Resources\\Products\\Icons\\icon_woods.png",
     "ImagePath": "Resources\\Products\\Images\\woods.png"
   },
@@ -18,6 +25,13 @@
     "BaseProductionPrice": 15,
     "DeliveryPrice": 0.2,
     "Volume": 0.5,
+    "TechImpactQuality": 0.3,
+    "ToolImpactQuality": 0.3,
+    "WorkerImpactQuality": 0.4,
+
+    "TechImpactQuantity": 0.3,
+    "ToolImpactQuantity": 0.3,
+    "WorkerImpactQuantity": 0.4,
     "IconPath": "Resources\\Products\\Icons\\icon_leather.png",
     "ImagePath": "Resources\\Products\\Images\\leather.png"
   },
@@ -29,6 +43,13 @@
     "BaseProductionPrice": 2,
     "DeliveryPrice": 0.8,
     "Volume": 0.2,
+    "TechImpactQuality": 0.5,
+    "ToolImpactQuality": 0.3,
+    "WorkerImpactQuality": 0.2,
+
+    "TechImpactQuantity": 0.5,
+    "ToolImpactQuantity": 0.3,
+    "WorkerImpactQuantity": 0.2,
     "IconPath": "Resources\\Products\\Icons\\icon_clay.png",
     "ImagePath": "Resources\\Products\\Images\\clay.png"
   },
@@ -40,6 +61,13 @@
     "BaseProductionPrice": 0.8,
     "DeliveryPrice": 0.2,
     "Volume": 0.05,
+    "TechImpactQuality": 0.3,
+    "ToolImpactQuality": 0.4,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.3,
+    "ToolImpactQuantity": 0.4,
+    "WorkerImpactQuantity": 0.3,
     "IconPath": "Resources\\Products\\Icons\\icon_coal.png",
     "ImagePath": "Resources\\Products\\Images\\coal.png"
   },
@@ -51,6 +79,13 @@
     "BaseProductionPrice": 0.3,
     "DeliveryPrice": 0.1,
     "Volume": 0.05,
+    "TechImpactQuality": 0.3,
+    "ToolImpactQuality": 0.4,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.3,
+    "ToolImpactQuantity": 0.4,
+    "WorkerImpactQuantity": 0.3,
     "IconPath": "Resources\\Products\\Icons\\icon_iron_ore.png",
     "ImagePath": "Resources\\Products\\Images\\iron_ore.png"
   },
@@ -62,6 +97,13 @@
     "BaseProductionPrice": 0.5,
     "DeliveryPrice": 0.1,
     "Volume": 0.05,
+    "TechImpactQuality": 0.3,
+    "ToolImpactQuality": 0.4,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.3,
+    "ToolImpactQuantity": 0.4,
+    "WorkerImpactQuantity": 0.3,
     "IconPath": "Resources\\Products\\Icons\\icon_cooper_ore.png",
     "ImagePath": "Resources\\Products\\Images\\cooper_ore.png"
   },
@@ -73,6 +115,13 @@
     "BaseProductionPrice": 1.2,
     "DeliveryPrice": 0.4,
     "Volume": 0.02,
+    "TechImpactQuality": 0.2,
+    "ToolImpactQuality": 0.4,
+    "WorkerImpactQuality": 0.4,
+
+    "TechImpactQuantity": 0.2,
+    "ToolImpactQuantity": 0.4,
+    "WorkerImpactQuantity": 0.4,
     "IconPath": "Resources\\Products\\Icons\\icon_quartz.png",
     "ImagePath": "Resources\\Products\\Images\\quartz.png"
   },
