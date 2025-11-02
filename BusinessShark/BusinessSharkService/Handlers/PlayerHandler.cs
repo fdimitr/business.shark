@@ -19,7 +19,7 @@ namespace BusinessSharkService.Handlers
                 throw new ArgumentException("Login cannot be null or empty", nameof(login));
             }
 
-            return await _dbContext.Players.FirstOrDefaultAsync(p => p.Login == login);
+            return await _dbContext.Players.AsNoTracking().FirstOrDefaultAsync(p => p.Login == login);
         }
     }
 }

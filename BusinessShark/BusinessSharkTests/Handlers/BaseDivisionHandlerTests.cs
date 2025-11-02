@@ -24,12 +24,15 @@ namespace BusinessSharkTests.Handlers
             var country = new Country
             {
                 CountryId = 1,
+                Code = "UA",
                 Name = "TestCountry"
             };
 
             var city = new City
             {
                 CityId = 1,
+                CountryId = 1,
+                Country = country,
                 Name = "TestCity"
             };
 

@@ -135,7 +135,15 @@ namespace BusinessSharkService.DataAccess
                 modelBuilder.Entity<Country>().HasData(new Country
                 {
                     CountryId = 1,
+                    Code = "UA",
                     Name = "Ukraine",
+                });
+
+                modelBuilder.Entity<Country>().HasData(new Country
+                {
+                    CountryId = 2,
+                    Code = "PL",
+                    Name = "Poland",
                 });
 
                 modelBuilder.Entity<City>().HasData(new City
@@ -143,6 +151,7 @@ namespace BusinessSharkService.DataAccess
                     CityId = 1,
                     Name = "Kharkiv",
                     CountryId = 1,
+                    Country = null!,
                     Population = 1500000,
                     AverageSalary = 1300.0
                 });
@@ -151,6 +160,7 @@ namespace BusinessSharkService.DataAccess
                     CityId = 2,
                     Name = "Kyiv",
                     CountryId = 1,
+                    Country = null!,
                     Population = 3000000,
                     AverageSalary = 1500.0
                 });
@@ -159,8 +169,18 @@ namespace BusinessSharkService.DataAccess
                     CityId = 3,
                     Name = "Lviv",
                     CountryId = 1,
+                    Country = null!,
                     Population = 800000,
                     AverageSalary = 1200.0
+                });
+                modelBuilder.Entity<City>().HasData(new City
+                {
+                    CityId = 4,
+                    Name = "Wroclaw",
+                    CountryId = 2,
+                    Country = null!,
+                    Population = 800000,
+                    AverageSalary = 2000.0
                 });
 
                 // **************** Seeding Test Data (Admin Company) from JSON ****************

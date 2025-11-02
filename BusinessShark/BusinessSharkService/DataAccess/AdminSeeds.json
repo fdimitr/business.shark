@@ -20,13 +20,25 @@
       "DivisionId": "1",
       "CompanyId": "1",
       "CityId": "1",
-      "Name": "Admin Sawmill",
+      "Name": "Admin Sawmill (UA)",
       "TechLevel": "1",
       "RawMaterialReserves": "500000000",
       "ProductDefinitionId": "1",
       "ResourceDepositQuality": "1",
       "VolumeCapacity": "1000",
       "RentalCost": "400"
+    },
+    {
+      "DivisionId": "2",
+      "CompanyId": "1",
+      "CityId": "4",
+      "Name": "Admin Sawmill (PL)",
+      "TechLevel": "1",
+      "RawMaterialReserves": "450000000",
+      "ProductDefinitionId": "1",
+      "ResourceDepositQuality": "2",
+      "VolumeCapacity": "600",
+      "RentalCost": "800"
     }
   ],
   "Warehouses": [
@@ -41,6 +53,18 @@
       "WarehouseId": "2",
       "VolumeCapacity": "1000",
       "Type": "1"
+    },
+    {
+      "DivisionId": "2",
+      "WarehouseId": "3",
+      "VolumeCapacity": "600",
+      "Type": "0"
+    },
+    {
+      "DivisionId": "2",
+      "WarehouseId": "4",
+      "VolumeCapacity": "600",
+      "Type": "1"
     }
   ],
   "Tools": [
@@ -50,6 +74,13 @@
       "TechLevel": "2",
       "Deprecation": "150",
       "TotalQuantity": "5"
+    },
+    {
+      "ToolsId": "2",
+      "DivisionId": "2",
+      "TechLevel": "2",
+      "Deprecation": "100",
+      "TotalQuantity": "3"
     }
   ],
   "Employees": [
@@ -59,6 +90,13 @@
       "TechLevel": "3",
       "SalaryPerEmployee": "150",
       "TotalQuantity": "5"
+    },
+    {
+      "EmployeesId": "2",
+      "DivisionId": "2",
+      "TechLevel": "4",
+      "SalaryPerEmployee": "400",
+      "TotalQuantity": "3"
     }
   ]
 }

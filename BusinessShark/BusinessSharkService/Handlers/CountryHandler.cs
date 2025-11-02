@@ -10,7 +10,8 @@ namespace BusinessSharkService.Handlers
         private readonly MineHandler _mineHandler;
         private readonly SawmillHandler _sawmillHandler;
 
-        public CountryHandler(FactoryHandler factoryHandler,
+        public CountryHandler(
+            FactoryHandler factoryHandler,
             DistributionCenterHandler storageHandler,
             MineHandler mineHandler,
             SawmillHandler sawmillHandler)
@@ -20,6 +21,7 @@ namespace BusinessSharkService.Handlers
             _mineHandler = mineHandler;
             _sawmillHandler = sawmillHandler;
         }
+
 
         public void StartCalculation(CancellationToken stoppingToken, Country country)
         {

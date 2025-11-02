@@ -1,13 +1,28 @@
-﻿using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
+﻿using BusinessSharkService.DataAccess;
+using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
 using BusinessSharkService.Handlers.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace BusinessSharkService.Handlers.Divisions
 {
-    public class SawmillHandler(IWorldContext worldContext) : DivisionHandler<Sawmill>(worldContext)
+    public class SawmillHandler(IWorldContext worldContext, DataContext dbContext) : DivisionHandler<Sawmill>(worldContext)
     {
+        private readonly DataContext _dbContext = dbContext;
+
+        public async Task<List<Sawmill>> LoadListAsync(int companyId)
+        {
+            return await _dbContext.Sawmills
+                .AsNoTracking()
+                .Include(s => s.ProductDefinition)
+                .Include(s => s.City)
+                    .ThenInclude(c => c!.Country)
+                .Where(s => s.CompanyId == companyId)
+                .ToListAsync();
+        }
+
         public override void CalculateCosts(Sawmill sawmill)
         {
             if (sawmill is null) throw new ArgumentNullException(nameof(sawmill));

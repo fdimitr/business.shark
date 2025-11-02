@@ -12,7 +12,7 @@ namespace BusinessSharkService.DataAccess.Models.Location
         [Required]
         [StringLength(30)]
         public required string Name { get; set; }
-
+        public required string Code { get; set; }
         public List<City> Cities { get; set; } = new();
     }
 }

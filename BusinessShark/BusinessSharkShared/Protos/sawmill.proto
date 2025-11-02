@@ -1,0 +1,26 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "BusinessSharkService";
+
+package sawmill;
+
+service SawmillService {
+  rpc LoadList(SawmillListRequest) returns (SawmillListResponse);
+}
+
+message SawmillListRequest {
+  int32 CompanyId = 1;
+}
+
+message SawmillListGrpc {
+  int32 DivisionId = 1;
+  string CountryCode = 2; 
+  string City = 3;
+  string Name = 4;
+  int32 ProductDefinitionId = 5;
+  int32 VolumeCapacity = 6;
+}
+
+message SawmillListResponse {
+	repeated SawmillListGrpc Sawmills = 1;
+}

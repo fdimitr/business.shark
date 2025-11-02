@@ -8,16 +8,19 @@ namespace BusinessSharkClient
     {
         public static SummaryModel Summary { get; } = new();
 
-
+        private CompanyService.CompanyServiceClient _companyServiceClient;
         private AuthService.AuthServiceClient _authServiceClient;
         private GlobalDataProvider _globalDataProvider;
         private SummaryService.SummaryServiceClient _summaryServiceClient;
 
-
-        public App(AuthService.AuthServiceClient authServiceClient, SummaryService.SummaryServiceClient summaryServiceClient, GlobalDataProvider globalDataProvider)
+        public App(AuthService.AuthServiceClient authServiceClient,
+            CompanyService.CompanyServiceClient companyServiceClient,
+            SummaryService.SummaryServiceClient summaryServiceClient,
+            GlobalDataProvider globalDataProvider)
         {
             InitializeComponent();
             _authServiceClient = authServiceClient;
+            _companyServiceClient = companyServiceClient;
             _globalDataProvider = globalDataProvider;
             _summaryServiceClient = summaryServiceClient;
 
@@ -26,7 +29,7 @@ namespace BusinessSharkClient
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new LoginView(_authServiceClient, _globalDataProvider));
+            return new Window(new LoginView(_authServiceClient, _globalDataProvider, _companyServiceClient));
         }
 
         public async void OnLoad(object sender, EventArgs e)

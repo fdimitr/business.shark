@@ -89,6 +89,7 @@ builder.Services.AddScoped<MineHandler>();
 builder.Services.AddScoped<SawmillHandler>();
 builder.Services.AddScoped<FactoryHandler>();
 builder.Services.AddScoped<PlayerHandler>();
+builder.Services.AddScoped<CompanyHandler>();
 
 builder.Services.AddHostedService<CalculationService>();
 
@@ -101,6 +102,8 @@ app.UseCors();
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 
 // Configure the HTTP request pipeline.
+app.MapGrpcService<SawmillGrpcService>().EnableGrpcWeb();
+app.MapGrpcService<CompanyGrpService>().EnableGrpcWeb();
 app.MapGrpcService<SummaryGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<ProductCategoryGrpService>().EnableGrpcWeb();
 app.MapGrpcService<ProductDefinitionGrpcService>().EnableGrpcWeb();

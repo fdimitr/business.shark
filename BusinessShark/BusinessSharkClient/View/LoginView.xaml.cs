@@ -7,13 +7,15 @@ namespace BusinessSharkClient.View;
 public partial class LoginView : ContentPage
 {
     private AuthService.AuthServiceClient _authServiceClient;
+    private CompanyService.CompanyServiceClient _companyServiceClient;
     private GlobalDataProvider _globalDataProvider;
 
-    public LoginView(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider)
+    public LoginView(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider, CompanyService.CompanyServiceClient companyServiceClient)
 	{
 		InitializeComponent();
         _authServiceClient = authServiceClient;
         _globalDataProvider = globalDataProvider;
+        _companyServiceClient = companyServiceClient;
         Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
     }
 
@@ -38,7 +40,12 @@ public partial class LoginView : ContentPage
                 await SecureStorage.Default.SetAsync("current_user", EmailEntry.Text);
                 await SecureStorage.Default.SetAsync("player_id", loginResult.PlayerId.ToString());
 
+                // Load global data
                 ShowPopup("Synchronizing data ....");
+                var company = await _companyServiceClient.GetByPlayerAsync(new GetByPlayerRequest { PlayerId = loginResult.PlayerId });
+                await SecureStorage.Default.SetAsync("company_id", company.CompanyId.ToString());
+                await SecureStorage.Default.SetAsync("company_name", company.Name);
+
                 await _globalDataProvider.LoadData();
 
                 // Goto to shell application main page

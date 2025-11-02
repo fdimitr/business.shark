@@ -12,7 +12,8 @@ namespace BusinessSharkService.DataAccess.Models.Location
         [Key]
         public int CityId { get; set; }
 
-        public int CountryId { get; set; }
+        public required int CountryId { get; set; }
+        public required Country Country { get; set; }
 
         [Required]
         [StringLength(30)]

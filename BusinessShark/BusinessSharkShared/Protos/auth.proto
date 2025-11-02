@@ -27,6 +27,7 @@ message AuthResponse {
   string refresh_token = 2;
   string expires_in = 3;
   int32  playerId = 4;
+  int32  companyId = 5;
 }
 
 message Empty {}

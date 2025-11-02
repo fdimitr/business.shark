@@ -85,14 +85,14 @@
                         Text="Create your Account"
                         TextColor="{DynamicResource Primary}" />
             </VerticalStackLayout>
-            <Grid x:Name="OverlayPanel"              
+            <Grid x:Name="OverlayPanel"
                         VerticalOptions="Center"
                         HorizontalOptions="Center"
                         WidthRequest="300"
                         HeightRequest="200"
                         Margin="0,-320,0,0"
                         Padding="10"
-                        Opacity="0.9"
+                        Opacity="0.7"
                         BackgroundColor="{DynamicResource DeepPrimary}"
                         IsVisible="False">
                 <Border

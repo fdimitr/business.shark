@@ -34,7 +34,7 @@ public partial class ProductListView : ContentPage
     {
         var container = new VerticalStackLayout
         {
-            Spacing = 5
+            Spacing = 2
         };
 
         // Category Header
@@ -45,7 +45,7 @@ public partial class ProductListView : ContentPage
             FontAttributes = FontAttributes.Bold,
             TextColor = Colors.White,
             BackgroundColor = Color.FromArgb("#3560A0"),
-            Margin = new Thickness(0, 5, 0, 10),
+            Margin = new Thickness(0, 2, 0, 10),
             HorizontalTextAlignment = TextAlignment.Center
         };
         container.Children.Add(header);

@@ -5,6 +5,7 @@ using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Handlers.Divisions;
 using BusinessSharkService.Handlers.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace BusinessSharkTests.Handlers
@@ -20,7 +21,8 @@ namespace BusinessSharkTests.Handlers
         public void SetUp()
         {
             _mockWorldContext = new Mock<IWorldContext>();
-            _sawmillHandler = new SawmillHandler(_mockWorldContext.Object);
+            var dataContext = new Mock<BusinessSharkService.DataAccess.DataContext>();
+            _sawmillHandler = new SawmillHandler(_mockWorldContext.Object, dataContext.Object);
 
             _sawmill = new Sawmill
             {
