@@ -17,7 +17,7 @@ namespace BusinessSharkService.DataAccess.Models
         public int TotalQuantity { get; set; }
 
         [Comment("Technology level of the workers, influencing their effectiveness.")]
-        public double TechLevel { get; set; } = 1;
+        public double SkillLevel { get; set; } = 1;
 
         public double SalaryPerEmployee { get; set; }
 

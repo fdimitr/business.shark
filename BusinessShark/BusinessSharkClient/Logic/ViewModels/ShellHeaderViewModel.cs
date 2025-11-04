@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace BusinessSharkClient.Logic.Models
+namespace BusinessSharkClient.Logic.ViewModels
 {
     public class ShellHeaderViewModel : INotifyPropertyChanged
     {
@@ -35,7 +35,7 @@ namespace BusinessSharkClient.Logic.Models
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }

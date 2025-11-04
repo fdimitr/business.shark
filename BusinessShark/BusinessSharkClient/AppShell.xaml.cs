@@ -1,4 +1,5 @@
 ﻿using BusinessSharkClient.Logic.Models;
+using BusinessSharkClient.Logic.ViewModels;
 using BusinessSharkClient.View;
 
 namespace BusinessSharkClient
@@ -13,15 +14,15 @@ namespace BusinessSharkClient
 
             // Registering pages for navigation
             Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
-            Routing.RegisterRoute(nameof(OfficeView), typeof(OfficeView));
-            Routing.RegisterRoute(nameof(LoginView), typeof(LoginView));
-            Routing.RegisterRoute(nameof(CompanyView), typeof(CompanyView));
-            Routing.RegisterRoute(nameof(WorldView), typeof(WorldView));
-            Routing.RegisterRoute(nameof(ConstructionView), typeof(ConstructionView));
-            Routing.RegisterRoute(nameof(ProfileView), typeof(ProfileView));
-            Routing.RegisterRoute(nameof(AnaliticsView), typeof(AnaliticsView));
-            Routing.RegisterRoute(nameof(DocumentationView), typeof(DocumentationView));
-            Routing.RegisterRoute(nameof(ProductListView), typeof(ProductListView));
+            Routing.RegisterRoute(nameof(OfficePage), typeof(OfficePage));
+            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            Routing.RegisterRoute(nameof(CompanyPage), typeof(CompanyPage));
+            Routing.RegisterRoute(nameof(WorldPage), typeof(WorldPage));
+            Routing.RegisterRoute(nameof(ConstructionPage), typeof(ConstructionPage));
+            Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
+            Routing.RegisterRoute(nameof(AnaliticsPage), typeof(AnaliticsPage));
+            Routing.RegisterRoute(nameof(DocumentationPage), typeof(DocumentationPage));
+            Routing.RegisterRoute(nameof(ProductListPage), typeof(ProductListPage));
 
             // Setting the BindingContext for data binding
             BindingContext = HeaderViewModel;

@@ -1,8 +1,8 @@
 namespace BusinessSharkClient.View;
 
-public partial class WorldView : ContentPage
+public partial class AnaliticsPage : ContentPage
 {
-	public WorldView()
+	public AnaliticsPage()
 	{
 		InitializeComponent();
 	}

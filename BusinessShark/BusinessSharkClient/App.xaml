@@ -13,6 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:AmountToColorConverter x:Key="AmountToColorConverter" />
             <converters:NumberWithSpacesConverter x:Key="NumberWithSpacesConverter" />
+            <converters:SectionToColorConverter x:Key="SectionToColorConverter" />
             <ControlTemplate x:Key="PageWithStatusBar"
                              xmlns:local="clr-namespace:BusinessSharkClient">
                 <Grid RowDefinitions="*,Auto">

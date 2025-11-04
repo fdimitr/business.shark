@@ -1,4 +1,5 @@
 ﻿using BusinessSharkService.DataAccess;
+using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Player;
 using BusinessSharkService.Handlers.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -40,8 +41,8 @@ namespace BusinessSharkService.Handlers
                 {
                     city.Divisions = await _dbContext.Divisions
                         .Where(s => s.CityId == city.CityId)
-                        .Include(s => s.Warehouses)
-                            .ThenInclude(w => w.Products)
+                        .Include(s => s.Warehouses!)
+                          .ThenInclude(w => w.Products)
                         .Include(s => s.DeliveryRoutes)
                         .Include(f => f.Employees)
                         .Include(f => f.Tools)

@@ -22,7 +22,7 @@ namespace BusinessSharkService.DataAccess.Models.Items
         public int Quantity { get; set; }
 
         [Comment("Price of the product in storage")]
-        public double Price { get; set; }
+        public double UnitPrice { get; set; }
 
         [Comment("Current price of the product in production")]
         public double ProcessingPrice { get; set; }
@@ -47,7 +47,7 @@ namespace BusinessSharkService.DataAccess.Models.Items
                 ProductDefinitionId = this.ProductDefinitionId,
                 ProductDefinition = this.ProductDefinition,
                 Quality = this.Quality,
-                Price = this.Price
+                UnitPrice = this.UnitPrice
             };
         }
     }

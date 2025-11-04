@@ -8,12 +8,12 @@ public class AdminSeedLoader
 {
     public class AdminSeedData
     {
-        public List<Player> Players { get; set; }
-        public List<Company> Companies { get; set; }
-        public List<Sawmill> Sawmills { get; set; }
-        public List<Warehouse> Warehouses { get; set; }
-        public List<Tools> Tools { get; set; }
-        public List<Employees> Employees { get; set; }
+        public List<Player>? Players { get; set; }
+        public List<Company>? Companies { get; set; }
+        public List<Sawmill>? Sawmills { get; set; }
+        public List<Warehouse>? Warehouses { get; set; }
+        public List<Tools>? Tools { get; set; }
+        public List<Employees>? Employees { get; set; }
     }
 
     public static AdminSeedData LoadAdminSeedData(string filePath)

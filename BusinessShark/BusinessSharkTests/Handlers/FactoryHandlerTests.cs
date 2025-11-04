@@ -15,7 +15,7 @@ namespace BusinessSharkTests.Handlers
         private Factory CreateFactoryWithResources(ProductDefinition productDef, float techLevel = 1.0f, float toolTechLevel = 1.0f, float workerTechLevel = 1.0f)
         {
             var tools = new Tools { TechLevel = toolTechLevel, TotalQuantity = 1 };
-            var workers = new Employees { TechLevel = workerTechLevel, TotalQuantity = 1 };
+            var workers = new Employees { SkillLevel = workerTechLevel, TotalQuantity = 1 };
             var factory = new Factory{
                 DivisionId = 1,
                 Name = "TestFactory",
@@ -134,7 +134,7 @@ namespace BusinessSharkTests.Handlers
             var productDef = (ProductDefinition)ProductDefinitions[(int)ProductType.Bed].Clone();
             productDef.BaseProductionCount = 0.5;
             var factory = CreateFactoryWithResources(productDef);
-            factory.Employees!.TechLevel = 3.0; // Increase worker tech level to boost production
+            factory.Employees!.SkillLevel = 3.0; // Increase worker tech level to boost production
             factory.Tools!.TechLevel = 3.0;   // Increase tool tech level to boost production
 
             var worldContextMock = new Mock<IWorldContext>();
@@ -162,7 +162,7 @@ namespace BusinessSharkTests.Handlers
             var productDef = (ProductDefinition)ProductDefinitions[(int)ProductType.Bed].Clone();
             productDef.BaseProductionCount = 0.5;
             var factory = CreateFactoryWithResources(productDef);
-            factory.Employees!.TechLevel = 3.0; // Increase worker tech level to boost production
+            factory.Employees!.SkillLevel = 3.0; // Increase worker tech level to boost production
             factory.Tools!.TechLevel = 3.0;   // Increase tool tech level to boost production
 
             var worldContextMock = new Mock<IWorldContext>();

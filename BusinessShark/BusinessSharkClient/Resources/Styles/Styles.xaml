@@ -441,4 +441,42 @@
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
+    <!-- Карточка секции -->
+    <Style x:Key="SectionBorderStyle" TargetType="Border">
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="10" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Background" Value="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#66000000" Opacity="0.4" Radius="10" Offset="5,5" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Заголовок секции -->
+    <Style x:Key="SectionTitleStyle" TargetType="Label">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light=#333, Dark=#EEE}" />
+        <Setter Property="Margin" Value="0,0,0,6" />
+    </Style>
+
+    <!-- Название поля -->
+    <Style x:Key="FieldNameStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light=#666, Dark=#CCC}" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <!-- Значение поля -->
+    <Style x:Key="FieldValueStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light=#111, Dark=#FFF}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="HorizontalOptions" Value="End" />
+    </Style>
+
 </ResourceDictionary>

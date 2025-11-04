@@ -1,4 +1,5 @@
 ﻿using BusinessSharkService.DataAccess;
+using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
@@ -21,6 +22,22 @@ namespace BusinessSharkService.Handlers.Divisions
                     .ThenInclude(c => c!.Country)
                 .Where(s => s.CompanyId == companyId)
                 .ToListAsync();
+        }
+
+        public async Task<Sawmill?> LoadAsync(int divisionId)
+        {
+            return await _dbContext.Sawmills
+                .AsNoTracking()
+                .Include(s => s.ProductDefinition)
+                .Include(s => s.Tools)
+                .Include(s => s.Employees)
+                .Include(s => s.Warehouses!.Where(w=>w.Type == (int)WarehouseType.Output))
+                    .ThenInclude(w => w.Products)
+                .Include(s => s.DivisionTransactions)
+                .Include(s => s.DeliveryRoutes)
+                .Include(s => s.City)
+                    .ThenInclude(c => c!.Country)
+                .FirstOrDefaultAsync(s => s.DivisionId == divisionId);
         }
 
         public override void CalculateCosts(Sawmill sawmill)
@@ -155,7 +172,7 @@ namespace BusinessSharkService.Handlers.Divisions
             return sawmill.ResourceDepositQuality *
                 (sawmill.TechLevel * itemDef.TechImpactQuality +
                 sawmill.Tools!.TechLevel * itemDef.ToolImpactQuality +
-                sawmill.Employees!.TechLevel * itemDef.WorkerImpactQuality);
+                sawmill.Employees!.SkillLevel * itemDef.WorkerImpactQuality);
         }
 
         internal static double CalculateProductionQuantity(Sawmill sawmill)
@@ -168,7 +185,7 @@ namespace BusinessSharkService.Handlers.Divisions
 
             var quantity = sawmill.TechLevel * itemDef.TechImpactQuantity +
                 sawmill.Tools.TechLevel * itemDef.ToolImpactQuantity +
-                sawmill.Employees.TechLevel * itemDef.WorkerImpactQuantity;
+                sawmill.Employees.SkillLevel * itemDef.WorkerImpactQuantity;
             return itemDef.BaseProductionCount * quantity;
         }
     }

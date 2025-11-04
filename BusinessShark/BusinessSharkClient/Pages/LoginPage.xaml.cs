@@ -4,13 +4,13 @@ using Grpc.Core;
 
 namespace BusinessSharkClient.View;
 
-public partial class LoginView : ContentPage
+public partial class LoginPage : ContentPage
 {
     private AuthService.AuthServiceClient _authServiceClient;
     private CompanyService.CompanyServiceClient _companyServiceClient;
     private GlobalDataProvider _globalDataProvider;
 
-    public LoginView(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider, CompanyService.CompanyServiceClient companyServiceClient)
+    public LoginPage(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider, CompanyService.CompanyServiceClient companyServiceClient)
 	{
 		InitializeComponent();
         _authServiceClient = authServiceClient;

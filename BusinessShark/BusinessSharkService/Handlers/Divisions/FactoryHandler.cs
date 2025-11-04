@@ -130,7 +130,7 @@ namespace BusinessSharkService.Handlers.Divisions
             return qualityItems.Sum(e => e.Quality * e.QualityImpact)
                    + factory.TechLevel * itemDef.TechImpactQuality
                    + factory.Tools!.TechLevel * itemDef.ToolImpactQuality
-                   + factory.Employees!.TechLevel * itemDef.WorkerImpactQuality;
+                   + factory.Employees!.SkillLevel * itemDef.WorkerImpactQuality;
         }
 
         internal static double CalculateProductionQuantity(Factory factory)
@@ -143,7 +143,7 @@ namespace BusinessSharkService.Handlers.Divisions
 
             var quantity = factory.TechLevel * itemDef.TechImpactQuantity
                            + factory.Tools.TechLevel * itemDef.ToolImpactQuantity
-                           + factory.Employees.TechLevel * itemDef.WorkerImpactQuantity;
+                           + factory.Employees.SkillLevel * itemDef.WorkerImpactQuantity;
             return itemDef.BaseProductionCount * quantity;
         }
 

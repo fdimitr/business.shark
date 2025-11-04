@@ -1,4 +1,5 @@
 ﻿using BusinessSharkClient.Logic.Models;
+using BusinessSharkClient.Logic.ViewModels;
 using BusinessSharkService;
 using System.Collections.ObjectModel;
 
@@ -16,7 +17,7 @@ namespace BusinessSharkClient.Logic
             _globalDataProvider = globalDataProvider;
         }
 
-        public async Task<ObservableCollection<SawmillListGroup>> LoadData(int companyId)
+        public async Task<ObservableCollection<SawmillListGroup>> LoadList(int companyId)
         {
             var response = await _sawmillClient.LoadListAsync(new SawmillListRequest { CompanyId = companyId });
             if (response?.Sawmills == null || response.Sawmills.Count == 0)
@@ -53,6 +54,13 @@ namespace BusinessSharkClient.Logic
 
             return new ObservableCollection<SawmillListGroup>(grouped);
 
+        }
+
+        public async Task<SawmillResponse> LoadDetail(int divisionId)
+        {
+            var response = await _sawmillClient.LoadDetailAsync(new SawmillRequest { DivisionId = divisionId });
+            if (response == null) throw new Exception($"Sawmill wasn't found by id = {divisionId}");
+            return response;
         }
     }
 }

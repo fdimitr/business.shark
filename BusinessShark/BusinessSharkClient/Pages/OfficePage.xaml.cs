@@ -1,8 +1,8 @@
 namespace BusinessSharkClient.View;
 
-public partial class OfficeView : ContentPage
+public partial class OfficePage : ContentPage
 {
-	public OfficeView()
+	public OfficePage()
 	{
 		InitializeComponent();
 	}

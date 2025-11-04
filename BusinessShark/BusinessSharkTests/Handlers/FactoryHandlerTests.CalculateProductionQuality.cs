@@ -26,7 +26,7 @@ namespace BusinessSharkTests.Handlers
         }
 
         private Tools CreateTools(int techLevel) => new Tools { TechLevel = techLevel };
-        private Employees CreateEmployees(int techLevel) => new Employees { TechLevel = techLevel };
+        private Employees CreateEmployees(int techLevel) => new Employees { SkillLevel = techLevel };
 
         [Test]
         public void CalculateProductionQuality_ReturnsZero_WhenProductDefinitionIsNull()

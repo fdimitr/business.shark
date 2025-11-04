@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
+  <PropertyGroup>    
 		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
@@ -20,7 +19,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
-		<!-- Display name -->
+    <!-- Enable XAML source generation for better performance -->
+    <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
+    
+    <!-- Display name -->
 		<ApplicationTitle>BusinessSharkClient</ApplicationTitle>
 
 		<!-- App Identifier -->
@@ -59,7 +61,7 @@
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
-
+ 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="12.2.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
@@ -74,40 +76,55 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="View\AnaliticsView.xaml.cs">
-	    <DependentUpon>AnaliticsView.xaml</DependentUpon>
+	  <Compile Update="Pages\CompanyPage.xaml.cs">
+	    <DependentUpon>CompanyPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="View\ConstructionView.xaml.cs">
-	    <DependentUpon>ConstructionView.xaml</DependentUpon>
+	  <Compile Update="Pages\LoginPage.xaml.cs">
+	    <DependentUpon>LoginPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="View\DocumentationView.xaml.cs">
-	    <DependentUpon>DocumentationView.xaml</DependentUpon>
+	  <Compile Update="Pages\AnaliticsPage.xaml.cs">
+	    <DependentUpon>AnaliticsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="View\ProductDefinitionView.xaml.cs">
-	    <DependentUpon>ProductDefinitionView.xaml</DependentUpon>
+	  <Compile Update="Pages\OfficePage.xaml.cs">
+	    <DependentUpon>OfficePage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="View\WorldView.xaml.cs">
-	    <DependentUpon>WorldView.xaml</DependentUpon>
+	  <Compile Update="Pages\ProductListPage.xaml.cs">
+	    <DependentUpon>ProductListPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\ProfilePage.xaml.cs">
+	    <DependentUpon>ProfilePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\ConstructionPage.xaml.cs">
+	    <DependentUpon>ConstructionPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\DocumentationPage.xaml.cs">
+	    <DependentUpon>DocumentationPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\ProductDefinitionPage.xaml.cs">
+	    <DependentUpon>ProductDefinitionPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\WorldPage.xaml.cs">
+	    <DependentUpon>WorldPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="View\AnaliticsView.xaml">
+	  <MauiXaml Update="Pages\AnaliticsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\CompanyView.xaml">
+	  <MauiXaml Update="Pages\CompanyPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\ConstructionView.xaml">
+	  <MauiXaml Update="Pages\ConstructionPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\SawmillDetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Divisions\FactoryListView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Divisions\MinesListView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="View\Divisions\SawmillDetailView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Divisions\SawmillListView.xaml">
@@ -119,25 +136,25 @@
 	  <MauiXaml Update="View\Divisions\WarehouseListView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\DocumentationView.xaml">
+	  <MauiXaml Update="Pages\DocumentationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\LoginView.xaml">
+	  <MauiXaml Update="Pages\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\OfficeView.xaml">
+	  <MauiXaml Update="Pages\OfficePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\ProductDefinitionView.xaml">
+	  <MauiXaml Update="Pages\ProductDefinitionPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\ProductListView.xaml">
+	  <MauiXaml Update="Pages\ProductListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\ProfileView.xaml">
+	  <MauiXaml Update="Pages\ProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\WorldView.xaml">
+	  <MauiXaml Update="Pages\WorldPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

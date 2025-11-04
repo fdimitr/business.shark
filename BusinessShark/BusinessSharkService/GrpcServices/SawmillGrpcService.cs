@@ -1,5 +1,5 @@
-﻿using BusinessSharkService.Handlers;
-using BusinessSharkService.Handlers.Divisions;
+﻿using BusinessSharkService.Handlers.Divisions;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 
 namespace BusinessSharkService.GrpcServices
@@ -30,6 +30,75 @@ namespace BusinessSharkService.GrpcServices
             }));
             return response;
 
+        }
+
+        public override async Task<SawmillResponse> LoadDetail(SawmillRequest request, ServerCallContext context)
+        {
+            var sawmill = await _sawmillHandler.LoadAsync(request.DivisionId);
+            if (sawmill == null)
+            {
+                throw new RpcException(new Status(StatusCode.NotFound, $"Sawmill with DivisionId {request.DivisionId} not found."));
+            }
+            var response = new SawmillResponse
+            {
+                DivisionId = sawmill.DivisionId,
+                Name = sawmill.Name,
+                City = sawmill.City != null ? sawmill.City.Name : string.Empty,
+                CountryCode = sawmill.City != null && sawmill.City.Country != null ? sawmill.City.Country.Code : string.Empty,
+                ProductDefinitionId = sawmill.ProductDefinitionId,
+                VolumeCapacity = sawmill.VolumeCapacity,
+                ResourceDepositQuality = sawmill.ResourceDepositQuality,
+                RawMaterialReserves = sawmill.RawMaterialReserves,
+                TechLevel = sawmill.TechLevel,
+                PlantingCosts = sawmill.PlantingCosts,
+                OutputWarehouse = new SawmillWarhouseGrpc
+                {
+                    WarehouseId = sawmill.OutputWarehouse.WarehouseId,
+                    VolumeCapacity = sawmill.OutputWarehouse.VolumeCapacity,
+                    Products = { sawmill.OutputWarehouse.Products != null ? sawmill.OutputWarehouse.Products.ConvertAll(p => new SawmillWarehouseProductsGrpc
+                    {
+                        WarehouseProductId = p.WarehouseProductId,
+                        ProductDefinitionId = p.ProductDefinitionId,
+                        Quantity = p.Quantity,
+                        Quality = p.Quality,
+                        UnitPrice = p.UnitPrice
+                    }) : new List<SawmillWarehouseProductsGrpc>()
+                    }
+                },
+                Tools = sawmill.Tools != null ? new SawmillToolsGrpc
+                {
+                    ToolsId = sawmill.Tools.ToolsId,
+                    TotalQuantity = sawmill.Tools.TotalQuantity,
+                    TechLevel = sawmill.Tools.TechLevel,
+                    Deprecation = sawmill.Tools.Deprecation,
+                    MaintenanceCostsAmount = sawmill.Tools.MaintenanceCostsAmount
+                } : null,
+                Employees = sawmill.Employees != null ? new SawmillEmployeesGrpc
+                {
+                    EmployeesId = sawmill.Employees.EmployeesId,
+                    TotalQuantity = sawmill.Employees.TotalQuantity,
+                    SalaryPerEmployee = sawmill.Employees.SalaryPerEmployee,
+                    SkillLevel = sawmill.Employees.SkillLevel
+                } : null,
+                DivisionTransactions =  { sawmill.DivisionTransactions != null ? sawmill.DivisionTransactions.ConvertAll(t => new SawmillTrnasactionsGrpc
+                {
+                    DivisionTransactionsId = t.DivisionTransactionsId,
+                    TransactionDate = Timestamp.FromDateTime(t.TransactionDate),
+                    SalesProductsAmount = t.SalesProductsAmount,
+                    PurchasedProductsAmount = t.PurchasedProductsAmount,
+                    TransportCostsAmount = t.TransportCostsAmount,
+                    EmployeeSalariesAmount = t.EmployeeSalariesAmount,
+                    MaintenanceCostsAmount = t.MaintenanceCostsAmount,
+                    IncomeTaxAmount = t.IncomeTaxAmount,
+                    RentalCostsAmount = t.RentalCostsAmount,
+                    EmployeeTrainingAmount = t.EmployeeTrainingAmount,
+                    CustomAmount = t.CustomAmount,
+                    AdvertisingCostsAmount = t.AdvertisingCostsAmount
+                }) : new List<SawmillTrnasactionsGrpc>()
+                }
+            };
+
+            return response;
         }
     }
 

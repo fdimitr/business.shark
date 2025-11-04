@@ -3,13 +3,13 @@ using BusinessSharkClient.Logic.Models;
 
 namespace BusinessSharkClient.View;
 
-public partial class ProductDefinitionView : ContentPage
+public partial class ProductDefinitionPage : ContentPage
 {
     public ProductDefinitionModel CurrentProduct { get; set; }
 
     private GlobalDataProvider _globalDataProvider;
 
-    public ProductDefinitionView(ProductDefinitionModel product, GlobalDataProvider globalDataProvider)
+    public ProductDefinitionPage(ProductDefinitionModel product, GlobalDataProvider globalDataProvider)
     {
         InitializeComponent();
         _globalDataProvider = globalDataProvider;
@@ -71,7 +71,7 @@ public partial class ProductDefinitionView : ContentPage
             var definition = _globalDataProvider.ProductDefinitions.FirstOrDefault(p => p.ProductDefinitionId == selectedComponent.ComponentDefinitionId);
             if (definition != null)
             {
-                await Navigation.PushAsync(new ProductDefinitionView(definition, _globalDataProvider));
+                await Navigation.PushAsync(new ProductDefinitionPage(definition, _globalDataProvider));
             }
 
             // Deselect the item in the list

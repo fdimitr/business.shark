@@ -29,7 +29,7 @@ namespace BusinessSharkTests.Handlers
 
             if (workerTechLevel.HasValue)
             {
-                factory.Employees = new Employees { TechLevel = workerTechLevel.Value };
+                factory.Employees = new Employees { SkillLevel = workerTechLevel.Value };
             }
 
             return factory;

@@ -188,12 +188,12 @@ namespace BusinessSharkService.DataAccess
                 var adminSeedData = AdminSeedLoader.LoadAdminSeedData(filePath);
 
                 // Access the deserialized objects
-                List<Player> players = adminSeedData.Players;
-                List<Company> companies = adminSeedData.Companies;
-                List<Sawmill> sawmills = adminSeedData.Sawmills;
-                List<Warehouse> warehouses = adminSeedData.Warehouses;
-                List<Tools> tools = adminSeedData.Tools;
-                List<Employees> employees = adminSeedData.Employees;
+                List<Player> players = adminSeedData.Players ?? new List<Player>();
+                List<Company> companies = adminSeedData.Companies ?? new List<Company>();
+                List<Sawmill> sawmills = adminSeedData.Sawmills ?? new List<Sawmill>();
+                List<Warehouse> warehouses = adminSeedData.Warehouses ?? new List<Warehouse>();
+                List<Tools> tools = adminSeedData.Tools ?? new List<Tools>();
+                List<Employees> employees = adminSeedData.Employees ?? new List<Employees>();
 
                 foreach (var player in players)
                 {

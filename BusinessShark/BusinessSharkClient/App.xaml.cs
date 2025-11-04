@@ -29,7 +29,7 @@ namespace BusinessSharkClient
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new LoginView(_authServiceClient, _globalDataProvider, _companyServiceClient));
+            return new Window(new LoginPage(_authServiceClient, _globalDataProvider, _companyServiceClient));
         }
 
         public async void OnLoad(object sender, EventArgs e)

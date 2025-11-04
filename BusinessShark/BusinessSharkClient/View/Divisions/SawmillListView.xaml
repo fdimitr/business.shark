@@ -20,8 +20,8 @@
                 <DataTemplate>
                     <HorizontalStackLayout BackgroundColor="#F2F2F2">
                         <!-- City + Flag -->
-                        <Label Text="{Binding City}" FontAttributes="Bold" FontSize="12" Padding="5"/>
-                        <Image Source="{Binding CountryFlag}" VerticalOptions="Center" Margin="0" HeightRequest="15" WidthRequest="11" />
+                        <Label Text="{Binding City}" FontAttributes="Bold" FontSize="14" Padding="5"/>
+                        <Image Source="{Binding CountryFlag}" VerticalOptions="Center" Margin="0" HeightRequest="18" WidthRequest="14" />
                     </HorizontalStackLayout>
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
@@ -32,12 +32,12 @@
                         <VerticalStackLayout Grid.Column="0">
                             <!-- Name -->
                             <Label Text="{Binding Name}" 
-                                   FontSize="12"
+                                   FontSize="14"
                                    VerticalOptions="Center"
                                    HorizontalTextAlignment="Start"/>
                             <!-- Volume -->
                             <Label Text="{Binding Volume, StringFormat='Volume: {0}'}"
-                                   FontSize="12"
+                                   FontSize="14"
                                    VerticalOptions="Center"
                                    HorizontalTextAlignment="Start"
                                    TextColor="Gray" />
@@ -45,7 +45,7 @@
                         <!-- Product -->
                         <HorizontalStackLayout Grid.Column="1">
                             <Label
-                                   FontSize="12"
+                                   FontSize="14"
                                    Text="{Binding ProductName}"
                                    VerticalOptions="Center"
                                    HorizontalTextAlignment="Start" />
@@ -69,7 +69,7 @@
                                 BorderWidth="1"
                                 BorderColor="DarkGrey"
                                 TextColor="Black"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenDetailsCommand}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentView}}, Path=BindingContext.OpenDetailsCommand}"
                                 CommandParameter="{Binding .}" />
                     </Grid>
                 </DataTemplate>

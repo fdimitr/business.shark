@@ -26,6 +26,7 @@
       "ProductDefinitionId": "1",
       "ResourceDepositQuality": "1",
       "VolumeCapacity": "1000",
+      "Description": "This is an example of a large note, which I hope will be displayed correctly without any problem",
       "RentalCost": "400"
     },
     {
@@ -87,14 +88,14 @@
     {
       "EmployeesId": "1",
       "DivisionId": "1",
-      "TechLevel": "3",
+      "SkillLevel": "3",
       "SalaryPerEmployee": "150",
       "TotalQuantity": "5"
     },
     {
       "EmployeesId": "2",
       "DivisionId": "2",
-      "TechLevel": "4",
+      "SkillLevel": "4",
       "SalaryPerEmployee": "400",
       "TotalQuantity": "3"
     }

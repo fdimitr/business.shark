@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BusinessSharkClient.View.CompanyView"
+             x:Class="BusinessSharkClient.View.CompanyPage"
              Title="Company Info"
              ControlTemplate="{StaticResource PageWithStatusBar}">
     <VerticalStackLayout>
@@ -17,7 +17,8 @@
 			                       HorizontalOptions="Center"
 			                       VerticalOptions="Center">
                 <VerticalStackLayout Spacing="0"
-				                     VerticalOptions="Center">
+				                     VerticalOptions="Center"
+                                     BackgroundColor="{Binding SelectedSection, Converter={StaticResource SectionToColorConverter}, ConverterParameter=Stores}">
                     <Image Aspect="AspectFit"
 					       Source="store.png"
 					       Grid.Column="1"
@@ -33,7 +34,8 @@
 					       FontSize="12"/>
                 </VerticalStackLayout>
                 <VerticalStackLayout Spacing="0"
-				                     VerticalOptions="Center">
+				                     VerticalOptions="Center"
+                                     BackgroundColor="{Binding SelectedSection, Converter={StaticResource SectionToColorConverter}, ConverterParameter=Factories}">
                     <Image Aspect="AspectFit"
 					       Source="factory.png"
 					       Grid.Column="1"
@@ -49,7 +51,8 @@
 					       FontSize="12"/>
                 </VerticalStackLayout>
                 <VerticalStackLayout Spacing="0"
-				                     VerticalOptions="Center">
+				                     VerticalOptions="Center"
+                                     BackgroundColor="{Binding SelectedSection, Converter={StaticResource SectionToColorConverter}, ConverterParameter=Warehouses}">
                     <Image Aspect="AspectFit"
 					       Source="warehouse.png"
 					       Grid.Column="1"
@@ -65,7 +68,8 @@
 					       FontSize="12"/>
                 </VerticalStackLayout>
                 <VerticalStackLayout Spacing="0"
-				                     VerticalOptions="Center">
+				                     VerticalOptions="Center"
+                                     BackgroundColor="{Binding SelectedSection, Converter={StaticResource SectionToColorConverter}, ConverterParameter=Sawmills}">
                     <Image Aspect="AspectFit"
 					       Source="sawmill.png"
 					       Grid.Column="1"
@@ -81,7 +85,8 @@
 					       FontSize="12"/>
                 </VerticalStackLayout>
                 <VerticalStackLayout Spacing="0"
-				                     VerticalOptions="Center">
+				                     VerticalOptions="Center"
+                                     BackgroundColor="{Binding SelectedSection, Converter={StaticResource SectionToColorConverter}, ConverterParameter=Mines}">
                     <Image Aspect="AspectFit"
 					       Source="mine.png"
 					       Grid.Column="1"
@@ -97,7 +102,8 @@
 					       FontSize="12"/>
                 </VerticalStackLayout>
                 <VerticalStackLayout Spacing="0"
-				                     VerticalOptions="Center">
+				                     VerticalOptions="Center"
+                                     BackgroundColor="{Binding SelectedSection, Converter={StaticResource SectionToColorConverter}, ConverterParameter=LivestockFarm}">
                     <Image Aspect="AspectFit"
 					       Source="livestock_farm.png"
 					       Grid.Column="1"
@@ -113,7 +119,8 @@
 					       FontSize="12"/>
                 </VerticalStackLayout>
                 <VerticalStackLayout Spacing="0"
-				                     VerticalOptions="Center">
+				                     VerticalOptions="Center"
+                                     BackgroundColor="{Binding SelectedSection, Converter={StaticResource SectionToColorConverter}, ConverterParameter=Laboratory}">
                     <Image Aspect="AspectFit"
 					       Source="laboratory.png"
 					       Grid.Column="1"

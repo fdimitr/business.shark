@@ -45,7 +45,7 @@ namespace BusinessSharkTests.Handlers
                 RawMaterialReserves = 100,
                 TechLevel = 1.5,
                 Tools = new Tools { TechLevel = 1.2 },
-                Employees = new Employees { TechLevel = 1.1 },
+                Employees = new Employees { SkillLevel = 1.1 },
                 Warehouses =
                 [
                     new Warehouse

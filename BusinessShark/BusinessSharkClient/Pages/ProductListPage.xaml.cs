@@ -4,11 +4,11 @@ using BusinessSharkClient.Logic.Models;
 
 namespace BusinessSharkClient.View;
 
-public partial class ProductListView : ContentPage
+public partial class ProductListPage : ContentPage
 {
     private GlobalDataProvider _globalDataProvider;
 
-    public ProductListView(GlobalDataProvider globalDataProvider)
+    public ProductListPage(GlobalDataProvider globalDataProvider)
     {
         InitializeComponent();
 
@@ -137,6 +137,6 @@ public partial class ProductListView : ContentPage
 
     private async void OnProductClicked(ProductDefinitionModel product)
     {
-         await Navigation.PushAsync(new ProductDefinitionView(product, _globalDataProvider));
+         await Navigation.PushAsync(new ProductDefinitionPage(product, _globalDataProvider));
     }
 }
