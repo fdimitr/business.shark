@@ -23,17 +23,19 @@
     <None Remove="Protos\summary.proto" />
     <None Remove="Protos\company.proto" />
     <None Remove="Protos\sawmill.proto" />
+    <None Remove="Protos\division_transaction.proto" />
   </ItemGroup>
   
   <ItemGroup>
     <SupportedPlatform Include="browser" />
-    <Protobuf Include="Protos\greet.proto" />
-    <Protobuf Include="Protos\auth.proto" />
-    <Protobuf Include="Protos\product_definition.proto" />
-    <Protobuf Include="Protos\category.proto" />
-    <Protobuf Include="Protos\summary.proto" />
-    <Protobuf Include="Protos\company.proto" />
-    <Protobuf Include="Protos\sawmill.proto" />
+    <Protobuf Include="Protos\greet.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\auth.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\product_definition.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\category.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\summary.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\company.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\sawmill.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\division_transaction.proto" ProtoRoot="Protos" />
   </ItemGroup>
 
 </Project>

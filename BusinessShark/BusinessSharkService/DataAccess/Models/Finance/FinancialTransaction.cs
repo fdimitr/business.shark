@@ -1,13 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BusinessSharkService.DataAccess.Models.Player;
+using System.ComponentModel.DataAnnotations;
 
-namespace BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers
+namespace BusinessSharkService.DataAccess.Models.Finance
 {
-    public class DivisionTransactions
+    public class FinancialTransaction
     {
         [Key]
-        public int DivisionTransactionsId { get; set; }
-        public int DivisionId { get; set; }
-        public Division? Division { get; set; } = null!;
+        public int FinancialTransactionId { get; set; }
+        public int CompanyId { get; set; }
+        public Company? Company { get; set; }
         public DateTime TransactionDate { get; set; }
 
         public double SalesProductsAmount { get; set; }
@@ -24,5 +25,6 @@ namespace BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers
 
         // Сost of Replenishment of Raw Materials
         public double ReplenishmentAmount { get; set; }
+        public long CalculationMilliseconds { get; set; }
     }
 }

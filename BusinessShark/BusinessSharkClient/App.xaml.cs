@@ -6,6 +6,17 @@ namespace BusinessSharkClient
 {
     public partial class App : Application
     {
+        public class DashedLineDrawable : IDrawable
+        {
+            public void Draw(ICanvas canvas, RectF dirtyRect)
+            {
+                canvas.StrokeColor = Color.FromRgb(235,235,235);
+                canvas.StrokeSize = 1;
+                canvas.StrokeDashPattern = new float[] { 4, 2 }; // 4px линия, 2px пробел
+                canvas.DrawLine(0, 0, dirtyRect.Width, 0);
+            }
+        }
+
         public static SummaryModel Summary { get; } = new();
 
         private CompanyService.CompanyServiceClient _companyServiceClient;
@@ -25,6 +36,8 @@ namespace BusinessSharkClient
             _summaryServiceClient = summaryServiceClient;
 
             BindingContext = Summary;
+
+            Resources.Add("DashedLineDrawable", new DashedLineDrawable());
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

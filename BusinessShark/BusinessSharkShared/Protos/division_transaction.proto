@@ -1,0 +1,26 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BusinessSharkService";
+
+package division_transaction;
+
+message DivisionTransactionsGrpc {
+	int32 DivisionTransactionsId = 1;
+	google.protobuf.Timestamp TransactionDate = 2;
+	double SalesProductsAmount = 3;
+	
+	double PurchasedProductsAmount = 4;
+	double TransportCostsAmount = 5;
+	double EmployeeSalariesAmount = 6; 
+	double MaintenanceCostsAmount = 7;
+	double IncomeTaxAmount = 8;
+	double RentalCostsAmount = 9;
+	double EmployeeTrainingAmount = 10; 
+	double CustomAmount = 11;
+	double AdvertisingCostsAmount = 12;	
+	double ReplenishmentAmount = 13;
+    int32 QuantityProduced = 14;
+    double QualityProduced = 15;
+}

@@ -1,6 +1,7 @@
 ﻿syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+import "division_transaction.proto";
 
 option csharp_namespace = "BusinessSharkService";
 
@@ -51,7 +52,9 @@ message SawmillResponse {
   SawmillWarhouseGrpc OutputWarehouse = 13;
   SawmillToolsGrpc Tools = 14;
   SawmillEmployeesGrpc Employees = 15;
-  repeated SawmillTrnasactionsGrpc DivisionTransactions = 16;
+  repeated division_transaction.DivisionTransactionsGrpc DivisionTransactions = 16;
+  double QuantityBonus = 17;
+  double QualityBonus = 18;
 }
 
 message SawmillWarhouseGrpc {
@@ -81,22 +84,4 @@ message SawmillEmployeesGrpc {
 	int32 TotalQuantity = 2;
 	double SkillLevel = 3;
 	double SalaryPerEmployee = 4;
-}
-
-message SawmillTrnasactionsGrpc {
-	int32 DivisionTransactionsId = 1;
-	google.protobuf.Timestamp TransactionDate = 2;
-	double SalesProductsAmount = 3;
-	
-	double PurchasedProductsAmount = 4;
-	double TransportCostsAmount = 5;
-	double EmployeeSalariesAmount = 6; 
-	double MaintenanceCostsAmount = 7;
-	double IncomeTaxAmount = 8;
-	double RentalCostsAmount = 9;
-	double EmployeeTrainingAmount = 10; 
-	double CustomAmount = 11;
-	double AdvertisingCostsAmount = 12;
-	
-	double ReplenishmentAmount = 13;
 }

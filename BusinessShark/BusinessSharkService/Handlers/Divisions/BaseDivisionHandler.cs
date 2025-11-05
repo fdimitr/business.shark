@@ -11,7 +11,7 @@ namespace BusinessSharkService.Handlers.Divisions
 
         public abstract void StartCalculation(T Division);
         public abstract void CompleteCalculation(T Division);
-        public abstract void CalculateCosts(T Division);
+        public abstract void CalculateCosts(T Division, int quantityProduced, double qualityProduced);
 
 
         public void StartTransferItems(T Division)

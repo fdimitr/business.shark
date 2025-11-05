@@ -30,6 +30,7 @@ public partial class CompanyPage : ContentPage
         _globalDataProvider = globalDataProvider;
         SelectedSection = "Stores";
 
+        DynamicContentArea.Content = new StoresListView();
         BindingContext = this;
     }
 

@@ -147,7 +147,7 @@ namespace BusinessSharkService.Handlers.Divisions
             return itemDef.BaseProductionCount * quantity;
         }
 
-        public override void CalculateCosts(Factory Division)
+        public override void CalculateCosts(Factory Division, int quantityProduced, double qualityProduced)
         {
             throw new NotImplementedException();
         }

@@ -1,6 +1,5 @@
 ﻿using BusinessSharkService.DataAccess;
-using BusinessSharkService.DataAccess.Models.Divisions;
-using BusinessSharkService.DataAccess.Models.Player;
+using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.Handlers.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Frozen;

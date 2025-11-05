@@ -1,6 +1,7 @@
 ﻿using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
+using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.DataAccess.Models.Player;
@@ -29,7 +30,7 @@ namespace BusinessSharkService.DataAccess
         public DbSet<Player> Players { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<FinancialTransaction> FinancialTransactions { get; set; }
-        public DbSet<DivisionTransactions> DivisionTransactions { get; set; }
+        public DbSet<DivisionTransaction> DivisionTransactions { get; set; }
 
         public DataContext()
         {

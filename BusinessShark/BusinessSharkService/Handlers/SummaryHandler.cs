@@ -29,7 +29,8 @@ namespace BusinessSharkService.Handlers
             {
                 Balance = company.Balance,
                 Income = lastTransaction?.SalesProductsAmount ?? 0,
-                Expenses = lastTransaction != null ? lastTransaction.PurchasedProductsAmount +
+                Expenses = lastTransaction != null ? 
+                           lastTransaction.PurchasedProductsAmount +
                            lastTransaction.TransportCostsAmount +
                            lastTransaction.EmployeeSalariesAmount +
                            lastTransaction.MaintenanceCostsAmount +

@@ -1,4 +1,5 @@
 ﻿using BusinessSharkService.Handlers.Divisions;
+using BusinessSharkService.Handlers.Finance;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 
@@ -9,7 +10,7 @@ namespace BusinessSharkService.GrpcServices
         private readonly ILogger<ProductDefinitionGrpcService> _logger;
         private readonly SawmillHandler _sawmillHandler;
 
-        public SawmillGrpcService(ILogger<ProductDefinitionGrpcService> logger, SawmillHandler sawmillHandler)
+        public SawmillGrpcService(ILogger<ProductDefinitionGrpcService> logger,  SawmillHandler sawmillHandler)
         {
             _logger = logger;
             _sawmillHandler = sawmillHandler;
@@ -51,6 +52,8 @@ namespace BusinessSharkService.GrpcServices
                 RawMaterialReserves = sawmill.RawMaterialReserves,
                 TechLevel = sawmill.TechLevel,
                 PlantingCosts = sawmill.PlantingCosts,
+                QualityBonus = sawmill.QualityBonus,
+                QuantityBonus = sawmill.QuantityBonus,
                 OutputWarehouse = new SawmillWarhouseGrpc
                 {
                     WarehouseId = sawmill.OutputWarehouse.WarehouseId,
@@ -80,7 +83,7 @@ namespace BusinessSharkService.GrpcServices
                     SalaryPerEmployee = sawmill.Employees.SalaryPerEmployee,
                     SkillLevel = sawmill.Employees.SkillLevel
                 } : null,
-                DivisionTransactions =  { sawmill.DivisionTransactions != null ? sawmill.DivisionTransactions.ConvertAll(t => new SawmillTrnasactionsGrpc
+                DivisionTransactions =  { sawmill.DivisionTransactions != null ? sawmill.DivisionTransactions.ConvertAll(t => new DivisionTransactionsGrpc
                 {
                     DivisionTransactionsId = t.DivisionTransactionsId,
                     TransactionDate = Timestamp.FromDateTime(t.TransactionDate),
@@ -93,8 +96,10 @@ namespace BusinessSharkService.GrpcServices
                     RentalCostsAmount = t.RentalCostsAmount,
                     EmployeeTrainingAmount = t.EmployeeTrainingAmount,
                     CustomAmount = t.CustomAmount,
-                    AdvertisingCostsAmount = t.AdvertisingCostsAmount
-                }) : new List<SawmillTrnasactionsGrpc>()
+                    AdvertisingCostsAmount = t.AdvertisingCostsAmount,
+                    QualityProduced = t.QualityProduced,
+                    QuantityProduced = t.QuantityProduced,
+                }) : new List<DivisionTransactionsGrpc>()
                 }
             };
 

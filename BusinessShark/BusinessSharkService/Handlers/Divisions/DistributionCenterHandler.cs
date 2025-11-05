@@ -5,7 +5,7 @@ namespace BusinessSharkService.Handlers.Divisions
 {
     public class DistributionCenterHandler(IWorldContext worldHandler) : DivisionHandler<DistributionCenter>(worldHandler)
     {
-        public override void CalculateCosts(DistributionCenter Division)
+        public override void CalculateCosts(DistributionCenter Division, int quantityProduced, double qualityProduced)
         {
             throw new NotImplementedException();
         }

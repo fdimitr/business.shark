@@ -13,7 +13,7 @@ namespace BusinessSharkService.Handlers.Divisions
         {
         }
 
-        public override void CalculateCosts(Mine Division)
+        public override void CalculateCosts(Mine Division, int quantityProduced, double qualityProduced)
         {
             throw new NotImplementedException();
         }

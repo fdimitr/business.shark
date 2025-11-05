@@ -44,6 +44,9 @@ namespace BusinessSharkClient.Logic.ViewModels
         private int lastProductionQuantity;
 
         [ObservableProperty]
+        private double lastProductionQuality;
+
+        [ObservableProperty]
         private double balance;
 
         [ObservableProperty]
@@ -98,10 +101,13 @@ namespace BusinessSharkClient.Logic.ViewModels
             }
 
             // PRODUCTION
-            QualityBonus = 0.0;
-            QuantityBonus = 0.0;
-            Balance = 0.0;
-            LastProductionQuantity = 0;
+            QualityBonus = response.QualityBonus;
+            QuantityBonus = response.QuantityBonus;
+
+            var divisionStatistic = DivisionTransactionViewModel.GetLastTransaction(response.DivisionTransactions.ToList());
+            Balance = divisionStatistic.Balance;
+            LastProductionQuantity = divisionStatistic.QuantityProduced;
+            LastProductionQuality = divisionStatistic.QualityProduced;
 
             // Employee
             WorkerCount = response.Employees.TotalQuantity;

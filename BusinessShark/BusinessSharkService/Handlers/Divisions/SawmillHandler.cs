@@ -1,11 +1,10 @@
 ﻿using BusinessSharkService.DataAccess;
-using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
+using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
 using BusinessSharkService.Handlers.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace BusinessSharkService.Handlers.Divisions
 {
@@ -40,7 +39,7 @@ namespace BusinessSharkService.Handlers.Divisions
                 .FirstOrDefaultAsync(s => s.DivisionId == divisionId);
         }
 
-        public override void CalculateCosts(Sawmill sawmill)
+        public override void CalculateCosts(Sawmill sawmill, int quantityProduced, double qualityProduced)
         {
             if (sawmill is null) throw new ArgumentNullException(nameof(sawmill));
 
@@ -51,7 +50,7 @@ namespace BusinessSharkService.Handlers.Divisions
                 sawmill.Tools.MaintenanceCostsAmount = 0; // Reset after accounting for costs
             }
 
-            sawmill.CurrentTransactions = new DivisionTransactions
+            sawmill.CurrentTransactions = new DivisionTransaction
             {
                 DivisionId = sawmill.DivisionId,
                 TransactionDate = DateTime.UtcNow,
@@ -60,12 +59,14 @@ namespace BusinessSharkService.Handlers.Divisions
                 EmployeeSalariesAmount = sawmill.Employees != null ? sawmill.Employees.SalaryPerEmployee * sawmill.Employees.TotalQuantity : 0,
                 MaintenanceCostsAmount = maintenanceCostsAmount,
                 RentalCostsAmount = sawmill.RentalCost,
+                QuantityProduced = quantityProduced,
+                QualityProduced = qualityProduced,
                 EmployeeTrainingAmount = 0.0,
             };
             
             if (sawmill.DivisionTransactions == null)
             {
-                sawmill.DivisionTransactions = new List<DivisionTransactions>();
+                sawmill.DivisionTransactions = new List<DivisionTransaction>();
             }
             sawmill.DivisionTransactions.Add(sawmill.CurrentTransactions);
 
@@ -149,17 +150,14 @@ namespace BusinessSharkService.Handlers.Divisions
                 }
 
                 // Recalculate costs after completing production
-                CalculateCosts(sawmill);
+                CalculateCosts(sawmill, addedItem.Quantity, addedItem.Quality);
 
                 // Deduct used raw materials from reserves
                 sawmill.RawMaterialReserves -= addedItem.Quantity;
                 // Clear the input warehouse after transferring items
                 sawmill.WarehouseProductInput.Clear();
             }
-            
         }
-
-
 
         internal static double CalculateProductionQuality(Sawmill sawmill)
         {

@@ -1,4 +1,4 @@
-﻿using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
+﻿using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.DataAccess.Models.Player;
@@ -32,10 +32,16 @@ namespace BusinessSharkService.DataAccess.Models.Divisions
         [Comment("The cost of renting this division per month. Based on the city metric and city location")]
         public double RentalCost { get; set; }
 
+        [Comment("A coefficient that directly affects the final quality produced (if any)")]
+        public double QuantityBonus { get; set; }
+
+        [Comment("A coefficient that directly affects the final quantity produced (if any)")]
+        public double QualityBonus { get; set; }
+
         [Comment("Warehouses for the division")]
         public List<Warehouse>? Warehouses { get; set; }
 
-        public List<DivisionTransactions>? DivisionTransactions { get; set; }
+        public List<DivisionTransaction>? DivisionTransactions { get; set; }
 
         public List<DeliveryRoute> DeliveryRoutes { get; set; } = new();
 
@@ -44,7 +50,7 @@ namespace BusinessSharkService.DataAccess.Models.Divisions
         public Employees? Employees { get; set; }
 
         [NotMapped]
-        internal DivisionTransactions CurrentTransactions { get; set; } = new();
+        internal DivisionTransaction CurrentTransactions { get; set; } = new();
 
         [NotMapped]
         public Warehouse InputWarehouse
