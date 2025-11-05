@@ -2,8 +2,7 @@
 using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
-using BusinessSharkService.Handlers;
-using NUnit.Framework;
+using BusinessSharkService.Handlers.Divisions;
 
 namespace BusinessSharkTests.Handlers
 {
@@ -30,7 +29,7 @@ namespace BusinessSharkTests.Handlers
 
             if (workerTechLevel.HasValue)
             {
-                factory.Workers = new Workers { TechLevel = workerTechLevel.Value };
+                factory.Employees = new Employees { SkillLevel = workerTechLevel.Value };
             }
 
             return factory;

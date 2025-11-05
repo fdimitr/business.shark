@@ -6,27 +6,43 @@ namespace BusinessSharkClient
 {
     public partial class App : Application
     {
+        public class DashedLineDrawable : IDrawable
+        {
+            public void Draw(ICanvas canvas, RectF dirtyRect)
+            {
+                canvas.StrokeColor = Color.FromRgb(235,235,235);
+                canvas.StrokeSize = 1;
+                canvas.StrokeDashPattern = new float[] { 4, 2 }; // 4px линия, 2px пробел
+                canvas.DrawLine(0, 0, dirtyRect.Width, 0);
+            }
+        }
+
         public static SummaryModel Summary { get; } = new();
 
-
+        private CompanyService.CompanyServiceClient _companyServiceClient;
         private AuthService.AuthServiceClient _authServiceClient;
         private GlobalDataProvider _globalDataProvider;
         private SummaryService.SummaryServiceClient _summaryServiceClient;
 
-
-        public App(AuthService.AuthServiceClient authServiceClient, SummaryService.SummaryServiceClient summaryServiceClient, GlobalDataProvider globalDataProvider)
+        public App(AuthService.AuthServiceClient authServiceClient,
+            CompanyService.CompanyServiceClient companyServiceClient,
+            SummaryService.SummaryServiceClient summaryServiceClient,
+            GlobalDataProvider globalDataProvider)
         {
             InitializeComponent();
             _authServiceClient = authServiceClient;
+            _companyServiceClient = companyServiceClient;
             _globalDataProvider = globalDataProvider;
             _summaryServiceClient = summaryServiceClient;
 
             BindingContext = Summary;
+
+            Resources.Add("DashedLineDrawable", new DashedLineDrawable());
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new LoginView(_authServiceClient, _globalDataProvider));
+            return new Window(new LoginPage(_authServiceClient, _globalDataProvider, _companyServiceClient));
         }
 
         public async void OnLoad(object sender, EventArgs e)

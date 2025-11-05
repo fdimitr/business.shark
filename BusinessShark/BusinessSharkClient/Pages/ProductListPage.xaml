@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BusinessSharkClient.View.ProductListPage"
+             Title="Product List"
+             ControlTemplate="{StaticResource PageWithStatusBar}">
+
+    <ScrollView>
+        <VerticalStackLayout
+            x:Name="MainContainer"
+            Padding="5"
+            Spacing="10">
+            <!-- Category tables will be added dynamically -->
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

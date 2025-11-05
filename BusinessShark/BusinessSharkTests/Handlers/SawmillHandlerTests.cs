@@ -1,8 +1,11 @@
-﻿using BusinessSharkService.DataAccess.Models;
+﻿using BusinessSharkService;
+using BusinessSharkService.DataAccess.Models;
+using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using BusinessSharkService.DataAccess.Models.Items;
-using BusinessSharkService.Handlers;
+using BusinessSharkService.Handlers.Divisions;
 using BusinessSharkService.Handlers.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace BusinessSharkTests.Handlers
@@ -18,7 +21,8 @@ namespace BusinessSharkTests.Handlers
         public void SetUp()
         {
             _mockWorldContext = new Mock<IWorldContext>();
-            _sawmillHandler = new SawmillHandler(_mockWorldContext.Object);
+            var dataContext = new Mock<BusinessSharkService.DataAccess.DataContext>();
+            _sawmillHandler = new SawmillHandler(_mockWorldContext.Object, dataContext.Object);
 
             _sawmill = new Sawmill
             {
@@ -41,9 +45,18 @@ namespace BusinessSharkTests.Handlers
                 RawMaterialReserves = 100,
                 TechLevel = 1.5,
                 Tools = new Tools { TechLevel = 1.2 },
-                Workers = new Workers { TechLevel = 1.1 },
-                WarehouseInput = new List<Product>(),
-                WarehouseOutput = new List<Product>()
+                Employees = new Employees { SkillLevel = 1.1 },
+                Warehouses =
+                [
+                    new Warehouse
+                    {
+                        Type = (int)WarehouseType.Input
+                    },
+                    new Warehouse
+                    {
+                        Type = (int)WarehouseType.Output
+                    }
+                ]
             };
         }
 
@@ -54,11 +67,11 @@ namespace BusinessSharkTests.Handlers
             _sawmillHandler.StartCalculation(_sawmill);
 
             // Assert
-            Assert.That(_sawmill.WarehouseInput.Count, Is.EqualTo(1));
-            var product = _sawmill.WarehouseInput.First();
+            Assert.That(_sawmill.WarehouseProductInput!.Count, Is.EqualTo(1));
+            var product = _sawmill.WarehouseProductInput.First();
             Assert.That(product.Quantity, Is.GreaterThan(0));
             Assert.That(product.Quality, Is.GreaterThan(0));
-            Assert.That(product.DivisionId, Is.EqualTo(_sawmill.DivisionId));
+            Assert.That(product.WarehouseId, Is.EqualTo(_sawmill.InputWarehouse!.WarehouseId));
             Assert.That(product.ProductDefinitionId, Is.EqualTo(_sawmill.ProductDefinitionId));
         }
 
@@ -66,7 +79,7 @@ namespace BusinessSharkTests.Handlers
         public void StartCalculation_NullSawmill_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.That(() => _sawmillHandler.StartCalculation(null), Throws.ArgumentNullException);
+            Assert.That(() => _sawmillHandler.StartCalculation(null!), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -79,7 +92,7 @@ namespace BusinessSharkTests.Handlers
             _sawmillHandler.StartCalculation(_sawmill);
 
             // Assert
-            Assert.That(_sawmill.WarehouseInput, Is.Empty);
+            Assert.That(_sawmill.WarehouseProductInput, Is.Empty);
         }
 
         [Test]
@@ -92,13 +105,13 @@ namespace BusinessSharkTests.Handlers
             _sawmillHandler.CompleteCalculation(_sawmill);
 
             // Assert
-            Assert.That(_sawmill.WarehouseOutput.Count, Is.EqualTo(1));
-            var product = _sawmill.WarehouseOutput.First();
+            Assert.That(_sawmill.WarehouseProductOutput!.Count, Is.EqualTo(1));
+            var product = _sawmill.WarehouseProductOutput.First();
             Assert.That(product.Quantity, Is.GreaterThan(0));
             Assert.That(product.Quality, Is.GreaterThan(0));
-            Assert.That(product.DivisionId, Is.EqualTo(_sawmill.DivisionId));
+            Assert.That(product.WarehouseId, Is.EqualTo(_sawmill.OutputWarehouse!.WarehouseId));
             Assert.That(product.ProductDefinitionId, Is.EqualTo(_sawmill.ProductDefinitionId));
-            Assert.That(_sawmill.WarehouseInput, Is.Empty);
+            Assert.That(_sawmill.WarehouseProductInput, Is.Empty);
         }
 
         [Test]
@@ -108,7 +121,7 @@ namespace BusinessSharkTests.Handlers
             _sawmillHandler.CompleteCalculation(_sawmill);
 
             // Assert
-            Assert.That(_sawmill.WarehouseOutput, Is.Empty);
+            Assert.That(_sawmill.WarehouseProductOutput, Is.Empty);
         }
 
         [Test]

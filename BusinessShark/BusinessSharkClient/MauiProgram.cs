@@ -1,4 +1,5 @@
 ﻿using BusinessSharkClient.Logic;
+using CommunityToolkit.Maui;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
@@ -16,6 +17,8 @@ namespace BusinessSharkClient
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                // Initialize the .NET MAUI Community Toolkit by adding the below line of code
+                .UseMauiCommunityToolkit()
                 .ConfigureSyncfusionToolkit()
                 .ConfigureFonts(fonts =>
                 {
@@ -33,13 +36,18 @@ namespace BusinessSharkClient
             });
             var invoker = channel.Intercept(new Interceptors.SecurityInterceptor());
 
+            // Grpc clients
             builder.Services.AddScoped(services => new BusinessSharkService.Greeter.GreeterClient(invoker));
             builder.Services.AddScoped(services => new BusinessSharkService.AuthService.AuthServiceClient(channel));
             builder.Services.AddScoped(services => new BusinessSharkService.ProductDefinitionService.ProductDefinitionServiceClient(invoker));
             builder.Services.AddScoped(services => new BusinessSharkService.ProductCategoryService.ProductCategoryServiceClient(invoker));
             builder.Services.AddScoped(services => new BusinessSharkService.SummaryService.SummaryServiceClient(invoker));
+            builder.Services.AddScoped(services => new BusinessSharkService.CompanyService.CompanyServiceClient(invoker));
+            builder.Services.AddScoped(services => new BusinessSharkService.SawmillService.SawmillServiceClient(invoker));
 
+            // Provicders
             builder.Services.AddSingleton<GlobalDataProvider>();
+            builder.Services.AddScoped<SawmillProvider>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

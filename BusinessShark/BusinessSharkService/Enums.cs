@@ -18,4 +18,10 @@ namespace BusinessSharkService
         Clayware = 11,
         Qartz = 12,
     }
+
+    public enum WarehouseType
+    {
+        Input = 0,
+        Output = 1
+    }
 }

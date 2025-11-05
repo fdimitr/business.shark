@@ -21,15 +21,16 @@ namespace BusinessSharkService.Handlers
             }
 
             var lastTransaction = await _dbContext.FinancialTransactions
-                .Where(t => t.PlayerId == playerId)
+                .Where(t => t.CompanyId == company.CompanyId)
                 .OrderByDescending(t => t.TransactionDate)
                 .FirstOrDefaultAsync();
 
             return new CurrentSummary
             {
                 Balance = company.Balance,
-                Income = lastTransaction != null ? lastTransaction.SalesProductsAmount : 0,
-                Expenses = lastTransaction != null ? lastTransaction.PurchasedProductsAmount +
+                Income = lastTransaction?.SalesProductsAmount ?? 0,
+                Expenses = lastTransaction != null ? 
+                           lastTransaction.PurchasedProductsAmount +
                            lastTransaction.TransportCostsAmount +
                            lastTransaction.EmployeeSalariesAmount +
                            lastTransaction.MaintenanceCostsAmount +
@@ -37,7 +38,8 @@ namespace BusinessSharkService.Handlers
                            lastTransaction.RentalCostsAmount +
                            lastTransaction.EmployeeTrainingAmount +
                            lastTransaction.CustomAmount +
-                           lastTransaction.AdvertisingCostsAmount : 0
+                           lastTransaction.AdvertisingCostsAmount +
+                           lastTransaction.RentalCostsAmount : 0
             };
         }
     }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BusinessSharkClient.View.Divisions.SawmillListView"
+             xmlns:viewmodels="clr-namespace:BusinessSharkClient.Logic.Models">
+
+    <VerticalStackLayout Padding="5" Spacing="5">
+
+        <!-- Grid header -->
+        <Grid ColumnDefinitions="1.5*,*,30" Padding="5" ColumnSpacing="5">
+            <Label Grid.Column="0" Text="Name" FontAttributes="Bold" FontSize="14" />
+            <Label Grid.Column="1" Text="Product" FontAttributes="Bold" FontSize="14" />
+        </Grid>
+
+        <BoxView HeightRequest="1" BackgroundColor="#AAA" />
+
+        <!-- Division List -->
+        <CollectionView ItemsSource="{Binding GroupedSawmills}" IsGrouped="True" SelectionMode="None">
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout BackgroundColor="#F2F2F2">
+                        <!-- City + Flag -->
+                        <Label Text="{Binding City}" FontAttributes="Bold" FontSize="14" Padding="5"/>
+                        <Image Source="{Binding CountryFlag}" VerticalOptions="Center" Margin="0" HeightRequest="18" WidthRequest="14" />
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="1.5*,*,30" Padding="5" ColumnSpacing="5">
+                        
+                        <VerticalStackLayout Grid.Column="0">
+                            <!-- Name -->
+                            <Label Text="{Binding Name}" 
+                                   FontSize="14"
+                                   VerticalOptions="Center"
+                                   HorizontalTextAlignment="Start"/>
+                            <!-- Volume -->
+                            <Label Text="{Binding Volume, StringFormat='Volume: {0}'}"
+                                   FontSize="14"
+                                   VerticalOptions="Center"
+                                   HorizontalTextAlignment="Start"
+                                   TextColor="Gray" />
+                        </VerticalStackLayout>
+                        <!-- Product -->
+                        <HorizontalStackLayout Grid.Column="1">
+                            <Label
+                                   FontSize="14"
+                                   Text="{Binding ProductName}"
+                                   VerticalOptions="Center"
+                                   HorizontalTextAlignment="Start" />
+                            <Image Source="{Binding ProductIcon}"
+                                   HeightRequest="24"
+                                   WidthRequest="24"
+                                   Margin="5,0,0,0"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <!-- Action button -->
+                        <Button Grid.Column="2"
+                                Text="..."
+                                FontSize="11"
+                                HeightRequest="28"
+                                MinimumHeightRequest="28"
+                                Padding="4,0"
+                                CornerRadius="6"
+                                BackgroundColor="Transparent"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                BorderWidth="1"
+                                BorderColor="DarkGrey"
+                                TextColor="Black"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentView}}, Path=BindingContext.OpenDetailsCommand}"
+                                CommandParameter="{Binding .}" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentView>

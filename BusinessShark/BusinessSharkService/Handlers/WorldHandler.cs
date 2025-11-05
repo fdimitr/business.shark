@@ -1,8 +1,9 @@
 ﻿using BusinessSharkService.DataAccess;
-using BusinessSharkService.DataAccess.Models.Divisions;
+using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.Handlers.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Frozen;
+using System.Diagnostics;
 
 namespace BusinessSharkService.Handlers
 {
@@ -37,28 +38,13 @@ namespace BusinessSharkService.Handlers
             {
                 foreach (var city in country.Cities)
                 {
-                    city.Storages = await _dbContext.Storages.Where(s => s.CityId == city.CityId)
-                        .Include(s=>s.WarehouseOutput)
-                        .Include(s=>s.WarehouseInput)
-                        .Include(s=>s.DeliveryRoutes)
-                        .Include(f => f.Workers)
-                        .ToListAsync();
-                    city.Factories = await _dbContext.Factories.Where(f => f.CityId == city.CityId)
-                        .Include(f=> f.WarehouseOutput)
-                        .Include(f=> f.WarehouseInput)
-                        .Include(f=> f.DeliveryRoutes)
-                        .Include(f=> f.Workers)
-                        .Include(f=> f.Tools)
-                        .ToListAsync();
-                    city.Mines = await _dbContext.Mines.Where(m => m.CityId == city.CityId)
-                        .Include(m =>m.WarehouseOutput)
-                        .Include(m => m.WarehouseInput)
-                        .Include(f => f.Workers)
-                        .ToListAsync();
-                    city.Sawmills = await _dbContext.Sawmills.Where(s => s.CityId == city.CityId)
-                        .Include(s => s.WarehouseOutput)
-                        .Include(s => s.WarehouseInput)
-                        .Include(f => f.Workers)
+                    city.Divisions = await _dbContext.Divisions
+                        .Where(s => s.CityId == city.CityId)
+                        .Include(s => s.Warehouses!)
+                          .ThenInclude(w => w.Products)
+                        .Include(s => s.DeliveryRoutes)
+                        .Include(f => f.Employees)
+                        .Include(f => f.Tools)
                         .ToListAsync();
                 }
             }
@@ -66,34 +52,114 @@ namespace BusinessSharkService.Handlers
 
         public async Task SaveCalculationData()
         {
-            foreach (var country in _worldContext.Countries)
-            {
-                foreach (var city in country.Cities)
-                {
-                    //_dbContext.Storages.UpdateRange(city.Storages);
-                    //_dbContext.Factories.UpdateRange(city.Factories);
-                    //_dbContext.Mines.UpdateRange(city.Mines);
-                    //_dbContext.Sawmills.UpdateRange(city.Sawmills);
-                    await _dbContext.SaveChangesAsync();
-                }
-            }
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task Calculate(CancellationToken stoppingToken)
         {
-            await LoadCalculationData();
-            _worldContext.FillDivisions();
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
 
-            StartCalculation(stoppingToken);
-            CompleteCalculation(stoppingToken);
+                await LoadCalculationData();
+                _worldContext.FillDivisions();
 
-            await SaveCalculationData();
+                StartCalculation(stoppingToken);
+                CompleteCalculation(stoppingToken);
+
+                stopwatch.Stop();
+                SummarizingСalculation(stoppingToken, stopwatch.ElapsedMilliseconds);
+
+                if (!stoppingToken.IsCancellationRequested)
+                {
+                    await SaveCalculationData();
+                }
+            }
+            finally
+            {
+                ClearCalculationEntities();
+            }
+        }
+
+        /// <summary>
+        /// Clears all division entities from each city within every country in the world context.
+        /// </summary>
+        /// <remarks>This method iterates through all countries and their respective cities in the world
+        /// context, removing all division entities from each city. Use this method to reset the division data across
+        /// all cities.</remarks>
+        private void ClearCalculationEntities()
+        {
+            foreach (var country in _worldContext.Countries)
+            {
+                foreach (var city in country.Cities)
+                {
+                    city.Divisions.Clear();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Aggregates financial data for each company and creates a summary transaction record.
+        /// </summary>
+        /// <remarks>This method iterates over all companies in the database context, aggregates financial
+        /// data from each division within a company, and creates a new financial transaction record for each company.
+        /// The operation can be cancelled by signaling the provided <paramref name="stoppingToken"/>.</remarks>
+        /// <param name="stoppingToken">A token to monitor for cancellation requests, which can be used to stop the operation prematurely.</param>
+        private void SummarizingСalculation(CancellationToken stoppingToken, long calculationMillisecond)
+        {
+            foreach(var company in _dbContext.Companies)
+            {
+                var financialTransactions = new FinancialTransaction
+                {
+                    CompanyId = company.CompanyId,
+                    TransactionDate = DateTime.UtcNow,
+                };
+
+                if (stoppingToken.IsCancellationRequested) break;
+                foreach(var division in company.Divisions)
+                {
+                    // Here you can add summarizing logic for each division
+                    var divTran = division.CurrentTransactions;
+                    if (divTran == null) continue;
+
+                    financialTransactions.SalesProductsAmount += divTran.SalesProductsAmount;
+                    financialTransactions.PurchasedProductsAmount += divTran.PurchasedProductsAmount;
+                    financialTransactions.TransportCostsAmount += divTran.TransportCostsAmount;
+                    financialTransactions.EmployeeSalariesAmount += divTran.EmployeeSalariesAmount;
+                    financialTransactions.MaintenanceCostsAmount += divTran.MaintenanceCostsAmount;
+                    financialTransactions.IncomeTaxAmount += divTran.IncomeTaxAmount;
+                    financialTransactions.RentalCostsAmount += divTran.RentalCostsAmount;
+                    financialTransactions.EmployeeTrainingAmount += divTran.EmployeeTrainingAmount;
+                    financialTransactions.CustomAmount += divTran.CustomAmount;
+                    financialTransactions.AdvertisingCostsAmount += divTran.AdvertisingCostsAmount;
+                    financialTransactions.ReplenishmentAmount += divTran.ReplenishmentAmount;
+                }
+
+                financialTransactions.CalculationMilliseconds = calculationMillisecond;
+                _dbContext.FinancialTransactions.Add(financialTransactions);
+
+                var total = financialTransactions.SalesProductsAmount
+                            - financialTransactions.PurchasedProductsAmount
+                            - financialTransactions.TransportCostsAmount
+                            - financialTransactions.EmployeeSalariesAmount
+                            - financialTransactions.MaintenanceCostsAmount
+                            - financialTransactions.IncomeTaxAmount
+                            - financialTransactions.RentalCostsAmount
+                            - financialTransactions.EmployeeTrainingAmount
+                            - financialTransactions.CustomAmount
+                            - financialTransactions.AdvertisingCostsAmount
+                            - financialTransactions.ReplenishmentAmount;
+
+                company.Balance += total;
+            }
         }
 
         public void StartCalculation(CancellationToken stoppingToken)
         {
             foreach (var country in _worldContext.Countries)
             {
+                if (stoppingToken.IsCancellationRequested) break;
                 _countryHandler.StartCalculation(stoppingToken, country);
             }
         }
@@ -102,6 +168,7 @@ namespace BusinessSharkService.Handlers
         {
             foreach (var country in _worldContext.Countries)
             {
+                if (stoppingToken.IsCancellationRequested) break;
                 _countryHandler.CompleteCalculation(stoppingToken, country);
             }
         }

@@ -1,17 +1,18 @@
-﻿using BusinessSharkService.DataAccess;
-using BusinessSharkService.DataAccess.Models.Location;
+﻿using BusinessSharkService.DataAccess.Models.Location;
+using BusinessSharkService.Handlers.Divisions;
 
 namespace BusinessSharkService.Handlers
 {
     public class CountryHandler
     {
         private readonly FactoryHandler _factoryHandler;
-        private readonly StorageHandler _storageHandler;
+        private readonly DistributionCenterHandler _storageHandler;
         private readonly MineHandler _mineHandler;
         private readonly SawmillHandler _sawmillHandler;
 
-        public CountryHandler(FactoryHandler factoryHandler,
-            StorageHandler storageHandler,
+        public CountryHandler(
+            FactoryHandler factoryHandler,
+            DistributionCenterHandler storageHandler,
             MineHandler mineHandler,
             SawmillHandler sawmillHandler)
         {
@@ -21,25 +22,31 @@ namespace BusinessSharkService.Handlers
             _sawmillHandler = sawmillHandler;
         }
 
+
         public void StartCalculation(CancellationToken stoppingToken, Country country)
         {
             foreach (var city in country.Cities)
             {
+                if (stoppingToken.IsCancellationRequested) break;
                 foreach (var factory in city.Factories)
                 {
+                    if (stoppingToken.IsCancellationRequested)
                     _factoryHandler.StartCalculation(factory);
                 }
 
-                foreach (var storage in city.Storages)
+                foreach (var storage in city.DistributionCenters)
                 {
+                    if (stoppingToken.IsCancellationRequested) break;
                     _storageHandler.StartCalculation(storage);
                 }
                 foreach (var mine in city.Mines)
                 {
+                    if (stoppingToken.IsCancellationRequested) break;
                     _mineHandler.StartCalculation(mine);
                 }
                 foreach (var sawmill in city.Sawmills)
                 {
+                    if (stoppingToken.IsCancellationRequested) break;
                     _sawmillHandler.StartCalculation(sawmill);
                 }
             }
@@ -53,7 +60,7 @@ namespace BusinessSharkService.Handlers
                 {
                     _factoryHandler.CompleteCalculation(factory);
                 }
-                foreach (var storage in city.Storages)
+                foreach (var storage in city.DistributionCenters)
                 {
                     _storageHandler.CompleteCalculation(storage);
                 }

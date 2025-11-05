@@ -4,6 +4,7 @@ using BusinessSharkService.DataAccess;
 using BusinessSharkService.GrpcServices;
 using BusinessSharkService.Handlers;
 using BusinessSharkService.Handlers.Context;
+using BusinessSharkService.Handlers.Divisions;
 using BusinessSharkService.Handlers.Interfaces;
 using BusinessSharkService.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -83,8 +84,12 @@ builder.Services.AddScoped<ProductCategoryHandler>();
 builder.Services.AddScoped<SummaryHandler>();
 builder.Services.AddScoped<CountryHandler>();
 builder.Services.AddScoped<CityHandler>();
-builder.Services.AddScoped<StorageHandler>();
+builder.Services.AddScoped<DistributionCenterHandler>();
+builder.Services.AddScoped<MineHandler>();
+builder.Services.AddScoped<SawmillHandler>();
+builder.Services.AddScoped<FactoryHandler>();
 builder.Services.AddScoped<PlayerHandler>();
+builder.Services.AddScoped<CompanyHandler>();
 
 builder.Services.AddHostedService<CalculationService>();
 
@@ -97,6 +102,8 @@ app.UseCors();
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 
 // Configure the HTTP request pipeline.
+app.MapGrpcService<SawmillGrpcService>().EnableGrpcWeb();
+app.MapGrpcService<CompanyGrpService>().EnableGrpcWeb();
 app.MapGrpcService<SummaryGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<ProductCategoryGrpService>().EnableGrpcWeb();
 app.MapGrpcService<ProductDefinitionGrpcService>().EnableGrpcWeb();

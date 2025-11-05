@@ -16,7 +16,7 @@ namespace BusinessSharkService.GrpcServices
             _summaryHandler = summaryHandler;
         }
 
-        public async override Task<SummaryResponse> Load(SummaryRequest request, ServerCallContext context)
+        public override async Task<SummaryResponse> Load(SummaryRequest request, ServerCallContext context)
         {  
             var summary = await _summaryHandler.LoadAsync(request.PlayerId);
             return new SummaryResponse

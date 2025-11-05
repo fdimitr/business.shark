@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BusinessSharkClient.Pages.SawmillDetailPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}"
+             ControlTemplate="{StaticResource PageWithStatusBar}"
+             Shell.NavBarIsVisible="False"
+             Title="Sawmill Detail">
+
+    <ContentPage.Resources>
+        <Style x:Key="DottedLineStyle" TargetType="GraphicsView">
+            <Setter Property="HeightRequest" Value="1" />
+            <Setter Property="HorizontalOptions" Value="Fill" />
+            <Setter Property="Drawable" Value="{StaticResource DashedLineDrawable}" />
+        </Style>
+    </ContentPage.Resources>
+    
+    <ScrollView>
+        <VerticalStackLayout>
+            <!-- 🔹 Командная панель -->
+            <Grid ColumnDefinitions="50, Auto,*"  
+                    Grid.Column="0" Grid.Row="0" 
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray950}}">
+                <ImageButton x:Name="BackButton"
+                            Grid.Column="0"
+                            Source="arrow_dropleft_48_w.png" 
+                            Clicked="OnBackButtonClicked"
+                            HeightRequest="30"
+                            WidthRequest="30"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Start"
+                            Aspect="AspectFit">
+                    <!-- Use a standard back arrow icon (e.g., from FontAwesome or a .png) -->
+                    <!-- As a fallback, we can use text -->
+                    <ImageButton.Triggers>
+                        <Trigger TargetType="ImageButton" Property="Source" Value="back_icon.png">
+                            <Setter Property="BackgroundColor" Value="Transparent" />
+                        </Trigger>
+                    </ImageButton.Triggers>
+                </ImageButton>
+
+                <Label Grid.Column="1"
+                        Text="{Binding Title}"
+                        TextColor="{StaticResource White}"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
+            </Grid>
+            <HorizontalStackLayout HorizontalOptions="Start" Padding="5" Spacing="20" Grid.Column="0" Grid.Row="1">
+                <ImageButton Source="finances.png"
+                                HeightRequest="60"
+                                WidthRequest="60"
+                                BackgroundColor="Transparent"
+                                Command="{Binding OpenFinanceCommand}" />
+                <ImageButton Source="supply.png"
+                                HeightRequest="60"
+                                WidthRequest="60"
+                                BackgroundColor="Transparent"
+                                Command="{Binding OpenSupplyCommand}" />
+                <ImageButton Source="sales_warehouse.png"
+                                HeightRequest="60"
+                                WidthRequest="60"
+                                BackgroundColor="Transparent"
+                                Command="{Binding OpenSalesCommand}" />
+            </HorizontalStackLayout>
+
+            <VerticalStackLayout 
+                x:Name="DataStackLayout"
+                Padding="10"
+                Spacing="20">
+                <!-- 🔸 Секция "Лесопилка" -->
+                <Border Style="{StaticResource SectionBorderStyle}">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <HorizontalStackLayout Grid.Row="0" Grid.Column="0" HorizontalOptions="Start">
+                            <Label Text="Sawmill:" 
+                                   Style="{StaticResource SectionTitleStyle}"
+                                   Margin="0,0,20,0"
+                                   Grid.ColumnSpan="2" />
+                            <Label Text="Woods" Style="{StaticResource FieldNameStyle}" Grid.ColumnSpan="2" />
+                            <Image Source="{Binding ProductIcon}"
+                                Grid.Row="0" Grid.Column="1"
+                                HeightRequest="24"
+                                WidthRequest="24"
+                                Margin="5,0,0,0"
+                                VerticalOptions="Start" />
+
+                        </HorizontalStackLayout>
+                        <Image Source="icon_edit.png"
+                               Grid.Row="0" Grid.Column="2"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               HorizontalOptions="End"
+                               BackgroundColor="Transparent"/>
+                        <!-- Name -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                            <Label Text="Name:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Label Text="{Binding Name}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- City -->
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+                            <Label Text="City:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                            <HorizontalStackLayout Spacing="6" HorizontalOptions="End">
+                                <Label Text="{Binding City}" Style="{StaticResource FieldValueStyle}" />
+                                <Image Source="{Binding CountryFlag}" HeightRequest="18" WidthRequest="14" />
+                            </HorizontalStackLayout>
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Size -->
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="0">
+                            <Label Text="Size:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="1">
+                             <Label Text="{Binding VolumeCapacity, StringFormat='{0:F2} m2'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Tech. Level -->
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="0">
+                            <Label Text="Tech. Level:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="1">
+                            <Label Text="{Binding TechLevel, StringFormat='{0:F2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        
+                        <!-- Base Quality -->
+                        <VerticalStackLayout Grid.Row="5" Grid.Column="0">
+                            <Label Text="Base Quality:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="5" Grid.Column="1">
+                            <Label Text="{Binding ResourceDepositQuality, StringFormat='{0:F2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        
+
+                    </Grid>
+                </Border>
+
+                <!-- 🔸 Секция "Производство" -->
+                <Border Style="{StaticResource SectionBorderStyle}">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Label Text="Production" Style="{StaticResource SectionTitleStyle}" Grid.ColumnSpan="2" />
+
+                        <!-- Quantity -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                            <Label Text="Quantity:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Label Text="{Binding LastProductionQuantity}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Quality -->
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+                            <Label Text="Quality:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                            <Label Text="{Binding LastProductionQuality, StringFormat='{0:N2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Balance -->
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="0">
+                            <Label Text="Balance:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="1">
+                            <Label
+                               Text="{Binding Balance, StringFormat='{0:N2}'}" 
+                               TextColor="{Binding Balance, Converter={StaticResource AmountToColorConverter}}"
+                               Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <Label Grid.Row="3" Grid.Column="1" 
+                               Text="{Binding Balance, StringFormat='{0:N2}'}" 
+                               TextColor="{Binding Balance, Converter={StaticResource AmountToColorConverter}}"
+                               Style="{StaticResource FieldValueStyle}" />
+
+                        <!-- Quantity bonus -->
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="0">
+                            <Label Text="Quantity bonus:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="1">
+                            <Label Text="{Binding QuantityBonus, StringFormat='{0:P1}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Quality bonus -->
+                        <VerticalStackLayout Grid.Row="5" Grid.Column="0">
+                            <Label Text="Quality bonus:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="5" Grid.Column="1">
+                            <Label Text="{Binding QualityBonus, StringFormat='{0:P1}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </Border>
+
+                <!-- 🔸 Секция "Сотрудники" -->
+                <Border Style="{StaticResource SectionBorderStyle}">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Label Text="Employees" Style="{StaticResource SectionTitleStyle}" Grid.ColumnSpan="2" />
+                        <Image Source="icon_edit.png"
+                               Grid.Row="0" Grid.Column="1"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               HorizontalOptions="End"
+                               BackgroundColor="Transparent"/>
+
+                        <!-- Quantity -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                            <Label Text="Quantity:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Label Text="{Binding WorkerCount}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Qualification -->
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+                            <Label Text="Qualification:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                            <Label Text="{Binding Qualification, StringFormat='{0:N2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Salary: -->
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="0">
+                            <Label Text="Salary:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="1">
+                            <Label Text="{Binding Salary, StringFormat='{0:N2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Education Process -->
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="0">
+                            <Label Text="Education Process:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="1">
+                            <Label Text="{Binding TrainingProgress, StringFormat='{0:P2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- 🔸 Секция "Оборудование" -->
+                <Border Style="{StaticResource SectionBorderStyle}">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Label Text="Equipment" Style="{StaticResource SectionTitleStyle}" Grid.ColumnSpan="2" />
+                        <Image Source="icon_edit.png"
+                               Grid.Row="0" Grid.Column="1"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               HorizontalOptions="End"
+                               BackgroundColor="Transparent" />
+
+                        <!-- Quantity -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                            <Label Text="Quantity:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Label Text="{Binding EquipmentCount}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Tech. Level -->
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+                            <Label Text="Tech level:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                            <Label Text="{Binding EquipmentTechLevel, StringFormat='{0:N2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Wear -->
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="0">
+                            <Label Text="Wear:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="1">
+                            <Label Text="{Binding Wear, StringFormat='{0:N2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- 🔸 Секция "Заметки" -->
+                <Border Style="{StaticResource SectionBorderStyle}">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Label Text="Notes" Style="{StaticResource SectionTitleStyle}" Grid.ColumnSpan="2" />
+                        <Image Source="icon_edit.png"
+                               Grid.Row="0" Grid.Column="1"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               HorizontalOptions="End"
+                               BackgroundColor="Transparent"/>
+                        <Border Grid.Row="1" Grid.ColumnSpan="2"
+                                Stroke="LightGray"
+                                StrokeThickness="1"
+                                StrokeShape="Rectangle"
+                                HeightRequest="130"
+                                Padding="4">
+                            <Editor
+                                Text="{Binding Description}"
+                                IsEnabled="False"
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill"
+                                Style="{StaticResource FieldValueStyle}" />
+                        </Border>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
+    

@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BusinessSharkService.DataAccess.Models.Divisions;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessSharkService.DataAccess.Models
 {
@@ -10,6 +12,7 @@ namespace BusinessSharkService.DataAccess.Models
         public int ToolsId { get; set; }
 
         public int DivisionId { get; set; }
+        public Division? Division { get; set; }
 
         public int TotalQuantity { get; set; }
 
@@ -19,7 +22,9 @@ namespace BusinessSharkService.DataAccess.Models
         [Comment("Deprecation factor of the tools, ranging from 0 (completely deprecated) to 1 (new).")]
         public double Deprecation { get; set; }
 
-        public int ActiveQuantity => (int)Math.Round(TotalQuantity * Deprecation);
+        public double MaintenanceCostsAmount { get; set; }
 
+        [NotMapped]
+        public int ActiveQuantity => (int)Math.Round(TotalQuantity * Deprecation);
     }
 }

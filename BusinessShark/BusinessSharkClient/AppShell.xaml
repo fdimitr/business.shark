@@ -7,6 +7,22 @@
     Title="BusinessSharkClient"
     Shell.FlyoutBehavior="Flyout">
 
+    <Shell.TitleView>
+        <Grid Padding="0" Margin="0" ColumnDefinitions="Auto,*">
+            <VerticalStackLayout Grid.Column="0">
+                <Label Text="{Binding CompanyName}"
+                       FontSize="12"
+                       VerticalOptions="Center"
+                       TextColor="{DynamicResource ShellForegroundColor}" />
+                <Label Text="{Binding Title}"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       TextColor="{DynamicResource ShellForegroundColor}" />
+            </VerticalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
     <Shell.ItemTemplate>
         <DataTemplate>
             <Grid Padding="10" ColumnDefinitions="Auto, *" ColumnSpacing="15">
@@ -17,22 +33,22 @@
                     HeightRequest="80"
                     Aspect="AspectFit"
                     VerticalOptions="Center" />
-                <Label
-                    Grid.Column="1"
-                    Text="{Binding Title}"
-                    VerticalOptions="Center"
-                    FontSize="18"
-                    TextColor="{DynamicResource ShellForegroundColor}" />
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding Title}"
+                        VerticalOptions="Center"
+                        FontSize="18"
+                        TextColor="{DynamicResource ShellForegroundColor}" />
             </Grid>
         </DataTemplate>
     </Shell.ItemTemplate>
-   
+
     <ShellContent
         Title="Login"
         IsVisible="False"
-        ContentTemplate="{DataTemplate local:View.LoginView}"
-        Route="LoginView" />
-    
+        ContentTemplate="{DataTemplate local:View.LoginPage}"
+        Route="LoginPage" />
+
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
@@ -41,49 +57,49 @@
     <FlyoutItem Title="Office" Icon="office80x80.png" >
         <ShellContent
 			Shell.NavBarIsVisible="true"
-            ContentTemplate="{DataTemplate local:View.OfficeView}"
+            ContentTemplate="{DataTemplate local:View.OfficePage}"
 			Title="Office" />
     </FlyoutItem>
     <FlyoutItem Title="Company" Icon="mycompany80x80.png" >
         <ShellContent
 			Shell.NavBarIsVisible="true"
-            ContentTemplate="{DataTemplate local:View.CompanyView}"
+            ContentTemplate="{DataTemplate local:View.CompanyPage}"
 			Title="Company" />
     </FlyoutItem>
     <FlyoutItem Title="Construction" Icon="construction80x80.png" >
         <ShellContent
 			Shell.NavBarIsVisible="true"
-            ContentTemplate="{DataTemplate local:View.ConstructionView}"
+            ContentTemplate="{DataTemplate local:View.ConstructionPage}"
 			Title="Construction" />
     </FlyoutItem>
     <FlyoutItem Title="Analitics" Icon="analitics80x80.png" >
         <ShellContent
 			Shell.NavBarIsVisible="true"
-            ContentTemplate="{DataTemplate local:View.AnaliticsView}"
+            ContentTemplate="{DataTemplate local:View.AnaliticsPage}"
 			Title="Analitics" />
     </FlyoutItem>
     <FlyoutItem Title="Product List" Icon="product_list80x80.png" >
         <ShellContent
 			Shell.NavBarIsVisible="true"
-            ContentTemplate="{DataTemplate local:View.ProductListView}"
+            ContentTemplate="{DataTemplate local:View.ProductListPage}"
 			Title="Product List" />
-    </FlyoutItem>    
+    </FlyoutItem>
     <FlyoutItem Title="World" Icon="world80x80.png" >
         <ShellContent
 			Shell.NavBarIsVisible="true"
-            ContentTemplate="{DataTemplate local:View.WorldView}"
+            ContentTemplate="{DataTemplate local:View.WorldPage}"
 			Title="World" />
     </FlyoutItem>    
     <FlyoutItem Title="Documentation" Icon="documentation80x80.png" >
         <ShellContent
 			Shell.NavBarIsVisible="true"
-            ContentTemplate="{DataTemplate local:View.DocumentationView}"
+            ContentTemplate="{DataTemplate local:View.DocumentationPage}"
 			Title="Documentation" />
     </FlyoutItem>
     <FlyoutItem Title="Profile" Icon="profile80x80.png" >
         <ShellContent
 			Shell.NavBarIsVisible="true"
-            ContentTemplate="{DataTemplate local:View.ProfileView}"
+            ContentTemplate="{DataTemplate local:View.ProfilePage}"
 			Title="Profile" />
     </FlyoutItem>
 </Shell>

@@ -14,7 +14,7 @@ namespace BusinessSharkService.Handlers
 
         public async Task<List<ProductCategory>> LoadAsync()
         {
-            return await _dbContext.Categories.ToListAsync();
+            return await _dbContext.Categories.AsNoTracking().ToListAsync();
         }
     }
 }

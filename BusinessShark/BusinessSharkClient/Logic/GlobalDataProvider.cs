@@ -45,7 +45,7 @@ namespace BusinessSharkClient.Logic
             {
                 var defModel = new ProductDefinitionModel
                 {
-                    ProductDefinitionId = defGrpc.ProductDefinitionId,                    
+                    ProductDefinitionId = defGrpc.ProductDefinitionId,
                     ProductCategoryId = defGrpc.ProductCategoryId,
                     Name = defGrpc.Name,
 
