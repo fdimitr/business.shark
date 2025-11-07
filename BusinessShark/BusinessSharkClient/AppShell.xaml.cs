@@ -1,5 +1,5 @@
-﻿using BusinessSharkClient.Logic.Models;
-using BusinessSharkClient.Logic.ViewModels;
+﻿using BusinessSharkClient.Logic.ViewModels;
+using BusinessSharkClient.Pages;
 using BusinessSharkClient.View;
 
 namespace BusinessSharkClient
@@ -23,9 +23,6 @@ namespace BusinessSharkClient
             Routing.RegisterRoute(nameof(AnaliticsPage), typeof(AnaliticsPage));
             Routing.RegisterRoute(nameof(DocumentationPage), typeof(DocumentationPage));
             Routing.RegisterRoute(nameof(ProductListPage), typeof(ProductListPage));
-
-            // Setting the BindingContext for data binding
-            BindingContext = HeaderViewModel;
 
             // Subscribing to the Loaded event
             this.Loaded += OnShellLoaded;

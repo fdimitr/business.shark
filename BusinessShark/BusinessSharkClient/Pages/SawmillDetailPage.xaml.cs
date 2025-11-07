@@ -17,11 +17,11 @@ public partial class SawmillDetailPage : ContentPage
         _sawmillProvider = sawmillProvider;
         _globalDataProvider = globalDataProvider;
         _divisionId = divisionId;
+        SawmillDetail = new SawmillDetailViewModel(_globalDataProvider, _sawmillProvider) { Name = "Loading ..." };
 
         InitializeComponent();
         Loaded += OnLoadingView;
 
-        SawmillDetail = new SawmillDetailViewModel(_globalDataProvider, _sawmillProvider) { Name = "Loading ..." };
         BindingContext = this;
         DataStackLayout.BindingContext = SawmillDetail;
     }

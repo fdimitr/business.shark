@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:BusinessSharkClient.Logic.ViewModels"
+             xmlns:local="clr-namespace:BusinessSharkClient.Pages"
              x:Class="BusinessSharkClient.Pages.SawmillDetailPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              ControlTemplate="{StaticResource PageWithStatusBar}"
@@ -40,6 +42,7 @@
                 </ImageButton>
 
                 <Label Grid.Column="1"
+                       x:DataType="local:SawmillDetailPage"
                         Text="{Binding Title}"
                         TextColor="{StaticResource White}"
                         FontSize="20"
@@ -68,7 +71,9 @@
             <VerticalStackLayout 
                 x:Name="DataStackLayout"
                 Padding="10"
-                Spacing="20">
+                Spacing="20"
+                BindingContext="SawmillDetail"
+                x:DataType="viewmodel:SawmillDetailViewModel">
                 <!-- 🔸 Секция "Лесопилка" -->
                 <Border Style="{StaticResource SectionBorderStyle}">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">

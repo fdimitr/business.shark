@@ -19,16 +19,16 @@ namespace BusinessSharkClient.Logic.ViewModels
         private ImageSource? productIcon;
 
         [ObservableProperty]
-        private string name;
+        private string? name;
 
         [ObservableProperty]
-        private string description;
+        private string? description;
 
         [ObservableProperty]
-        private string city;
+        private string? city;
 
         [ObservableProperty]
-        private string countryFlag;
+        private string? countryFlag;
 
         [ObservableProperty]
         private int volumeCapacity;

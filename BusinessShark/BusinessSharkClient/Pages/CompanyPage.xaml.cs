@@ -1,8 +1,7 @@
 ﻿using BusinessSharkClient.Logic;
 using BusinessSharkClient.View.Divisions;
-using System.ComponentModel;
 
-namespace BusinessSharkClient.View;
+namespace BusinessSharkClient.Pages;
 
 public partial class CompanyPage : ContentPage
 {

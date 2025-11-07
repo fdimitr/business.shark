@@ -1,8 +1,12 @@
-﻿using BusinessSharkClient.Logic;
+﻿using BusinessSharkClient.Interceptors;
+using BusinessSharkClient.Logic;
+using BusinessSharkClient.Logic.System;
 using CommunityToolkit.Maui;
+using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
 
@@ -34,16 +38,57 @@ namespace BusinessSharkClient
             {
                 HttpHandler = handler
             });
-            var invoker = channel.Intercept(new Interceptors.SecurityInterceptor());
+
+            var authServiceClient = new BusinessSharkService.AuthService.AuthServiceClient(channel);
+            builder.Services.AddScoped(services => authServiceClient);
+            builder.Services.AddScoped<IAuthService>(service => new AuthClientService(authServiceClient));
+            builder.Services.AddSingleton<SecurityInterceptor>();
+
+            builder.Services.AddSingleton(services =>
+            {
+                // Важно: инжектируем interceptor с DI
+                var interceptor = services.GetRequiredService<SecurityInterceptor>();
+                var invoker = channel.Intercept(interceptor);
+
+                return invoker;
+            });
 
             // Grpc clients
-            builder.Services.AddScoped(services => new BusinessSharkService.Greeter.GreeterClient(invoker));
-            builder.Services.AddScoped(services => new BusinessSharkService.AuthService.AuthServiceClient(channel));
-            builder.Services.AddScoped(services => new BusinessSharkService.ProductDefinitionService.ProductDefinitionServiceClient(invoker));
-            builder.Services.AddScoped(services => new BusinessSharkService.ProductCategoryService.ProductCategoryServiceClient(invoker));
-            builder.Services.AddScoped(services => new BusinessSharkService.SummaryService.SummaryServiceClient(invoker));
-            builder.Services.AddScoped(services => new BusinessSharkService.CompanyService.CompanyServiceClient(invoker));
-            builder.Services.AddScoped(services => new BusinessSharkService.SawmillService.SawmillServiceClient(invoker));
+            builder.Services.AddScoped(services => 
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.Greeter.GreeterClient(invoker);
+            });
+
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.ProductDefinitionService.ProductDefinitionServiceClient(invoker);
+            });
+
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.ProductCategoryService.ProductCategoryServiceClient(invoker);
+            });
+
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.SummaryService.SummaryServiceClient(invoker);
+            });
+
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.CompanyService.CompanyServiceClient(invoker);
+            });
+
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.SawmillService.SawmillServiceClient(invoker);
+            });
 
             // Provicders
             builder.Services.AddSingleton<GlobalDataProvider>();

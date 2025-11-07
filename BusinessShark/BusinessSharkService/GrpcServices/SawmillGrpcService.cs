@@ -2,9 +2,11 @@
 using BusinessSharkService.Handlers.Finance;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BusinessSharkService.GrpcServices
 {
+    [Authorize]
     public class SawmillGrpcService : SawmillService.SawmillServiceBase
     {
         private readonly ILogger<ProductDefinitionGrpcService> _logger;

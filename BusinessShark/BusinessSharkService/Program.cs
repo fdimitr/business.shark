@@ -75,7 +75,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddGrpc();
 // ==================================
 
-builder.Services.AddSingleton(new JwtTokenService(jwtKey, jwtIssuer));
+builder.Services.AddSingleton(new JwtTokenService(builder.Configuration, jwtKey, jwtIssuer));
 builder.Services.AddSingleton<IWorldContext, WorldContext>();
 
 builder.Services.AddScoped<WorldHandler>();

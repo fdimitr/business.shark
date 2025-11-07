@@ -1,4 +1,4 @@
-namespace BusinessSharkClient.View;
+namespace BusinessSharkClient.Pages;
 
 public partial class OfficePage : ContentPage
 {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BusinessSharkClient.View.LoginPage"
+             x:Class="BusinessSharkClient.Pages.LoginPage"
              Title="Login">
     <Grid RowDefinitions=".3*, .7*">
         <Image Aspect="AspectFill"  Source="business_plan.png" />
@@ -67,7 +67,7 @@
                 </Grid>
                 <Button Margin="0,30,0,0"
                         BackgroundColor="{DynamicResource Primary}"
-                        CornerRadius="10"
+                        CornerRadius="15"
                         HeightRequest="60"
                         Text="LOG IN"
                         TextColor="#FBF6FD"
@@ -79,11 +79,13 @@
                           TextDecorations="Underline"
                           TextColor="Blue" />
                 <Button Margin="0,30,0,0"
-                        BackgroundColor="#FBF6FD"
+                        CornerRadius="15"
+                        BackgroundColor="{DynamicResource Secondary}"
                         HeightRequest="60"
                         x:Name="BtnCreateAccount"
                         Text="Create your Account"
-                        TextColor="{DynamicResource Primary}" />
+                        TextColor="{DynamicResource Primary}"
+                        Clicked="OnCreateAcountClicked"/>
             </VerticalStackLayout>
             <Grid x:Name="OverlayPanel"
                         VerticalOptions="Center"

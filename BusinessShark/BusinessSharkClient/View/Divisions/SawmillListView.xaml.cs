@@ -46,7 +46,7 @@ public partial class SawmillListView : ContentView, INotifyPropertyChanged
         Loaded += OnLoadingView;
 
         BindingContext = this;
-     }
+    }
 
     public async void OnLoadingView(object? sender, EventArgs e)
     {
@@ -59,6 +59,7 @@ public partial class SawmillListView : ContentView, INotifyPropertyChanged
 
     private async void OnOpenDetails(SawmillListModel sawmill)
     {
-        await Navigation.PushAsync(new SawmillDetailPage(_globalDataProvider, _sawmillProvider, sawmill.Id));
+        var sawmillDetailPage = new SawmillDetailPage(_globalDataProvider, _sawmillProvider, sawmill.Id);
+        await Navigation.PushAsync(sawmillDetailPage);
     }
 }

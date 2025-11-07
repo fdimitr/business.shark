@@ -1,5 +1,6 @@
 ﻿using BusinessSharkClient.Logic;
-using BusinessSharkClient.View;
+using BusinessSharkClient.Logic.Models;
+using BusinessSharkClient.Pages;
 using BusinessSharkService;
 
 namespace BusinessSharkClient
@@ -42,7 +43,7 @@ namespace BusinessSharkClient
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new LoginPage(_authServiceClient, _globalDataProvider, _companyServiceClient));
+            return new Window(new LoginPage(_authServiceClient, _globalDataProvider));
         }
 
         public async void OnLoad(object sender, EventArgs e)

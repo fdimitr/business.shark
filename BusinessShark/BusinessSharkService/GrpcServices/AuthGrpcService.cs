@@ -8,11 +8,13 @@ public class AuthGrpcService : AuthService.AuthServiceBase
 {
     private readonly JwtTokenService _jwt;
     private readonly PlayerHandler _playerHandler;
+    private readonly CompanyHandler _companyHandler;
 
-    public AuthGrpcService(JwtTokenService jwt, PlayerHandler playerHandler)
+    public AuthGrpcService(JwtTokenService jwt, PlayerHandler playerHandler, CompanyHandler companyHandler)
     {
         _jwt = jwt;
         _playerHandler = playerHandler;
+        _companyHandler = companyHandler;
     }
 
     public async override Task<AuthResponse> Login(LoginRequest request, ServerCallContext context)
@@ -20,13 +22,19 @@ public class AuthGrpcService : AuthService.AuthServiceBase
         var player = await _playerHandler.GetByLoginAsync(request.Username);
         if (player != null && PasswordHelper.VerifyPassword(request.Password, player.Password))
         {
+            var company = await _companyHandler.GetByPlayer(player.PlayerId);
+            if (company == null)
+                throw new RpcException(new Status(StatusCode.Unauthenticated, "Invalid auth data structure"));
+
             var (access, refresh) = _jwt.GenerateTokens(request.Username);
             return new AuthResponse
             {
                 AccessToken = access,
                 RefreshToken = refresh,
                 ExpiresIn = DateTime.UtcNow.AddMinutes(15).ToString("O"),
-                PlayerId = player.PlayerId
+                PlayerId = player.PlayerId,
+                CompanyId = company.CompanyId,
+                CompanyName = company.Name
             };
         }
 

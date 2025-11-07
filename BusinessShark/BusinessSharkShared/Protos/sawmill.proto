@@ -1,6 +1,5 @@
 ﻿syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
 import "division_transaction.proto";
 
 option csharp_namespace = "BusinessSharkService";
