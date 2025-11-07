@@ -8,6 +8,7 @@ namespace BusinessSharkService.Handlers.Interfaces
 {
     public interface IWorldContext
     {
+        DateTime CurrentDate { get; set; }
         List<Country> Countries { get; set; }
         Dictionary<int, Division> Divisions { get; set; }
         FrozenDictionary<int, ProductDefinition> ProductDefinitions { get; set; }

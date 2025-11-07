@@ -1,5 +1,5 @@
-﻿using BusinessSharkService.Handlers;
-using BusinessSharkService.Handlers.Finance;
+﻿using BusinessSharkService.Handlers.Finance;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 
@@ -21,9 +21,23 @@ namespace BusinessSharkService.GrpcServices
         {
             var transactions = await _divisionTransactionHandler.GetByDivisionAsync(request.DivisionId);
             var result = new DivisionTransactionsResponse();
-            result.DivisionTransactions.AddRange(transactions.ConvertAll(t => new DivisionTransactionsGrpc
+            result.DivisionTransactions.AddRange(transactions?.ConvertAll(t => new DivisionTransactionsGrpc
             {
-
+                DivisionTransactionsId = t.DivisionTransactionsId,
+                AdvertisingCostsAmount = t.AdvertisingCostsAmount,
+                CustomAmount = t.CustomAmount,
+                EmployeeSalariesAmount = t.EmployeeSalariesAmount,
+                EmployeeTrainingAmount = t.EmployeeTrainingAmount,
+                IncomeTaxAmount = t.IncomeTaxAmount,
+                MaintenanceCostsAmount = t.MaintenanceCostsAmount,
+                PurchasedProductsAmount = t.PurchasedProductsAmount,
+                QualityProduced = t.QualityProduced,
+                QuantityProduced = t.QuantityProduced,
+                RentalCostsAmount = t.RentalCostsAmount,
+                ReplenishmentAmount = t.ReplenishmentAmount,
+                SalesProductsAmount = t.SalesProductsAmount,
+                TransactionDate = Timestamp.FromDateTime(t.TransactionDate),
+                TransportCostsAmount = t.TransportCostsAmount
             }));
             return result;
         }

@@ -10,11 +10,9 @@ namespace BusinessSharkService.Handlers.Divisions
 {
     public class SawmillHandler(IWorldContext worldContext, DataContext dbContext) : DivisionHandler<Sawmill>(worldContext)
     {
-        private readonly DataContext _dbContext = dbContext;
-
         public async Task<List<Sawmill>> LoadListAsync(int companyId)
         {
-            return await _dbContext.Sawmills
+            return await dbContext.Sawmills
                 .AsNoTracking()
                 .Include(s => s.ProductDefinition)
                 .Include(s => s.City)
@@ -25,7 +23,7 @@ namespace BusinessSharkService.Handlers.Divisions
 
         public async Task<Sawmill?> LoadAsync(int divisionId)
         {
-            return await _dbContext.Sawmills
+            return await dbContext.Sawmills
                 .AsNoTracking()
                 .Include(s => s.ProductDefinition)
                 .Include(s => s.Tools)
@@ -53,7 +51,7 @@ namespace BusinessSharkService.Handlers.Divisions
             sawmill.CurrentTransactions = new DivisionTransaction
             {
                 DivisionId = sawmill.DivisionId,
-                TransactionDate = DateTime.UtcNow,
+                TransactionDate = WorldContext.CurrentDate,
                 SalesProductsAmount = 0.0,
                 ReplenishmentAmount = sawmill.PlantingCosts,
                 EmployeeSalariesAmount = sawmill.Employees != null ? sawmill.Employees.SalaryPerEmployee * sawmill.Employees.TotalQuantity : 0,

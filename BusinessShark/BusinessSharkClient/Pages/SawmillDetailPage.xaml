@@ -32,8 +32,6 @@
                             VerticalOptions="Center"
                             HorizontalOptions="Start"
                             Aspect="AspectFit">
-                    <!-- Use a standard back arrow icon (e.g., from FontAwesome or a .png) -->
-                    <!-- As a fallback, we can use text -->
                     <ImageButton.Triggers>
                         <Trigger TargetType="ImageButton" Property="Source" Value="back_icon.png">
                             <Setter Property="BackgroundColor" Value="Transparent" />

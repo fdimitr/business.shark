@@ -93,9 +93,16 @@ namespace BusinessSharkClient
                 return new BusinessSharkService.SawmillService.SawmillServiceClient(invoker);
             });
 
-            // Provicders
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.DivisionTransactionsService.DivisionTransactionsServiceClient(invoker);
+            });
+
+            // Providers
             builder.Services.AddSingleton<GlobalDataProvider>();
             builder.Services.AddScoped<SawmillProvider>();
+            builder.Services.AddScoped<DivisionTransactionProvider>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

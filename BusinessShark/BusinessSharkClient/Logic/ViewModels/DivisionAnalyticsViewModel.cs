@@ -1,10 +1,10 @@
-﻿using BusinessSharkClient.Logic.Models;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using BusinessSharkService;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace BusinessSharkClient.Logic.ViewModels
 {
@@ -12,7 +12,7 @@ namespace BusinessSharkClient.Logic.ViewModels
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ObservableCollection<Models.DivisionAnaliticsModel> Days { get; }
+        public ObservableCollection<Models.DivisionAnalyticsModel> Days { get; }
 
         // LiveCharts series array (four line series)
         public ISeries[] Series { get; }
@@ -21,29 +21,41 @@ namespace BusinessSharkClient.Logic.ViewModels
         public Axis[] XAxes { get; }
         public Axis[] YAxes { get; }
 
-        public DivisionAnalyticsViewModel()
+        public DivisionAnalyticsViewModel(List<DivisionTransactionsGrpc> divisionTransactions)
         {
-            Days = new ObservableCollection<DivisionAnaliticsModel>();
-            var rnd = new Random(42);
-            var start = DateTime.Today.AddDays(-29);
-
-            for (int i = 0; i < 7; i++)
+            Days = [];
+            foreach (var dt in divisionTransactions)
             {
-                var date = start.AddDays(i);
-                var income = 800 + 400 * Math.Sin(i * 0.25) + rnd.NextDouble() * 150;
-                var expense = income * (0.55 + rnd.NextDouble() * 0.15);
-                var profit = income - expense;
-                Days.Add(new DivisionAnaliticsModel
+                Days.Add(new Models.DivisionAnalyticsModel
                 {
-                    Date = date,
-                    Income = Math.Round(income, 2),
-                    Expense = Math.Round(expense, 2),
-                    Profit = Math.Round(profit, 2)
+                    Date = dt.TransactionDate.ToDateTime(),
+                    Income = dt.SalesProductsAmount,
+                    Expense = dt.PurchasedProductsAmount +
+                              dt.TransportCostsAmount +
+                              dt.EmployeeSalariesAmount +
+                              dt.MaintenanceCostsAmount +
+                              dt.IncomeTaxAmount +
+                              dt.RentalCostsAmount +
+                              dt.EmployeeTrainingAmount +
+                              dt.CustomAmount +
+                              dt.AdvertisingCostsAmount +
+                              dt.ReplenishmentAmount,
+                    Profit = dt.SalesProductsAmount -
+                             (dt.PurchasedProductsAmount +
+                              dt.TransportCostsAmount +
+                              dt.EmployeeSalariesAmount +
+                              dt.MaintenanceCostsAmount +
+                              dt.IncomeTaxAmount +
+                              dt.RentalCostsAmount +
+                              dt.EmployeeTrainingAmount +
+                              dt.CustomAmount +
+                              dt.AdvertisingCostsAmount +
+                              dt.ReplenishmentAmount)
                 });
             }
 
-            Series = new ISeries[]
-            {
+            Series =
+            [
                 new LineSeries<double>
                 {
                     Name = "Income",
@@ -74,10 +86,10 @@ namespace BusinessSharkClient.Logic.ViewModels
                     Fill = null,
                     LineSmoothness = 0
                 }
-            };
+            ];
 
-            XAxes = new Axis[]
-            {
+            XAxes =
+            [
                 new Axis
                 {
                     Labels = Days.Select(d => d.Date.ToString("dd MMM")).ToArray(),
@@ -86,10 +98,10 @@ namespace BusinessSharkClient.Logic.ViewModels
                     UnitWidth = 1,
                     TextSize = 12
                 }
-            };
+            ];
 
-            YAxes = new Axis[]
-            {
+            YAxes =
+            [
                 new Axis
                 {
                     Labeler = value => value.ToString("N0"),
@@ -97,7 +109,7 @@ namespace BusinessSharkClient.Logic.ViewModels
                     SeparatorsPaint = new SolidColorPaint(SKColors.LightGray) { StrokeThickness = 1 },
                     TextSize = 12
                 }
-            };
+            ];
         }
     }
 }

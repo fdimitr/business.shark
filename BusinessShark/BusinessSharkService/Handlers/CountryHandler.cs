@@ -31,7 +31,7 @@ namespace BusinessSharkService.Handlers
                 foreach (var factory in city.Factories)
                 {
                     if (stoppingToken.IsCancellationRequested)
-                    _factoryHandler.StartCalculation(factory);
+                        _factoryHandler.StartCalculation(factory);
                 }
 
                 foreach (var storage in city.DistributionCenters)

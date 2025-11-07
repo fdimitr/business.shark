@@ -31,6 +31,7 @@ namespace BusinessSharkService.DataAccess
         public DbSet<Company> Companies { get; set; }
         public DbSet<FinancialTransaction> FinancialTransactions { get; set; }
         public DbSet<DivisionTransaction> DivisionTransactions { get; set; }
+        public DbSet<World> Worlds { get; set; }
 
         public DataContext()
         {
@@ -44,8 +45,8 @@ namespace BusinessSharkService.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Configure relationships and keys if needed
 
+            // Configure relationships and keys if needed
             modelBuilder.Entity<Division>().ToTable("Divisions");
             modelBuilder.Entity<Factory>().ToTable("Factories");
             modelBuilder.Entity<DistributionCenter>().ToTable("DistributionCenters");
@@ -86,6 +87,14 @@ namespace BusinessSharkService.DataAccess
                 .HasColumnName("xmin")
                 .HasColumnType("xid")
                 .ValueGeneratedOnAddOrUpdate();
+
+            modelBuilder.Entity<World>()
+
+                .HasData(new World
+            {
+                Id = 1,
+                CurrentDate = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+            });
 
             // **************** Seeding Product Categories **************************
             modelBuilder.Entity<ProductCategory>().HasData(new ProductCategory

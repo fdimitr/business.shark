@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
+using BusinessSharkService.Handlers.Finance;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
@@ -90,6 +91,7 @@ builder.Services.AddScoped<SawmillHandler>();
 builder.Services.AddScoped<FactoryHandler>();
 builder.Services.AddScoped<PlayerHandler>();
 builder.Services.AddScoped<CompanyHandler>();
+builder.Services.AddScoped<DivisionTransactionHandler>();
 
 builder.Services.AddHostedService<CalculationService>();
 
@@ -102,6 +104,7 @@ app.UseCors();
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 
 // Configure the HTTP request pipeline.
+app.MapGrpcService<DivisionTransactionGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<SawmillGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<CompanyGrpService>().EnableGrpcWeb();
 app.MapGrpcService<SummaryGrpcService>().EnableGrpcWeb();

@@ -1,23 +1,27 @@
-﻿using BusinessSharkService.DataAccess;
+﻿using System.Collections.Frozen;
+using System.Diagnostics;
+using BusinessSharkService.DataAccess;
 using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.Handlers.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Frozen;
-using System.Diagnostics;
 
 namespace BusinessSharkService.Handlers
 {
     public class WorldHandler
     {
+        private readonly ILogger<WorldHandler> _logger;
         private readonly CountryHandler _countryHandler;
         private readonly DataContext _dbContext;
         private readonly IWorldContext _worldContext;
 
-        public WorldHandler(DataContext dbContext, IWorldContext worldContext, CountryHandler countryHandler)
+        public WorldHandler(ILogger<WorldHandler> logger, DataContext dbContext, IWorldContext worldContext, CountryHandler countryHandler)
         {
+            _logger = logger;
             _worldContext = worldContext;
             _dbContext = dbContext;
             _countryHandler = countryHandler;
+
+            _worldContext.CurrentDate = dbContext.Worlds.First().CurrentDate;
 
             // Load All ItemDefinitions
             _worldContext.ProductDefinitions = dbContext.ProductDefinitions
@@ -59,6 +63,8 @@ namespace BusinessSharkService.Handlers
         {
             try
             {
+                _worldContext.CurrentDate = _worldContext.CurrentDate.AddDays(1);
+
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -75,6 +81,9 @@ namespace BusinessSharkService.Handlers
                 {
                     await SaveCalculationData();
                 }
+
+                _dbContext.Worlds.First().CurrentDate = _worldContext.CurrentDate;
+                _logger.LogInformation("Calculation completed in {ElapsedMilliseconds} ms", stopwatch.ElapsedMilliseconds);
             }
             finally
             {

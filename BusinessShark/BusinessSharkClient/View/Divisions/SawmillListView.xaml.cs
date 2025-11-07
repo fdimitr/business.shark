@@ -35,22 +35,33 @@ public partial class SawmillListView : ContentView, INotifyPropertyChanged
 
     private SawmillProvider _sawmillProvider;
     private GlobalDataProvider _globalDataProvider;
+    private DivisionTransactionProvider _transactionProvider;
 
-    public SawmillListView(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider)
+    public SawmillListView(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionTransactionProvider transactionProvider)
     {
         _sawmillProvider = sawmillProvider;
         _globalDataProvider = globalDataProvider;
+        _transactionProvider = transactionProvider;
         InitializeComponent();
 
         OpenDetailsCommand = new Command<SawmillListModel>(OnOpenDetails);
         Loaded += OnLoadingView;
 
         BindingContext = this;
+        _transactionProvider = transactionProvider;
     }
 
     public async void OnLoadingView(object? sender, EventArgs e)
     {
-        GroupedSawmills = await _sawmillProvider.LoadList(int.Parse(await SecureStorage.Default.GetAsync("company_id") ?? "0"));
+        try
+        {
+            GroupedSawmills = await _sawmillProvider.LoadList(int.Parse(await SecureStorage.Default.GetAsync("company_id") ?? "0"));
+        }
+        catch (Exception ex)
+        {
+            if (this.Parent is ContentPage page)
+                await page.DisplayAlert("Error", $"An unexpected error occurred: {ex.Message}", "OK");
+        }
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged;
@@ -59,7 +70,15 @@ public partial class SawmillListView : ContentView, INotifyPropertyChanged
 
     private async void OnOpenDetails(SawmillListModel sawmill)
     {
-        var sawmillDetailPage = new SawmillDetailPage(_globalDataProvider, _sawmillProvider, sawmill.Id);
-        await Navigation.PushAsync(sawmillDetailPage);
+        try
+        {
+            var sawmillDetailPage = new SawmillDetailPage(_globalDataProvider, _sawmillProvider, _transactionProvider, sawmill.Id);
+            await Navigation.PushAsync(sawmillDetailPage);
+        }
+        catch (Exception ex)
+        {
+            if (this.Parent is ContentPage page)
+                await page.DisplayAlert("Error", $"An unexpected error occurred: {ex.Message}", "OK");
+        }
     }
 }

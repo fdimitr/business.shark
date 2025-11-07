@@ -82,7 +82,7 @@ namespace BusinessSharkClient.Logic.ViewModels
             var response = await _sawmillProvider.LoadDetail(divisionId);
 
             // Cache product definitions for fast lookup
-            var productDefition = _globalDataProvider.ProductDefinitions.FirstOrDefault(p => p.ProductDefinitionId == response.ProductDefinitionId);
+            var productDefinition = _globalDataProvider.ProductDefinitions.FirstOrDefault(p => p.ProductDefinitionId == response.ProductDefinitionId);
 
             // SAWMILL
             DivisionId = divisionId;
@@ -95,19 +95,19 @@ namespace BusinessSharkClient.Logic.ViewModels
             TechLevel = response.TechLevel;
             ResourceDepositQuality = response.ResourceDepositQuality;
 
-            if (productDefition != null)
+            if (productDefinition != null)
             {
-                ProductIcon = productDefition.Image;
+                ProductIcon = productDefinition.Image;
             }
 
             // PRODUCTION
             QualityBonus = response.QualityBonus;
             QuantityBonus = response.QuantityBonus;
 
-            var divisionStatistic = DivisionTransactionViewModel.GetLastTransaction(response.DivisionTransactions.ToList());
-            Balance = divisionStatistic.Balance;
-            LastProductionQuantity = divisionStatistic.QuantityProduced;
-            LastProductionQuality = divisionStatistic.QualityProduced;
+            var divisionStatistics = DivisionTransactionViewModel.GetLastTransaction(response.DivisionTransactions.ToList());
+            Balance = divisionStatistics.Balance;
+            LastProductionQuantity = divisionStatistics.QuantityProduced;
+            LastProductionQuality = divisionStatistics.QualityProduced;
 
             // Employee
             WorkerCount = response.Employees.TotalQuantity;

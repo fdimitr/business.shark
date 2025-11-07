@@ -11,16 +11,14 @@ public partial class SawmillDetailPage : ContentPage
     public SawmillDetailViewModel SawmillDetail { get; set; }
 
 
-    private SawmillProvider _sawmillProvider;
-    private GlobalDataProvider _globalDataProvider;
+    private DivisionTransactionProvider _transactionProvider;
     private int _divisionId;
 
-    public SawmillDetailPage(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, int divisionId)
+    public SawmillDetailPage(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionTransactionProvider transactionProvider, int divisionId)
     {
-        _sawmillProvider = sawmillProvider;
-        _globalDataProvider = globalDataProvider;
+        _transactionProvider = transactionProvider;
         _divisionId = divisionId;
-        SawmillDetail = new SawmillDetailViewModel(_globalDataProvider, _sawmillProvider) { Name = "Loading ..." };
+        SawmillDetail = new SawmillDetailViewModel(globalDataProvider, sawmillProvider) { Name = "Loading ..." };
 
         OpenDivisionAnalyticsCommand = new Command(OnOpenDivisionAnalytics);
 
@@ -33,7 +31,7 @@ public partial class SawmillDetailPage : ContentPage
 
     private void OnOpenDivisionAnalytics(object obj)
     {
-        Navigation.PushAsync(new DivisionAnalyticsPage());
+        Navigation.PushAsync(new DivisionAnalyticsPage(_transactionProvider, _divisionId));
     }
 
     private async void OnLoadingView(object? sender, EventArgs e)
