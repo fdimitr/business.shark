@@ -27,19 +27,17 @@ namespace BusinessSharkClient.Logic.ViewModels
             var rnd = new Random(42);
             var start = DateTime.Today.AddDays(-29);
 
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 7; i++)
             {
                 var date = start.AddDays(i);
                 var income = 800 + 400 * Math.Sin(i * 0.25) + rnd.NextDouble() * 150;
                 var expense = income * (0.55 + rnd.NextDouble() * 0.15);
-                var tax = income * 0.18;
-                var profit = income - expense - tax;
+                var profit = income - expense;
                 Days.Add(new DivisionAnaliticsModel
                 {
                     Date = date,
                     Income = Math.Round(income, 2),
                     Expense = Math.Round(expense, 2),
-                    Tax = Math.Round(tax, 2),
                     Profit = Math.Round(profit, 2)
                 });
             }
@@ -48,37 +46,31 @@ namespace BusinessSharkClient.Logic.ViewModels
             {
                 new LineSeries<double>
                 {
-                    Name = "Доход",
+                    Name = "Income",
                     Values = Days.Select(d => d.Income).ToArray(),
                     GeometrySize = 6,
-                    Stroke = new SolidColorPaint(SKColors.DeepSkyBlue) { StrokeThickness = 2 },
+                    Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 3 },
+                    GeometryStroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 3 },
                     Fill = null,
                     LineSmoothness = 0
                 },
                 new LineSeries<double>
                 {
-                    Name = "Расход",
+                    Name = "Expense",
                     Values = Days.Select(d => d.Expense).ToArray(),
                     GeometrySize = 6,
-                    Stroke = new SolidColorPaint(SKColors.IndianRed) { StrokeThickness = 2 },
+                    Stroke = new SolidColorPaint(SKColors.IndianRed) { StrokeThickness = 3 },
+                    GeometryStroke = new SolidColorPaint(SKColors.IndianRed) { StrokeThickness = 3 },
                     Fill = null,
                     LineSmoothness = 0
                 },
                 new LineSeries<double>
                 {
-                    Name = "Налог",
-                    Values = Days.Select(d => d.Tax).ToArray(),
-                    GeometrySize = 6,
-                    Stroke = new SolidColorPaint(SKColors.Goldenrod) { StrokeThickness = 2 },
-                    Fill = null,
-                    LineSmoothness = 0
-                },
-                new LineSeries<double>
-                {
-                    Name = "Прибыль",
+                    Name = "Profit",
                     Values = Days.Select(d => d.Profit).ToArray(),
                     GeometrySize = 6,
-                    Stroke = new SolidColorPaint(SKColors.ForestGreen) { StrokeThickness = 2 },
+                    Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 3 },
+                    GeometryStroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 3 },
                     Fill = null,
                     LineSmoothness = 0
                 }
@@ -91,7 +83,8 @@ namespace BusinessSharkClient.Logic.ViewModels
                     Labels = Days.Select(d => d.Date.ToString("dd MMM")).ToArray(),
                     ShowSeparatorLines = true,
                     SeparatorsPaint = new SolidColorPaint(SKColors.LightGray) { StrokeThickness = 1 },
-                    UnitWidth = 1
+                    UnitWidth = 1,
+                    TextSize = 12
                 }
             };
 
@@ -100,8 +93,9 @@ namespace BusinessSharkClient.Logic.ViewModels
                 new Axis
                 {
                     Labeler = value => value.ToString("N0"),
-                    Name = "₽",
-                    SeparatorsPaint = new SolidColorPaint(SKColors.LightGray) { StrokeThickness = 1 }
+                    ShowSeparatorLines = true,
+                    SeparatorsPaint = new SolidColorPaint(SKColors.LightGray) { StrokeThickness = 1 },
+                    TextSize = 12
                 }
             };
         }

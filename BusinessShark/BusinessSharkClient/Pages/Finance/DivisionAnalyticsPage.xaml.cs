@@ -19,12 +19,12 @@ public partial class DivisionAnalyticsPage : ContentPage
         MainChart.ZoomMode = ZoomAndPanMode.Both;
         MainChart.LegendPosition = LegendPosition.Top;
         MainChart.TooltipPosition = TooltipPosition.Top; // default tooltip position
-
+        MainChart.LegendTextSize = 12;
         // Clean, modern look for grid lines and axes
         if (_vm.XAxes != null) MainChart.XAxes = _vm.XAxes;
         if (_vm.YAxes != null) MainChart.YAxes = _vm.YAxes;
 
-        // Populate the table grid (4 rows: Income, Expense, Tax, Profit; columns: Day 1..30)
+        // Populate the table grid (3 rows: Income, Expense, Profit; columns: Day 1..30)
         BuildTable();
     }
 
@@ -44,16 +44,16 @@ public partial class DivisionAnalyticsPage : ContentPage
             DataGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         }
 
-        // Rows: header row + 4 data rows
+        // Rows: header row + 3 data rows
         // Header row
         DataGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-        // Data rows: Income, Expense, Tax, Profit
-        for (int r = 0; r < 4; r++)
+        // Data rows: Income, Expense, Profit
+        for (int r = 0; r < 3; r++)
             DataGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
         // Add header cell (top-left)
-        var headerFrame = MakeCell("Показатель \\ День", true);
+        var headerFrame = MakeCell("", true);
         DataGrid.Add(headerFrame, 0, 0);
 
         // Fill day headers
@@ -64,8 +64,8 @@ public partial class DivisionAnalyticsPage : ContentPage
         }
 
         // Row labels
-        var rowTitles = new[] { "Доход", "Расход", "Налог", "Прибыль" };
-        for (int r = 0; r < 4; r++)
+        var rowTitles = new[] { "Income", "Expense", "Profit" };
+        for (int r = 0; r < 3; r++)
         {
             var rowLabel = MakeCell(rowTitles[r], true);
             DataGrid.Add(rowLabel, 0, r + 1);
@@ -75,8 +75,8 @@ public partial class DivisionAnalyticsPage : ContentPage
         for (int c = 0; c < days.Count; c++)
         {
             var d = days[c];
-            var vals = new[] { d.Income, d.Expense, d.Tax, d.Profit };
-            for (int r = 0; r < 4; r++)
+            var vals = new[] { d.Income, d.Expense, d.Profit };
+            for (int r = 0; r < 3; r++)
             {
                 var txt = vals[r].ToString("N2");
                 var cell = MakeCell(txt, false);

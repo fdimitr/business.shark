@@ -55,7 +55,7 @@
                                 HeightRequest="60"
                                 WidthRequest="60"
                                 BackgroundColor="Transparent"
-                                Command="{Binding OpenFinanceCommand}" />
+                                Command="{Binding OpenDivisionAnalyticsCommand}" />
                 <ImageButton Source="supply.png"
                                 HeightRequest="60"
                                 WidthRequest="60"

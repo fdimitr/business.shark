@@ -19,18 +19,17 @@
     </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="16">
+        <VerticalStackLayout Padding="10" Spacing="15">
 
             <!-- Header -->
-            <HorizontalStackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Center" Spacing="12">
+            <HorizontalStackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Center" Spacing="5">
                 <Label Text="Division analytics" Style="{StaticResource SectionTitle}" VerticalOptions="Center" />
-                <Label Text="(30 days)" Style="{StaticResource SubText}" VerticalOptions="Center" />
+                <Label Text="(7 days)" Style="{StaticResource SubText}" VerticalOptions="Center" />
             </HorizontalStackLayout>
 
             <!-- Chart card -->
-            <Frame HasShadow="True" CornerRadius="12" Padding="12" BorderColor="#E0E0E0" BackgroundColor="White">
+            <Frame HasShadow="True" CornerRadius="5" Padding="5" BorderColor="#E0E0E0" BackgroundColor="White">
                 <VerticalStackLayout>
-                    <Label Text="Доход / Расход / Налог / Прибыль" FontAttributes="Bold" Margin="0,0,0,6" />
                     <!-- LiveCharts CartesianChart -->
                     <lvc:CartesianChart
                         x:Name="MainChart"
@@ -38,8 +37,6 @@
                         Series="{Binding Series}"
                         XAxes="{Binding XAxes}"
                         YAxes="{Binding YAxes}"
-                        Tooltip="{Binding Tooltip}"
-                        Legend="{Binding Legend}"
                         Margin="0" />
                     <!-- Small hint -->
                     <Label Text="Пинч-зум и перетаскивание поддерживается. Колесо мыши — масштаб." Style="{StaticResource SubText}" Margin="0,8,0,0"/>
