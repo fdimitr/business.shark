@@ -20,8 +20,7 @@
     <ScrollView>
         <VerticalStackLayout>
             <!-- 🔹 Командная панель -->
-            <Grid ColumnDefinitions="50, Auto,*"  
-                    Grid.Column="0" Grid.Row="0" 
+            <Grid ColumnDefinitions="50, Auto,*"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray950}}">
                 <ImageButton x:Name="BackButton"
                             Grid.Column="0"
@@ -40,7 +39,7 @@
                 </ImageButton>
 
                 <Label Grid.Column="1"
-                       x:DataType="local:SawmillDetailPage"
+                        x:DataType="local:SawmillDetailPage"
                         Text="{Binding Title}"
                         TextColor="{StaticResource White}"
                         FontSize="20"
@@ -48,17 +47,23 @@
                         HorizontalOptions="Center"
                         VerticalOptions="Center" />
             </Grid>
-            <HorizontalStackLayout HorizontalOptions="Start" Padding="5" Spacing="20" Grid.Column="0" Grid.Row="1">
+            <HorizontalStackLayout HorizontalOptions="Start" Padding="5" Spacing="20" Grid.Column="0" Grid.Row="1"
+                                   x:DataType="local:SawmillDetailPage">
                 <ImageButton Source="finances.png"
                                 HeightRequest="60"
                                 WidthRequest="60"
                                 BackgroundColor="Transparent"
                                 Command="{Binding OpenDivisionAnalyticsCommand}" />
-                <ImageButton Source="supply.png"
-                                HeightRequest="60"
-                                WidthRequest="60"
-                                BackgroundColor="Transparent"
-                                Command="{Binding OpenSupplyCommand}" />
+                <ImageButton Source="financial_statistics.png"
+                             HeightRequest="60"
+                             WidthRequest="60"
+                             BackgroundColor="Transparent"
+                             Command="{Binding OpenFinancialStatisticsCommand}" />
+                <ImageButton Source="production_statistics.png"
+                             HeightRequest="60"
+                             WidthRequest="60"
+                             BackgroundColor="Transparent"
+                             Command="{Binding OpenProductionStatisticsCommand}" />
                 <ImageButton Source="sales_warehouse.png"
                                 HeightRequest="60"
                                 WidthRequest="60"
@@ -272,7 +277,7 @@
 
                 <!-- 🔸 Секция "Оборудование" -->
                 <Border Style="{StaticResource SectionBorderStyle}">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
                         <Label Text="Equipment" Style="{StaticResource SectionTitleStyle}" Grid.ColumnSpan="2" />
                         <Image Source="icon_edit.png"
                                Grid.Row="0" Grid.Column="1"
@@ -308,6 +313,16 @@
                         </VerticalStackLayout>
                         <VerticalStackLayout Grid.Row="3" Grid.Column="1">
                             <Label Text="{Binding Wear, StringFormat='{0:N2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+
+                        <!-- Efficiency -->
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="0">
+                            <Label Text="Efficiency:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="1">
+                            <Label Text="{Binding Efficiency, StringFormat='{0:N2}'}" Style="{StaticResource FieldValueStyle}" />
                             <GraphicsView Style="{StaticResource DottedLineStyle}" />
                         </VerticalStackLayout>
                     </Grid>

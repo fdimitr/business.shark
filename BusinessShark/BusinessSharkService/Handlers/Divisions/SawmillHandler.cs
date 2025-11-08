@@ -1,4 +1,5 @@
-﻿using BusinessSharkService.DataAccess;
+﻿using System;
+using BusinessSharkService.DataAccess;
 using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.DataAccess.Models.Items;
@@ -165,10 +166,15 @@ namespace BusinessSharkService.Handlers.Divisions
                 return 0;
             }
 
-            return sawmill.ResourceDepositQuality *
+            // Calculate quality based on resource deposit quality, tech level, tools, and employee skill
+            var quality = sawmill.ResourceDepositQuality *
                 (sawmill.TechLevel * itemDef.TechImpactQuality +
                 sawmill.Tools!.TechLevel * itemDef.ToolImpactQuality +
                 sawmill.Employees!.SkillLevel * itemDef.WorkerImpactQuality);
+
+            // Adjust quality by tools efficiency
+            // the impact is reduced by half compared to the quantity calculation
+            return quality * (1 - sawmill.Tools.Efficiency) / 2 + sawmill.Tools.Efficiency;
         }
 
         internal static double CalculateProductionQuantity(Sawmill sawmill)
@@ -179,9 +185,14 @@ namespace BusinessSharkService.Handlers.Divisions
                 return 0;
             }
 
+            // Calculate quantity based on tech level, tools, and employee skill
             var quantity = sawmill.TechLevel * itemDef.TechImpactQuantity +
                 sawmill.Tools.TechLevel * itemDef.ToolImpactQuantity +
                 sawmill.Employees.SkillLevel * itemDef.WorkerImpactQuantity;
+
+            // Adjust quantity by tools efficiency
+            quantity *= sawmill.Tools.Efficiency;
+
             return itemDef.BaseProductionCount * quantity;
         }
     }

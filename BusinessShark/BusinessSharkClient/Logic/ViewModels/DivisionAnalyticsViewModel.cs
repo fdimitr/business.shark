@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using BusinessSharkService;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
@@ -8,10 +7,8 @@ using SkiaSharp;
 
 namespace BusinessSharkClient.Logic.ViewModels
 {
-    public class DivisionAnalyticsViewModel : INotifyPropertyChanged
+    public class DivisionAnalyticsViewModel
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         public ObservableCollection<Models.DivisionAnalyticsModel> Days { get; }
 
         // LiveCharts series array (four line series)

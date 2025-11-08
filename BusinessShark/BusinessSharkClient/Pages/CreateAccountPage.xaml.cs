@@ -1,21 +1,26 @@
-﻿using BusinessSharkClient.Logic;
+﻿using System.Windows.Input;
+using BusinessSharkClient.Logic;
 using BusinessSharkService;
 
 namespace BusinessSharkClient.Pages;
 
 public partial class CreateAccountPage : ContentPage
 {
+    public ICommand CreateAccountCommand { get; }
+
     private AuthService.AuthServiceClient _authServiceClient;
     private GlobalDataProvider _globalDataProvider;
+
     public CreateAccountPage(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider)
     {
         _authServiceClient = authServiceClient;
         _globalDataProvider = globalDataProvider;
+        CreateAccountCommand = new Command(OnCreateAccountClicked);
         InitializeComponent();
     }
 
     // Обработчик кнопки "Create Account"
-    private async void OnCreateAccountClicked(object sender, EventArgs e)
+    private async void OnCreateAccountClicked(object obj)
     {
         // Находим все поля на странице
         var loginEntry = this.FindByName<Entry>("LoginEntry");
@@ -38,7 +43,7 @@ public partial class CreateAccountPage : ContentPage
         await DisplayAlert("Success", $"Account for {nameEntry.Text} has been created successfully!", "OK");
 
         // Переход обратно на страницу входа
-        OnNavigateToLoginClicked(sender, e);
+        OnNavigateToLoginClicked(this, null!);
     }
 
     // Обработчик кнопки "Log in"

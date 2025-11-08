@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using BusinessSharkService.DataAccess;
 using BusinessSharkService.DataAccess.Models.Finance;
+using BusinessSharkService.Handlers.Context;
 using BusinessSharkService.Handlers.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -115,6 +116,7 @@ namespace BusinessSharkService.Handlers
         /// data from each division within a company, and creates a new financial transaction record for each company.
         /// The operation can be cancelled by signaling the provided <paramref name="stoppingToken"/>.</remarks>
         /// <param name="stoppingToken">A token to monitor for cancellation requests, which can be used to stop the operation prematurely.</param>
+        /// <param name="calculationMillisecond"></param>
         private void SummarizingСalculation(CancellationToken stoppingToken, long calculationMillisecond)
         {
             foreach(var company in _dbContext.Companies)
@@ -122,7 +124,7 @@ namespace BusinessSharkService.Handlers
                 var financialTransactions = new FinancialTransaction
                 {
                     CompanyId = company.CompanyId,
-                    TransactionDate = DateTime.UtcNow,
+                    TransactionDate = _worldContext.CurrentDate,
                 };
 
                 if (stoppingToken.IsCancellationRequested) break;
@@ -130,7 +132,6 @@ namespace BusinessSharkService.Handlers
                 {
                     // Here you can add summarizing logic for each division
                     var divTran = division.CurrentTransactions;
-                    if (divTran == null) continue;
 
                     financialTransactions.SalesProductsAmount += divTran.SalesProductsAmount;
                     financialTransactions.PurchasedProductsAmount += divTran.PurchasedProductsAmount;

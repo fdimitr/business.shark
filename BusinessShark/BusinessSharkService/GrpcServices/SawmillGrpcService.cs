@@ -75,7 +75,9 @@ namespace BusinessSharkService.GrpcServices
                     ToolsId = sawmill.Tools.ToolsId,
                     TotalQuantity = sawmill.Tools.TotalQuantity,
                     TechLevel = sawmill.Tools.TechLevel,
-                    Deprecation = sawmill.Tools.Deprecation,
+                    WearCoefficient = sawmill.Tools.WearCoefficient,
+                    MaxQuantity = sawmill.Tools.MaxQuantity,
+                    Efficiency = sawmill.Tools.Efficiency,
                     MaintenanceCostsAmount = sawmill.Tools.MaintenanceCostsAmount
                 } : null,
                 Employees = sawmill.Employees != null ? new SawmillEmployeesGrpc

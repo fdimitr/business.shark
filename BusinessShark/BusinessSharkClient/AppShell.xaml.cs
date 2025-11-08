@@ -24,6 +24,9 @@ namespace BusinessSharkClient
             Routing.RegisterRoute(nameof(DocumentationPage), typeof(DocumentationPage));
             Routing.RegisterRoute(nameof(ProductListPage), typeof(ProductListPage));
 
+            // Setting the BindingContext for data binding
+            BindingContext = HeaderViewModel;
+
             // Subscribing to the Loaded event
             this.Loaded += OnShellLoaded;
         }

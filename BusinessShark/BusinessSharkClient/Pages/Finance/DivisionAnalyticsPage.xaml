@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
     xmlns:finance="clr-namespace:BusinessSharkClient.Pages.Finance"
+    xmlns:viewModels="clr-namespace:BusinessSharkClient.Logic.ViewModels"
     ControlTemplate="{StaticResource PageWithStatusBar}"
     Shell.NavBarIsVisible="False"
     Title="Division Analytics">
@@ -13,7 +14,7 @@
         <VerticalStackLayout>
             <VerticalStackLayout>
                 <!-- 🔹 Командная панель -->
-                <Grid ColumnDefinitions="50, Auto,*" Grid.Column="0" Grid.Row="0"
+                <Grid ColumnDefinitions="50, Auto,*"
                       BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray950}}">
                     <ImageButton x:Name="BackButton"
                          Grid.Column="0"
@@ -43,7 +44,7 @@
                    VerticalOptions="Center" />
                 </Grid>
             </VerticalStackLayout>
-            <VerticalStackLayout x:Name="AnalyticLayout" Padding="10" Spacing="15">
+            <VerticalStackLayout x:Name="AnalyticLayout" Padding="10" Spacing="15" x:DataType="viewModels:DivisionAnalyticsViewModel">
                 <!-- Chart card -->
                 <Border Padding="5" Background="White" Stroke="#E0E0E0" StrokeThickness="1">
                     <Border.StrokeShape>

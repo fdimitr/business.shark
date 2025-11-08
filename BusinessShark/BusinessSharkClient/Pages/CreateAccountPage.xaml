@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BusinessSharkClient.Pages.CreateAccountPage"
+             xmlns:local="clr-namespace:BusinessSharkClient.Pages"
              Title="Create Account">
 
     <Grid RowDefinitions=".3*, .7*">
@@ -138,7 +139,7 @@
                         CornerRadius="15"
                         HeightRequest="55"
                         Command="{Binding CreateAccountCommand}"
-                        Clicked="OnCreateAccountClicked" />
+                        x:DataType="local:CreateAccountPage" />
 
                 <!-- Back to Login -->
                 <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0">
@@ -151,7 +152,6 @@
                             FontSize="Small"
                             BackgroundColor="Transparent"
                             TextColor="{DynamicResource Primary}"
-                            Command="{Binding NavigateToLoginCommand}"
                             VerticalOptions="Center"
                             Clicked="OnNavigateToLoginClicked" />
                 </HorizontalStackLayout>

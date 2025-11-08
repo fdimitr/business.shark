@@ -74,14 +74,18 @@
       "DivisionId": "1",
       "TechLevel": "2",
       "Deprecation": "150",
-      "TotalQuantity": "5"
+      "TotalQuantity": "5",
+      "MaxQuantity": "5",
+      "WearCoefficient": "0.0"
     },
     {
       "ToolsId": "2",
       "DivisionId": "2",
       "TechLevel": "2",
       "Deprecation": "100",
-      "TotalQuantity": "3"
+      "TotalQuantity": "3",
+      "MaxQuantity": "5",
+      "WearCoefficient": "0.0"
     }
   ],
   "Employees": [

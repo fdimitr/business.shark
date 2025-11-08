@@ -8,6 +8,10 @@ namespace BusinessSharkClient.Pages;
 public partial class SawmillDetailPage : ContentPage
 {
     public ICommand OpenDivisionAnalyticsCommand { get; }
+    public ICommand OpenFinancialStatisticsCommand { get; }
+    public ICommand OpenProductionStatisticsCommand { get; }
+    public ICommand OpenSalesCommand { get; }
+
     public SawmillDetailViewModel SawmillDetail { get; set; }
 
 
@@ -21,12 +25,30 @@ public partial class SawmillDetailPage : ContentPage
         SawmillDetail = new SawmillDetailViewModel(globalDataProvider, sawmillProvider) { Name = "Loading ..." };
 
         OpenDivisionAnalyticsCommand = new Command(OnOpenDivisionAnalytics);
+        OpenFinancialStatisticsCommand = new Command(OnOpenFinancialStatistics);
+        OpenProductionStatisticsCommand = new Command(OnOpenProductionStatistics);
+        OpenSalesCommand = new Command(OnOpenSales);
 
         InitializeComponent();
         Loaded += OnLoadingView;
 
         BindingContext = this;
         DataStackLayout.BindingContext = SawmillDetail;
+    }
+
+    private void OnOpenSales(object obj)
+    {
+
+    }
+
+    private void OnOpenProductionStatistics(object obj)
+    {
+
+    }
+
+    private void OnOpenFinancialStatistics(object obj)
+    {
+
     }
 
     private void OnOpenDivisionAnalytics(object obj)

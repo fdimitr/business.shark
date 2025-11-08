@@ -56,25 +56,28 @@ namespace BusinessSharkClient.Logic.ViewModels
         private double qualityBonus;
 
         [ObservableProperty]
-        private int workerCount = 45;
+        private int workerCount;
 
         [ObservableProperty]
-        private double qualification = 0.76;
+        private double qualification;
 
         [ObservableProperty]
-        private double salary = 38000;
+        private double salary;
 
         [ObservableProperty]
-        private double trainingProgress = 0.15;
+        private double trainingProgress;
 
         [ObservableProperty]
-        private int equipmentCount = 15;
+        private int equipmentCount;
 
         [ObservableProperty]
-        private double equipmentTechLevel = 0.82;
+        private double equipmentTechLevel;
 
         [ObservableProperty]
-        private double wear = 0.12;
+        private double wear;
+
+        [ObservableProperty]
+        private double efficiency;
 
 
         internal async Task LoadAsync(int divisionId)
@@ -118,7 +121,8 @@ namespace BusinessSharkClient.Logic.ViewModels
             // Equipment
             EquipmentCount = response.Tools.TotalQuantity;
             EquipmentTechLevel = response.Tools.TechLevel;
-            Wear = response.Tools.Deprecation;
+            Wear = response.Tools.WearCoefficient;
+            Efficiency = response.Tools.Efficiency;
         }
 
     }

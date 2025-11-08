@@ -13,17 +13,29 @@ namespace BusinessSharkService.Handlers.Divisions
         public abstract void CompleteCalculation(T Division);
         public abstract void CalculateCosts(T Division, int quantityProduced, double qualityProduced);
 
-
-        public void StartTransferItems(T Division)
+        public void CalculationOfToolWear(T division)
         {
-            foreach (var route in Division.DeliveryRoutes)
+            if (division.Tools != null)
+            {
+                if (division.Tools.TechLevel < 1) division.Tools.TechLevel = 1;
+
+                double k = Math.Log(10) / 99.0; // коэффициент подгонки
+                double wear = 0.1 * Math.Exp(-k * (division.Tools.TechLevel - 1));
+                division.Tools.WearCoefficient += wear;
+                if (division.Tools.WearCoefficient > 1) division.Tools.WearCoefficient = 1;
+            }
+        }
+
+        public void StartTransferItems(T division)
+        {
+            foreach (var route in division.DeliveryRoutes)
             {
                 var fromDivision = worldContext.Divisions[route.DivisionId];
                 if (fromDivision.WarehouseProductOutput.TryGetItem(route.ProductDefinitionId, out var item))
                 {
                     if (item is { Quantity: > 0 })
                     {
-                        if (!Division.WarehouseProductInput.TryGetItem(route.ProductDefinitionId, out var targetItem))
+                        if (!division.WarehouseProductInput.TryGetItem(route.ProductDefinitionId, out var targetItem))
                         {
                             targetItem = (WarehouseProduct)item.Clone();
                         }
