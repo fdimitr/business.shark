@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BusinessSharkClient.Pages.Finance.FinancialStatisticsPage"
+             xmlns:finance="clr-namespace:BusinessSharkClient.Pages.Finance"
+             xmlns:viewModels="clr-namespace:BusinessSharkClient.Logic.ViewModels"
+             ControlTemplate="{StaticResource PageWithStatusBar}"
+             Shell.NavBarIsVisible="False"
+             Title="Financial Statistics">
+    <ScrollView>
+        <VerticalStackLayout>
+            <VerticalStackLayout>
+                <!-- 🔹 Командная панель -->
+                <Grid ColumnDefinitions="50, Auto,*"
+                      BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray950}}">
+                    <ImageButton x:Name="BackButton"
+                         Grid.Column="0"
+                         Source="arrow_dropleft_48_w.png" 
+                         Clicked="OnBackButtonClicked"
+                         HeightRequest="30"
+                         WidthRequest="30"
+                         VerticalOptions="Center"
+                         HorizontalOptions="Start"
+                         Aspect="AspectFit">
+                        <!-- Use a standard back arrow icon (e.g., from FontAwesome or a .png) -->
+                        <!-- As a fallback, we can use text -->
+                        <ImageButton.Triggers>
+                            <Trigger TargetType="ImageButton" Property="Source" Value="back_icon.png">
+                                <Setter Property="BackgroundColor" Value="Transparent" />
+                            </Trigger>
+                        </ImageButton.Triggers>
+                    </ImageButton>
+
+                    <Label Grid.Column="1"
+                   x:DataType="finance:FinancialStatisticsPage"
+                   Text="{Binding Title}"
+                   TextColor="{StaticResource White}"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+                </Grid>
+            </VerticalStackLayout>
+            <VerticalStackLayout x:Name="FinancialStatisticsLayout" Padding="10" Spacing="15" x:DataType="viewModels:DivisionAnalyticsViewModel">
+                <!-- Table financial statistics card -->
+                <Border Padding="0" Background="White" Stroke="#E0E0E0" StrokeThickness="1">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12" />
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Opacity="0.25" Radius="10" />
+                    </Border.Shadow>
+                    <VerticalStackLayout>
+                        <Label Text="Values by day" FontAttributes="Bold" Margin="12,12,12,6"/>
+                        <ScrollView x:Name="DataScrollViewAnalytics"
+                                        Orientation="Horizontal"
+                                        HorizontalScrollBarVisibility="Always"
+                                        Margin="0,0,0,20"
+                                        Loaded="OnDataScrollViewStatisticsLoaded">
+                            <Grid x:Name="DataGridStatistics"
+                                      Padding="12"
+                                      ColumnSpacing="0"
+                                      RowSpacing="0" />
+                        </ScrollView>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

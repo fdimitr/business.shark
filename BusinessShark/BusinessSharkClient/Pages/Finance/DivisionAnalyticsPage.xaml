@@ -64,7 +64,7 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Table card -->
+                <!-- Table financial analytics card -->
                 <Border Padding="0" Background="White" Stroke="#E0E0E0" StrokeThickness="1">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="12" />
@@ -74,21 +74,19 @@
                     </Border.Shadow>
                     <VerticalStackLayout>
                         <Label Text="Таблица: показатели по дням" FontAttributes="Bold" Margin="12,12,12,6"/>
-                            <ScrollView x:Name="DataScrollView"
+                            <ScrollView x:Name="DataScrollViewAnalytics"
                                         Orientation="Horizontal"
                                         HorizontalScrollBarVisibility="Always"
                                         Margin="0,0,0,20"
-                                        Loaded="OnDataScrollViewLoaded">
-                                <Grid x:Name="DataGrid"
+                                        Loaded="OnDataScrollViewAnalyticsLoaded">
+                            <Grid x:Name="DataGridAnalytics"
                                       Padding="12"
                                       ColumnSpacing="0"
                                       RowSpacing="0" />
                             </ScrollView>
                     </VerticalStackLayout>
                 </Border>
-
             </VerticalStackLayout>
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

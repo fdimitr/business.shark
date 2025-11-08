@@ -9,7 +9,6 @@ public partial class SawmillDetailPage : ContentPage
 {
     public ICommand OpenDivisionAnalyticsCommand { get; }
     public ICommand OpenFinancialStatisticsCommand { get; }
-    public ICommand OpenProductionStatisticsCommand { get; }
     public ICommand OpenSalesCommand { get; }
 
     public SawmillDetailViewModel SawmillDetail { get; set; }
@@ -26,7 +25,6 @@ public partial class SawmillDetailPage : ContentPage
 
         OpenDivisionAnalyticsCommand = new Command(OnOpenDivisionAnalytics);
         OpenFinancialStatisticsCommand = new Command(OnOpenFinancialStatistics);
-        OpenProductionStatisticsCommand = new Command(OnOpenProductionStatistics);
         OpenSalesCommand = new Command(OnOpenSales);
 
         InitializeComponent();
@@ -41,14 +39,9 @@ public partial class SawmillDetailPage : ContentPage
 
     }
 
-    private void OnOpenProductionStatistics(object obj)
-    {
-
-    }
-
     private void OnOpenFinancialStatistics(object obj)
     {
-
+        Navigation.PushAsync(new FinancialStatisticsPage(_transactionProvider, _divisionId));
     }
 
     private void OnOpenDivisionAnalytics(object obj)

@@ -9,15 +9,22 @@ namespace BusinessSharkService.Handlers.Divisions
     {
         protected IWorldContext WorldContext => worldContext;
 
-        public abstract void StartCalculation(T Division);
-        public abstract void CompleteCalculation(T Division);
-        public abstract void CalculateCosts(T Division, int quantityProduced, double qualityProduced);
+        public abstract void StartCalculation(T division);
+        public abstract void CompleteCalculation(T division);
+        public abstract void CalculateCosts(T division, int quantityProduced, double qualityProduced);
 
         public void CalculationOfToolWear(T division)
         {
             if (division.Tools != null)
             {
                 if (division.Tools.TechLevel < 1) division.Tools.TechLevel = 1;
+
+                // Until the warranty expires, wear is not calculated.
+                if (division.Tools.WarrantyDays > 0)
+                {
+                    division.Tools.WarrantyDays--;
+                    return;
+                }
 
                 double k = Math.Log(10) / 99.0; // коэффициент подгонки
                 double wear = 0.1 * Math.Exp(-k * (division.Tools.TechLevel - 1));

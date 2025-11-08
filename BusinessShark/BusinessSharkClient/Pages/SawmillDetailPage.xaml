@@ -59,11 +59,6 @@
                              WidthRequest="60"
                              BackgroundColor="Transparent"
                              Command="{Binding OpenFinancialStatisticsCommand}" />
-                <ImageButton Source="production_statistics.png"
-                             HeightRequest="60"
-                             WidthRequest="60"
-                             BackgroundColor="Transparent"
-                             Command="{Binding OpenProductionStatisticsCommand}" />
                 <ImageButton Source="sales_warehouse.png"
                                 HeightRequest="60"
                                 WidthRequest="60"
@@ -322,7 +317,7 @@
                             <GraphicsView Style="{StaticResource DottedLineStyle}" />
                         </VerticalStackLayout>
                         <VerticalStackLayout Grid.Row="4" Grid.Column="1">
-                            <Label Text="{Binding Efficiency, StringFormat='{0:N2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <Label Text="{Binding Efficiency, StringFormat='{0:P2}'}" Style="{StaticResource FieldValueStyle}" />
                             <GraphicsView Style="{StaticResource DottedLineStyle}" />
                         </VerticalStackLayout>
                     </Grid>

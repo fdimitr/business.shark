@@ -6,5 +6,7 @@
         public double Income { get; set; }
         public double Expense { get; set; }
         public double Profit { get; set; }
+        public int Quantity { get; set; }
+        public double Quality { get; set; }
     }
 }

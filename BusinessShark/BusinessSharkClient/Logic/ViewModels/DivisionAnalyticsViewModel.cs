@@ -47,7 +47,9 @@ namespace BusinessSharkClient.Logic.ViewModels
                               dt.EmployeeTrainingAmount +
                               dt.CustomAmount +
                               dt.AdvertisingCostsAmount +
-                              dt.ReplenishmentAmount)
+                              dt.ReplenishmentAmount),
+                    Quality = dt.QualityProduced,
+                    Quantity = dt.QuantityProduced
                 });
             }
 

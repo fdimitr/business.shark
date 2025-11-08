@@ -24,7 +24,7 @@ public partial class DivisionAnalyticsPage : ContentPage
     {
         try
         {
-            var vm = await _transactionProvider.GetDivisionTransactions(_divisionId);
+            var vm = await _transactionProvider.GetDivisionAnalytics(_divisionId);
             AnalyticLayout.BindingContext = vm;
 
             // Configure chart interaction and appearance in code (safer than XAML enums)
@@ -38,7 +38,7 @@ public partial class DivisionAnalyticsPage : ContentPage
             MainChart.YAxes = vm.YAxes;
 
             // Populate the table grid (3 rows: Income, Expense, Profit; columns: Day 1..30)
-            BuildTable(vm);
+            BuildAnalyticsTable(vm);
         }
         catch (Exception ex)
         {
@@ -62,74 +62,73 @@ public partial class DivisionAnalyticsPage : ContentPage
         }
     }
 
-    private void BuildTable(DivisionAnalyticsViewModel vm)
+    private void BuildAnalyticsTable(DivisionAnalyticsViewModel vm)
     {
         var days = vm.Days;
-        DataGrid.RowDefinitions.Clear();
-        DataGrid.ColumnDefinitions.Clear();
-        DataGrid.Children.Clear();
+        DataGridAnalytics.RowDefinitions.Clear();
+        DataGridAnalytics.ColumnDefinitions.Clear();
+        DataGridAnalytics.Children.Clear();
 
         // First column: start row headers
-        DataGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        DataGridAnalytics.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         // Last column: end row headers
-        DataGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        DataGridAnalytics.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
         // Add columns for days
         foreach (var d in days)
         {
-            DataGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            DataGridAnalytics.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         }
 
         // Rows: header row + 3 data rows
         // Header row
-        DataGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        DataGridAnalytics.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-        // Data rows: Income, Expense, Profit
-        for (int r = 0; r < 3; r++)
-            DataGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        // Data rows: Income, Expense, Profit, Quantity, Quality
+        for (int r = 0; r < 5; r++)
+            DataGridAnalytics.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
         // Add start header cell (top-left)
         var headerFrame = MakeCell("", true);
-        DataGrid.Add(headerFrame, 0, 0);
+        DataGridAnalytics.Add(headerFrame, 0, 0);
+
         // Add end header cell (top-left)
-
         headerFrame = MakeCell("", true);
-        DataGrid.Add(headerFrame, days.Count + 2, 0);
-
+        DataGridAnalytics.Add(headerFrame, days.Count + 2, 0);
 
         // Fill day headers
         for (int c = 0; c < days.Count; c++)
         {
             var dayLabel = MakeCell(days[c].Date.ToString("dd MMM"), true);
-            DataGrid.Add(dayLabel, c + 1, 0);
+            DataGridAnalytics.Add(dayLabel, c + 1, 0);
         }
 
         // Row Start labels
-        var rowTitles = new[] { "Income", "Expense", "Profit" };
-        for (int r = 0; r < 3; r++)
+        var rowTitles = new[] { "Income", "Expense", "Profit", "Quantity", "Quality" };
+        for (int r = 0; r < 5; r++)
         {
             var rowLabel = MakeCell(rowTitles[r], true);
-            DataGrid.Add(rowLabel, 0, r + 1);
+            DataGridAnalytics.Add(rowLabel, 0, r + 1);
         }
 
         // Fill data cells
         for (int c = 0; c < days.Count; c++)
         {
             var d = days[c];
-            var vals = new[] { d.Income, d.Expense, d.Profit };
-            for (int r = 0; r < 3; r++)
+            var vals = new[] { d.Income, d.Expense, d.Profit, d.Quantity, d.Quality };
+            for (int r = 0; r < 5; r++)
             {
                 var txt = vals[r].ToString("N2");
                 var cell = MakeCell(txt, false);
-                DataGrid.Add(cell, c + 1, r + 1);
+                DataGridAnalytics.Add(cell, c + 1, r + 1);
             }
         }
 
         // Row End labels
-        for (int r = 0; r < 3; r++)
+        for (int r = 0; r < 5; r++)
         {
             var rowLabel = MakeCell(rowTitles[r], true);
-            DataGrid.Add(rowLabel, days.Count + 2, r + 1);
+            DataGridAnalytics.Add(rowLabel, days.Count + 2, r + 1);
         }
     }
 
@@ -157,12 +156,12 @@ public partial class DivisionAnalyticsPage : ContentPage
         return border;
     }
 
-    private async void OnDataScrollViewLoaded(object sender, EventArgs e)
+    private async void OnDataScrollViewAnalyticsLoaded(object sender, EventArgs e)
     {
         try
         {
             // If content is added later, also hook SizeChanged.
-            DataGrid.SizeChanged += async (_, __) => await ScrollGridToRightAsync();
+            DataGridAnalytics.SizeChanged += async (_, __) => await ScrollGridToRightAsync();
             await ScrollGridToRightAsync();
         }
         catch (Exception ex)
@@ -177,15 +176,15 @@ public partial class DivisionAnalyticsPage : ContentPage
         await Task.Yield();
 
         // Option 1: width-based scroll
-        var targetX = Math.Max(0, DataGrid.Width - DataScrollView.Width);
+        var targetX = Math.Max(0, DataGridAnalytics.Width - DataScrollViewAnalytics.Width);
         if (targetX > 0)
-            await DataScrollView.ScrollToAsync(targetX, 0, animated: false);
+            await DataScrollViewAnalytics.ScrollToAsync(targetX, 0, animated: false);
         else
         {
             // Option 2 fallback: last child
-            var last = DataGrid.Children.LastOrDefault();
+            var last = DataGridAnalytics.Children.LastOrDefault();
             if (last != null)
-                await DataScrollView.ScrollToAsync((Element)last, ScrollToPosition.End, animated: false);
+                await DataScrollViewAnalytics.ScrollToAsync((Element)last, ScrollToPosition.End, animated: false);
         }
     }
 }

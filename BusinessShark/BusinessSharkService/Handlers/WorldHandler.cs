@@ -65,6 +65,7 @@ namespace BusinessSharkService.Handlers
             try
             {
                 _worldContext.CurrentDate = _worldContext.CurrentDate.AddDays(1);
+                _dbContext.Worlds.First().CurrentDate = _worldContext.CurrentDate;
 
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();

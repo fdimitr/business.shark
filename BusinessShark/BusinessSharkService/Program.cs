@@ -1,21 +1,25 @@
+using System.Security.Claims;
+using System.Text;
 using BusinessSharkService.Constants;
 using BusinessSharkService.CoreServices;
 using BusinessSharkService.DataAccess;
 using BusinessSharkService.GrpcServices;
+using BusinessSharkService.GrpcServices.Interceptors;
 using BusinessSharkService.Handlers;
 using BusinessSharkService.Handlers.Context;
 using BusinessSharkService.Handlers.Divisions;
+using BusinessSharkService.Handlers.Finance;
 using BusinessSharkService.Handlers.Interfaces;
 using BusinessSharkService.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Text;
-using BusinessSharkService.Handlers.Finance;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Logging
 builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 
 //For Entity Framework DbContext
 DbContextOptions<DataContext> dbContextOptions = new DbContextOptionsBuilder<DataContext>()
@@ -73,7 +77,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddAuthorization();
-builder.Services.AddGrpc();
+builder.Services.AddGrpc(options =>
+{
+    options.Interceptors.Add<LoggingInterceptor>();
+});
 // ==================================
 
 builder.Services.AddSingleton(new JwtTokenService(builder.Configuration, jwtKey, jwtIssuer));

@@ -28,6 +28,9 @@ namespace BusinessSharkService.DataAccess.Models
         [Comment("Maintenance costs associated with the tools.")]
         public double MaintenanceCostsAmount { get; set; }
 
+        [Comment("warranty period in days during which the defect does not wear out")]
+        public int WarrantyDays { get; set; }
+
         // Computed property for efficiency
         [NotMapped]
         public double Efficiency => CalculateEfficiency();
