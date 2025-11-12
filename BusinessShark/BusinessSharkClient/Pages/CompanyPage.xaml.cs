@@ -8,6 +8,7 @@ public partial class CompanyPage : ContentPage
     private SawmillProvider _sawmillProvider;
     private GlobalDataProvider _globalDataProvider; 
     private DivisionTransactionProvider _transactionProvider;
+    private DivisionWarehouseProvider _warehouseProvider;
 
     private string _selectedSection = "Stores";
     public string SelectedSection
@@ -23,12 +24,13 @@ public partial class CompanyPage : ContentPage
         }
     }
 
-    public CompanyPage(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionTransactionProvider divisionTransactionProvider)
+    public CompanyPage(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionTransactionProvider divisionTransactionProvider, DivisionWarehouseProvider warehouseProvider)
 	{
 		InitializeComponent();
         _sawmillProvider = sawmillProvider;
         _globalDataProvider = globalDataProvider;
         _transactionProvider = divisionTransactionProvider;
+        _warehouseProvider = warehouseProvider;
         SelectedSection = "Stores";
 
         DynamicContentArea.Content = new StoresListView();
@@ -47,7 +49,7 @@ public partial class CompanyPage : ContentPage
         // Подгружаем нужный контрол
         IView newContent = section switch
         {
-            "Sawmills" => new SawmillListView(_globalDataProvider, _sawmillProvider, _transactionProvider),
+            "Sawmills" => new SawmillListView(_globalDataProvider, _sawmillProvider, _transactionProvider, _warehouseProvider),
             "Warehouses" => new WarehouseListView(),
             "Factories" => new FactoryListView(),
             "Stores" => new StoresListView(),

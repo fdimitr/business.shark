@@ -1,8 +1,8 @@
-﻿using BusinessSharkService;
-using BusinessSharkService.DataAccess.Models;
+﻿using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Handlers.Divisions;
+using BusinessSharkShared;
 
 namespace BusinessSharkTests.Handlers
 {

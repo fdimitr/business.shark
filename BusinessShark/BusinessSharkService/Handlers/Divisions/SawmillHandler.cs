@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Buffers.Text;
+using System.Diagnostics;
 using BusinessSharkService.DataAccess;
+using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
 using BusinessSharkService.Handlers.Interfaces;
+using BusinessSharkShared;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSharkService.Handlers.Divisions
@@ -63,10 +67,7 @@ namespace BusinessSharkService.Handlers.Divisions
                 EmployeeTrainingAmount = 0.0,
             };
             
-            if (sawmill.DivisionTransactions == null)
-            {
-                sawmill.DivisionTransactions = new List<DivisionTransaction>();
-            }
+            sawmill.DivisionTransactions ??= new List<DivisionTransaction>();
             sawmill.DivisionTransactions.Add(sawmill.CurrentTransactions);
 
             sawmill.PlantingCosts = 0.0; // Reset planting costs after accounting for them
@@ -105,6 +106,7 @@ namespace BusinessSharkService.Handlers.Divisions
             {
                 WarehouseId = sawmill.InputWarehouse!.WarehouseId,
                 ProductDefinitionId = sawmill.ProductDefinitionId,
+                ProductDefinition = sawmill.ProductDefinition,
                 Quality = quality,
                 Quantity = addedQuantity
             });
@@ -125,38 +127,59 @@ namespace BusinessSharkService.Handlers.Divisions
             // Try to get the product just produced in the input warehouse
             if (sawmill.WarehouseProductInput.TryGetItem(sawmill.ProductDefinitionId, out var addedItem))
             {
-                // If the output warehouse already contains this product, update its quantity and quality
-                if (sawmill.WarehouseProductOutput.TryGetItem(sawmill.ProductDefinitionId, out var item))
+                // Adjusting the quantity based on available warehouse space
+                AdjustingQuantityByWarehouseCapacity(addedItem, sawmill);
+                if (addedItem.Quantity > 0)
                 {
-                    // Calculate new average quality based on existing and added quantities/qualities
-                    var newQuality = CalculateWarehouseQuality(item.Quantity, item.Quality, addedItem.Quantity, addedItem.Quality);
-                    item.Quality = newQuality;
-                    // Add all produced quantities from input warehouse to output warehouse
-                    item.Quantity += sawmill.WarehouseProductInput.Sum(i => i.Quantity);
-                }
-                else
-                {
-                    // If product does not exist in output warehouse, add it as a new entry
-                    var totalQuantity = addedItem.Quantity;
-                    var averageQuality = addedItem.Quality;
-                    sawmill.WarehouseProductOutput.Add(new WarehouseProduct
+                    // If the output warehouse already contains this product, update its quantity and quality
+                    if (sawmill.WarehouseProductOutput.TryGetItem(sawmill.ProductDefinitionId, out var item))
                     {
-                        WarehouseId = sawmill.OutputWarehouse!.WarehouseId,
-                        ProductDefinitionId = sawmill.ProductDefinitionId,
-                        Quality = averageQuality,
-                        Quantity = totalQuantity
-                    });
+                        // Calculate new average quality based on existing and added quantities/qualities
+                        var newQuality = CalculateWarehouseQuality(item.Quantity, item.Quality, addedItem.Quantity,
+                            addedItem.Quality);
+                        item.Quality = newQuality;
+                        // Add all produced quantities from input warehouse to output warehouse
+                        item.Quantity += sawmill.WarehouseProductInput.Sum(i => i.Quantity);
+                    }
+                    else
+                    {
+                        // If product does not exist in output warehouse, add it as a new entry
+                        var totalQuantity = addedItem.Quantity;
+                        var averageQuality = addedItem.Quality;
+                        sawmill.WarehouseProductOutput.Add(new WarehouseProduct
+                        {
+                            WarehouseId = sawmill.OutputWarehouse!.WarehouseId,
+                            ProductDefinitionId = sawmill.ProductDefinitionId,
+                            Quality = averageQuality,
+                            Quantity = totalQuantity
+                        });
+                    }
                 }
-
-                // Recalculate costs after completing production
-                CalculateCosts(sawmill, addedItem.Quantity, addedItem.Quality);
 
                 // Deduct used raw materials from reserves
                 sawmill.RawMaterialReserves -= addedItem.Quantity;
                 // Clear the input warehouse after transferring items
                 sawmill.WarehouseProductInput.Clear();
             }
+
+            // Recalculate costs after completing production
+            CalculateCosts(sawmill, addedItem?.Quantity ?? 0, addedItem?.Quality ?? 0);
+
         }
+
+        private void AdjustingQuantityByWarehouseCapacity(WarehouseProduct addedItem, Sawmill sawmill)
+        {
+            if (sawmill.WarehouseProductOutput is null || sawmill.ProductDefinition is null)
+            {
+                Debug.Fail("sawmill.WarehouseProductOutput is null OR sawmill.ProductDefinition is null");
+            }
+
+            var freeSpace = sawmill.OutputWarehouse.VolumeCapacity - sawmill.WarehouseProductOutput.Sum(i => i.Quantity * sawmill.ProductDefinition.Volume);
+            addedItem.Quantity = freeSpace <= 0
+                ? 0
+                : (int)Math.Truncate(Math.Min(addedItem.Quantity, freeSpace / sawmill.ProductDefinition.Volume));
+        }
+
 
         internal static double CalculateProductionQuality(Sawmill sawmill)
         {
@@ -174,7 +197,7 @@ namespace BusinessSharkService.Handlers.Divisions
 
             // Adjust quality by tools efficiency
             // the impact is reduced by half compared to the quantity calculation
-            return quality * (1 - sawmill.Tools.Efficiency) / 2 + sawmill.Tools.Efficiency;
+            return quality * (1 - sawmill.Tools.Efficiency) / 2;
         }
 
         internal static double CalculateProductionQuantity(Sawmill sawmill)

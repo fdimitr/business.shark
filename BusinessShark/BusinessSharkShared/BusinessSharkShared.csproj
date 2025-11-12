@@ -24,6 +24,7 @@
     <None Remove="Protos\company.proto" />
     <None Remove="Protos\sawmill.proto" />
     <None Remove="Protos\division_transaction.proto" />
+    <None Remove="Protos\division_warehouse.proto" />
   </ItemGroup>
   
   <ItemGroup>
@@ -36,6 +37,7 @@
     <Protobuf Include="Protos\company.proto" ProtoRoot="Protos" />
     <Protobuf Include="Protos\sawmill.proto" ProtoRoot="Protos" />
     <Protobuf Include="Protos\division_transaction.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\division_warehouse.proto" ProtoRoot="Protos" />
   </ItemGroup>
 
 </Project>

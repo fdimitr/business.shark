@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BusinessSharkClient.Pages.DivisionWarehousePage"
+             xmlns:model="clr-namespace:BusinessSharkClient.Logic.Models"
+             xmlns:local="clr-namespace:BusinessSharkClient.Pages"
+             xmlns:synfusion="http://schemas.syncfusion.com/maui/toolkit"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             ControlTemplate="{StaticResource PageWithStatusBar}"
+             Title="Warehouse">
+
+    <!-- Use a Grid so the scrolling region (row 1) is size-constrained -->
+    <Grid RowDefinitions="Auto,*">
+        <!-- Scrolling content (CollectionView provides its own scrolling) -->
+        <CollectionView Grid.Row="1"
+                        x:DataType="model:DivisionWarehouseModel"
+                        ItemsSource="{Binding Products}"
+                        x:Name="ProductsView"
+                        SelectionMode="None">
+            <CollectionView.Header>
+                <VerticalStackLayout Padding="0,10,0,0"
+                                     x:DataType="model:DivisionWarehouseModel">
+                    <Label Text="{Binding CurrentFilling, StringFormat='Filling percentage {0:P2}'}"
+                           HorizontalOptions="Center" />
+                    <synfusion:SfLinearProgressBar Margin="10"
+                                                   Minimum="0"
+                                                   Maximum="1"
+                                                   Progress="{Binding CurrentFilling}"
+                                                   TrackCornerRadius="5"
+                                                   ProgressCornerRadius="5"
+                                                   ProgressHeight="15"
+                                                   TrackHeight="15"
+                                                   TrackFill="{DynamicResource Secondary}"
+                                                   ProgressFill="{DynamicResource Primary}" />
+                    <Grid ColumnDefinitions="*,*,*" Padding="5" ColumnSpacing="5">
+                        <Label Grid.Column="0" Text="Name" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="In Store and Sales" FontAttributes="Bold" FontSize="16" VerticalOptions="Center"/>
+                        <buttons:SfButton Grid.Column="2"
+                                          x:Name="SfButtonSave" 
+                                          Text="Save"
+                                          TextColor="White" 
+                                          HorizontalOptions="End"
+                                          VerticalOptions="Center"
+                                          Background="{DynamicResource Primary}"
+                                          Command="{Binding Source={RelativeSource AncestorType={x:Type local:DivisionWarehousePage}}, Path=UpdateModelCommand, x:DataType=local:DivisionWarehousePage}"
+                                          CommandParameter="{Binding .}"
+                                          ShowIcon="True" x:DataType="local:DivisionWarehousePage">
+                            <buttons:SfButton.ImageSource>
+                                <FontImageSource
+                                    FontFamily="awesome-solid"
+                                    Glyph="&#xf1c0;"
+                                    Size="44"
+                                    Color="{DynamicResource White}" />
+                            </buttons:SfButton.ImageSource>
+                        </buttons:SfButton>
+                    </Grid>
+                    <BoxView HeightRequest="1" BackgroundColor="#AAA" />
+                </VerticalStackLayout>
+            </CollectionView.Header>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:WarehouseProductModel">
+                    <Grid ColumnDefinitions="0.8*,*,*" Padding="5" ColumnSpacing="5">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Image Source="{Binding ProductIcon}"
+                                   HeightRequest="50"
+                                   WidthRequest="50"
+                                   Margin="5,0,10,0"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Start" />
+                            <Label FontSize="16"
+                                   Text="{Binding Name}"
+                                   VerticalOptions="Center"
+                                   HorizontalTextAlignment="Start" />
+                            <Label Text="{Binding Volume, StringFormat='Filling {0:P2}'}"
+                                   HorizontalOptions="Start" FontSize="12"/>
+                            <synfusion:SfLinearProgressBar Minimum="0"
+                                                           Maximum="1"
+                                                           Progress="{Binding Volume}"
+                                                           TrackCornerRadius="5"
+                                                           ProgressCornerRadius="5"
+                                                           ProgressHeight="10"
+                                                           TrackHeight="10"
+                                                           TrackFill="{DynamicResource Secondary}"
+                                                           ProgressFill="{DynamicResource Primary}" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1">
+                            <HorizontalStackLayout Margin="5,0,0,0">
+                                <Label FontSize="16" WidthRequest="90" Text="Quantity:" />
+                                <Label FontSize="16" Text="{Binding Quantity}" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Margin="5,0,0,0">
+                                <Label FontSize="16" WidthRequest="90" Text="Quality:" />
+                                <Label FontSize="16" Text="{Binding Quality, StringFormat='{0:N2}'}" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Margin="5,0,0,5">
+                                <Label FontSize="16" WidthRequest="90" Text="Cost Price:" />
+                                <Label FontSize="16" Text="{Binding CostPrice, StringFormat='{0:C2}'}" />
+                            </HorizontalStackLayout>
+                            <synfusion:SfTextInputLayout Hint="Sales Price"
+                                                         IsHintAlwaysFloated="true"
+                                                         IsEnabled="{Binding AvailableForSale}"
+                                                         ContainerType="Outlined">
+                                <Entry Text="{Binding SalesPrice, StringFormat='{0:N2}'}" Style="{StaticResource TableEntryStyle}" />
+                            </synfusion:SfTextInputLayout>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="2">
+                            <buttons:SfCheckBox Margin="20,0,0,30"
+                                                IsChecked="{Binding AvailableForSale}"
+                                                Text="Sale" />
+                            <synfusion:SfTextInputLayout Hint="Sales Limit"
+                                                         IsHintAlwaysFloated="true"
+                                                         ErrorText="Incorrect Limit"
+                                                         IsEnabled="{Binding AvailableForSale}"
+                                                         ContainerType="Outlined">
+                                <Entry Text="{Binding SalesLimit}" Style="{StaticResource TableEntryStyle}" />
+                            </synfusion:SfTextInputLayout>
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

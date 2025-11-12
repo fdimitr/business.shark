@@ -9,23 +9,30 @@ public partial class SawmillDetailPage : ContentPage
 {
     public ICommand OpenDivisionAnalyticsCommand { get; }
     public ICommand OpenFinancialStatisticsCommand { get; }
-    public ICommand OpenSalesCommand { get; }
+    public ICommand OpenDivisionWarehouseCommand { get; }
 
     public SawmillDetailViewModel SawmillDetail { get; set; }
 
+    private readonly DivisionTransactionProvider _transactionProvider;
+    private readonly DivisionWarehouseProvider _warehouseProvider;
+    private readonly GlobalDataProvider _globalDataProvider;
+    private readonly int _divisionId;
 
-    private DivisionTransactionProvider _transactionProvider;
-    private int _divisionId;
-
-    public SawmillDetailPage(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionTransactionProvider transactionProvider, int divisionId)
+    public SawmillDetailPage(GlobalDataProvider globalDataProvider, 
+        SawmillProvider sawmillProvider, 
+        DivisionTransactionProvider transactionProvider,
+        DivisionWarehouseProvider warehouseProvider,
+        int divisionId)
     {
         _transactionProvider = transactionProvider;
+        _warehouseProvider = warehouseProvider;
+        _globalDataProvider = globalDataProvider;
         _divisionId = divisionId;
         SawmillDetail = new SawmillDetailViewModel(globalDataProvider, sawmillProvider) { Name = "Loading ..." };
 
         OpenDivisionAnalyticsCommand = new Command(OnOpenDivisionAnalytics);
         OpenFinancialStatisticsCommand = new Command(OnOpenFinancialStatistics);
-        OpenSalesCommand = new Command(OnOpenSales);
+        OpenDivisionWarehouseCommand = new Command(OnOpenDivisionWarehouse);
 
         InitializeComponent();
         Loaded += OnLoadingView;
@@ -34,9 +41,9 @@ public partial class SawmillDetailPage : ContentPage
         DataStackLayout.BindingContext = SawmillDetail;
     }
 
-    private void OnOpenSales(object obj)
+    private void OnOpenDivisionWarehouse(object obj)
     {
-
+        Navigation.PushAsync(new DivisionWarehousePage(_warehouseProvider, _globalDataProvider, _divisionId));
     }
 
     private void OnOpenFinancialStatistics(object obj)
@@ -51,15 +58,13 @@ public partial class SawmillDetailPage : ContentPage
 
     private async void OnLoadingView(object? sender, EventArgs e)
     {
-        await SawmillDetail.LoadAsync(_divisionId);
-    }
-
-    private async void OnBackButtonClicked(object sender, EventArgs e)
-    {
-        // Check if we can go back
-        if (Navigation.NavigationStack.Count > 1)
+        try
         {
-            await Navigation.PopAsync();
+            await SawmillDetail.LoadAsync(_divisionId);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"An unexpected error occurred: {ex.Message}", "OK");
         }
     }
 }

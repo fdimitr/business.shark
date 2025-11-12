@@ -66,7 +66,7 @@ namespace BusinessSharkService.GrpcServices
                         ProductDefinitionId = p.ProductDefinitionId,
                         Quantity = p.Quantity,
                         Quality = p.Quality,
-                        UnitPrice = p.UnitPrice
+                        UnitPrice = p.CostPrice
                     }) : new List<SawmillWarehouseProductsGrpc>()
                     }
                 },

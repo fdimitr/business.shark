@@ -6,7 +6,6 @@
              x:Class="BusinessSharkClient.Pages.SawmillDetailPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              ControlTemplate="{StaticResource PageWithStatusBar}"
-             Shell.NavBarIsVisible="False"
              Title="Sawmill Detail">
 
     <ContentPage.Resources>
@@ -20,33 +19,6 @@
     <ScrollView>
         <VerticalStackLayout>
             <!-- 🔹 Командная панель -->
-            <Grid ColumnDefinitions="50, Auto,*"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray950}}">
-                <ImageButton x:Name="BackButton"
-                            Grid.Column="0"
-                            Source="arrow_dropleft_48_w.png" 
-                            Clicked="OnBackButtonClicked"
-                            HeightRequest="30"
-                            WidthRequest="30"
-                            VerticalOptions="Center"
-                            HorizontalOptions="Start"
-                            Aspect="AspectFit">
-                    <ImageButton.Triggers>
-                        <Trigger TargetType="ImageButton" Property="Source" Value="back_icon.png">
-                            <Setter Property="BackgroundColor" Value="Transparent" />
-                        </Trigger>
-                    </ImageButton.Triggers>
-                </ImageButton>
-
-                <Label Grid.Column="1"
-                        x:DataType="local:SawmillDetailPage"
-                        Text="{Binding Title}"
-                        TextColor="{StaticResource White}"
-                        FontSize="20"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center" />
-            </Grid>
             <HorizontalStackLayout HorizontalOptions="Start" Padding="5" Spacing="20" Grid.Column="0" Grid.Row="1"
                                    x:DataType="local:SawmillDetailPage">
                 <ImageButton Source="finances.png"
@@ -63,7 +35,7 @@
                                 HeightRequest="60"
                                 WidthRequest="60"
                                 BackgroundColor="Transparent"
-                                Command="{Binding OpenSalesCommand}" />
+                                Command="{Binding OpenDivisionWarehouseCommand}" />
             </HorizontalStackLayout>
 
             <VerticalStackLayout 
