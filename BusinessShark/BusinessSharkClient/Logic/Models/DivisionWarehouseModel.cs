@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BusinessSharkClient.Logic.Models
@@ -16,10 +15,5 @@ namespace BusinessSharkClient.Logic.Models
         private double currentFilling;
 
         public ObservableCollection<WarehouseProductModel> Products { get; set; } = new();
-
-        private void OnUpdateModelCommand(object obj)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

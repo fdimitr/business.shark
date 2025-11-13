@@ -71,7 +71,7 @@ public partial class DivisionWarehousePage : ContentPage
                 if (definition != null)
                 {
                     product.Name = definition.Name;
-                    product.ProductIcon = definition.Image;
+                    if (definition.Image != null) product.ProductIcon = definition.Image;
                     product.Volume = (definition.Volume * product.Quantity) / DivisionWarehouse.WarehouseCapacity;
                     totalOccupiedVolume += product.Volume;
                 }

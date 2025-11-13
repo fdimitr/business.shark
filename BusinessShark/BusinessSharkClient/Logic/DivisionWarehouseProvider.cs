@@ -53,7 +53,7 @@ namespace BusinessSharkClient.Logic
             };
             foreach (var product in divisionWarehouseModel.Products)
             {
-                if (product.isChanged)
+                if (product.IsChanged)
                 {
                     result.Products.Add(new DivisionWarehouseUpdateProductsGrpc
                     {

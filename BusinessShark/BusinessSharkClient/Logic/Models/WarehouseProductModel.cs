@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+// ReSharper disable InconsistentNaming
 
 namespace BusinessSharkClient.Logic.Models
 {
@@ -7,6 +8,7 @@ namespace BusinessSharkClient.Logic.Models
         public int WarehouseProductId { get; set; }
         public int ProductDefinitionId { get; set; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         [ObservableProperty] private string name;
 
         [ObservableProperty] private ImageSource productIcon;
@@ -18,22 +20,22 @@ namespace BusinessSharkClient.Logic.Models
         [ObservableProperty] private double salesPrice;
         [ObservableProperty] private int salesLimit;
         [ObservableProperty] private double fillingPercent;
-
-        internal bool isChanged;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+        internal bool IsChanged;
 
         partial void OnSalesPriceChanged(double value)
         {
-            isChanged = true;
+            IsChanged = true;
         }
 
         partial void OnSalesLimitChanged(int value)
         {
-            isChanged = true;
+            IsChanged = true;
         }
 
         partial void OnAvailableForSaleChanged(bool value)
         {
-            isChanged = true;
+            IsChanged = true;
         }
     }
 }
