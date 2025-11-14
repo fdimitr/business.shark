@@ -52,8 +52,8 @@
                                    VerticalOptions="Center"
                                    HorizontalTextAlignment="Start" />
                             <Image Source="{Binding ProductIcon}"
-                                   HeightRequest="24"
-                                   WidthRequest="24"
+                                   HeightRequest="35"
+                                   WidthRequest="35"
                                    Margin="5,0,0,0"
                                    VerticalOptions="Center" />
                         </HorizontalStackLayout>

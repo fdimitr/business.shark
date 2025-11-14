@@ -1,16 +1,28 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using BusinessSharkClient.Logic.Models;
+using BusinessSharkShared;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BusinessSharkClient.Logic.ViewModels
 {
     public partial class SawmillDetailViewModel : ObservableObject
     {
-        private SawmillProvider _sawmillProvider;
-        private GlobalDataProvider _globalDataProvider;
+        public ICommand SaveDivisionDetailCommand { get; }
+        private readonly SawmillProvider _sawmillProvider;
+        private readonly GlobalDataProvider _globalDataProvider;
 
-        public SawmillDetailViewModel(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider) 
-        { 
+        public SawmillDetailViewModel(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionSizeProvider divisionSizeProvider) 
+        {
             _sawmillProvider = sawmillProvider;
             _globalDataProvider = globalDataProvider;
+            SaveDivisionDetailCommand = new Command(OnSaveDivisionDetail);
+            SizeViewModel = new(divisionSizeProvider);
+
+        }
+
+        private void OnSaveDivisionDetail(object obj)
+        {
         }
 
         public int DivisionId { get; set; }
@@ -79,10 +91,21 @@ namespace BusinessSharkClient.Logic.ViewModels
         [ObservableProperty]
         private double efficiency;
 
+        public ObservableCollection<DivisionSizeModel> Sizes { get; set; }
+
+
+        public DivisionSizeViewModel SizeViewModel { get; }
+
 
         internal async Task LoadAsync(int divisionId)
         {
             var response = await _sawmillProvider.LoadDetail(divisionId);
+
+            await SizeViewModel.LoadAsync(DivisionType.Sawmill);
+            foreach (var size in SizeViewModel.Sizes)
+            {
+                Sizes.Add(size);
+            }
 
             // Cache product definitions for fast lookup
             var productDefinition = _globalDataProvider.ProductDefinitions.FirstOrDefault(p => p.ProductDefinitionId == response.ProductDefinitionId);

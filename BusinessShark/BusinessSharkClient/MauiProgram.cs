@@ -102,10 +102,17 @@ namespace BusinessSharkClient
                 var invoker = services.GetRequiredService<CallInvoker>();
                 return new BusinessSharkService.DivisionTransactionsService.DivisionTransactionsServiceClient(invoker);
             });
+
             builder.Services.AddScoped(services =>
             {
                 var invoker = services.GetRequiredService<CallInvoker>();
                 return new BusinessSharkService.DivisionWarehouseService.DivisionWarehouseServiceClient(invoker);
+            });
+
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.DivisionSizeService.DivisionSizeServiceClient(invoker);
             });
 
             // Providers
@@ -113,6 +120,7 @@ namespace BusinessSharkClient
             builder.Services.AddScoped<SawmillProvider>();
             builder.Services.AddScoped<DivisionTransactionProvider>();
             builder.Services.AddScoped<DivisionWarehouseProvider>();
+            builder.Services.AddScoped<DivisionSizeProvider>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:BusinessSharkClient.Logic.ViewModels"
              xmlns:local="clr-namespace:BusinessSharkClient.Pages"
+             xmlns:syncfusion="http://schemas.syncfusion.com/maui"
+             xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:view="clr-namespace:BusinessSharkClient.View.DivisionDetail"
              x:Class="BusinessSharkClient.Pages.SawmillDetailPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              ControlTemplate="{StaticResource PageWithStatusBar}"
              Title="Sawmill Detail">
-
     <ContentPage.Resources>
         <Style x:Key="DottedLineStyle" TargetType="GraphicsView">
             <Setter Property="HeightRequest" Value="1" />
@@ -51,23 +53,71 @@
                             <Label Text="Sawmill:" 
                                    Style="{StaticResource SectionTitleStyle}"
                                    Margin="0,0,20,0"
+                                   VerticalOptions="Center"
                                    Grid.ColumnSpan="2" />
-                            <Label Text="Woods" Style="{StaticResource FieldNameStyle}" Grid.ColumnSpan="2" />
+                            <Label Text="Woods" 
+                                   Style="{StaticResource FieldNameStyle}" 
+                                   VerticalOptions="Center"
+                                   Grid.ColumnSpan="2" />
                             <Image Source="{Binding ProductIcon}"
                                 Grid.Row="0" Grid.Column="1"
-                                HeightRequest="24"
-                                WidthRequest="24"
+                                HeightRequest="35"
+                                WidthRequest="35"
                                 Margin="5,0,0,0"
                                 VerticalOptions="Start" />
-
                         </HorizontalStackLayout>
-                        <Image Source="icon_edit.png"
+                        <ImageButton Source="icon_edit.png"
+                                Style ="{StaticResource LiteImageButton}"
                                Grid.Row="0" Grid.Column="2"
                                HeightRequest="20"
                                WidthRequest="20"
                                HorizontalOptions="End"
-                               BackgroundColor="Transparent"/>
-                        <!-- Name -->
+                               BackgroundColor="Transparent"
+                               Clicked="SawmillEdit_OnClicked"/>
+
+                            <syncfusion:SfPopup x:Name="DivisionPopup"
+                                                AutoSizeMode="Height"
+                                                AppearanceMode="TwoButton"
+                                                AcceptButtonText="SAVE"
+                                                DeclineButtonText="CANCEL"
+                                                ShowCloseButton="True"
+                                                ShowFooter="True" >
+                                <syncfusion:SfPopup.HeaderTemplate>
+                                <DataTemplate>
+                                    <Label Text="Edit Sawmill" 
+                                           VerticalTextAlignment="Center" 
+                                           FontSize="18" 
+                                           HorizontalTextAlignment="Center" 
+                                           FontAttributes="Bold"/>
+                                </DataTemplate>
+                            </syncfusion:SfPopup.HeaderTemplate>
+                            <syncfusion:SfPopup.PopupStyle>
+                                <syncfusion:PopupStyle CornerRadius="10"/>
+                            </syncfusion:SfPopup.PopupStyle>
+                            <syncfusion:SfPopup.ContentTemplate>
+                                <DataTemplate>
+                                    <VerticalStackLayout BackgroundColor="White"
+                                                         Margin="10,0,10,0"
+                                                         Padding="10">
+                                        <syncfusion:SfTextInputLayout Hint="Sawmill Name"
+                                                                      ContainerType="Outlined"
+                                                                      HorizontalOptions="Center"
+                                                                      VerticalOptions="Center">
+                                            <Entry Text="{Binding Name}"
+                                                   MaxLength="30"
+                                                   Style="{StaticResource TableEntryStyle}"></Entry>
+                                        </syncfusion:SfTextInputLayout>
+                                        <Label Text="Size:"></Label>
+                                        <editors:SfComboBox x:Name="ComboBoxSawmillSize"
+                                                            ItemsSource="{Binding Sizes}"
+                                                            IsEditable="false"
+                                                            MaxDropDownHeight="150" />
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </syncfusion:SfPopup.ContentTemplate>
+                        </syncfusion:SfPopup>
+
+                            <!-- Name -->
                         <VerticalStackLayout Grid.Row="1" Grid.Column="0">
                             <Label Text="Name:" Style="{StaticResource FieldNameStyle}" />
                             <GraphicsView Style="{StaticResource DottedLineStyle}" />
@@ -325,4 +375,5 @@
     </ScrollView>
 
 </ContentPage>
+    
     

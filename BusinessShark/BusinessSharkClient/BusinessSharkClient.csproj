@@ -176,4 +176,8 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="View\DivisionDetail\" />
+	</ItemGroup>
+
 </Project>

@@ -12,6 +12,7 @@ public partial class SawmillDetailPage : ContentPage
     public ICommand OpenDivisionWarehouseCommand { get; }
 
     public SawmillDetailViewModel SawmillDetail { get; set; }
+    public DivisionSizeViewModel Sizes { get; set; }
 
     private readonly DivisionTransactionProvider _transactionProvider;
     private readonly DivisionWarehouseProvider _warehouseProvider;
@@ -22,13 +23,14 @@ public partial class SawmillDetailPage : ContentPage
         SawmillProvider sawmillProvider, 
         DivisionTransactionProvider transactionProvider,
         DivisionWarehouseProvider warehouseProvider,
+        DivisionSizeProvider divisionSizeProvider,
         int divisionId)
     {
         _transactionProvider = transactionProvider;
         _warehouseProvider = warehouseProvider;
         _globalDataProvider = globalDataProvider;
         _divisionId = divisionId;
-        SawmillDetail = new SawmillDetailViewModel(globalDataProvider, sawmillProvider) { Name = "Loading ..." };
+        SawmillDetail = new SawmillDetailViewModel(globalDataProvider, sawmillProvider, divisionSizeProvider) { Name = "Loading ..." };
 
         OpenDivisionAnalyticsCommand = new Command(OnOpenDivisionAnalytics);
         OpenFinancialStatisticsCommand = new Command(OnOpenFinancialStatistics);
@@ -66,5 +68,10 @@ public partial class SawmillDetailPage : ContentPage
         {
             await DisplayAlert("Error", $"An unexpected error occurred: {ex.Message}", "OK");
         }
+    }
+
+    private void SawmillEdit_OnClicked(object? sender, EventArgs e)
+    {
+        DivisionPopup.IsOpen = true;
     }
 }

@@ -102,6 +102,7 @@ builder.Services.AddScoped<CompanyHandler>();
 builder.Services.AddScoped<DivisionTransactionHandler>();
 builder.Services.AddScoped<WarehouseHandler>();
 builder.Services.AddScoped<WarehouseProductsHandler>();
+builder.Services.AddScoped<DivisionSizeHandler>();
 
 builder.Services.AddHostedService<CalculationService>();
 
@@ -114,6 +115,7 @@ app.UseCors();
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 
 // Configure the HTTP request pipeline.
+app.MapGrpcService<DivisionSizeGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<DivisionWarehouseGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<DivisionTransactionGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<SawmillGrpcService>().EnableGrpcWeb();
@@ -127,3 +129,4 @@ app.MapGrpcService<GreeterService>().EnableGrpcWeb();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();
+

@@ -42,6 +42,11 @@ namespace BusinessSharkClient.Logic
                 }).ToObservableCollection()
             };
 
+            foreach (var p in result.Products)
+            {
+                p.MarkAsInitialized();
+            }
+
             return result;
         }
 

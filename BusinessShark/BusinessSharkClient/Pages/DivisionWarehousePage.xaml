@@ -7,7 +7,6 @@
              xmlns:synfusion="http://schemas.syncfusion.com/maui/toolkit"
              xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
              xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              ControlTemplate="{StaticResource PageWithStatusBar}"
              Title="Warehouse">
 
@@ -87,7 +86,7 @@
                                                            ProgressFill="{DynamicResource Primary}" />
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Grid.Column="1">
+                        <VerticalStackLayout Grid.Column="1" Margin="0,0,0,10">
                             <HorizontalStackLayout Margin="5,0,0,0">
                                 <Label FontSize="16" WidthRequest="90" Text="Quantity:" />
                                 <Label FontSize="16" Text="{Binding Quantity}" />
@@ -121,7 +120,7 @@
                             </Border>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Grid.Column="2">
+                        <VerticalStackLayout Grid.Column="2" Margin="0,0,0,10">
                             <buttons:SfCheckBox Margin="20,0,0,30"
                                                 IsChecked="{Binding AvailableForSale}"
                                                 Text="Sale" />

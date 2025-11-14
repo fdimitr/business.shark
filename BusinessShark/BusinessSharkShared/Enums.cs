@@ -10,7 +10,6 @@ namespace BusinessSharkShared
         Chair = 4,
         Table = 5,
         Clay = 6,
-        [Description("Leather Sofa")]
         Sofa = 7,
         Coal = 8,
         IronOre = 9,
@@ -23,5 +22,13 @@ namespace BusinessSharkShared
     {
         Input = 0,
         Output = 1
+    }
+
+    public enum DivisionType
+    {
+        Sawmill = 0,
+        Factory = 1,
+        DistributionCenter = 2,
+        Store = 3
     }
 }
