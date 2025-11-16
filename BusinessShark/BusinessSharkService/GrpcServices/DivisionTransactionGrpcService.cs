@@ -21,7 +21,7 @@ namespace BusinessSharkService.GrpcServices
         {
             var transactions = await _divisionTransactionHandler.GetByDivisionAsync(request.DivisionId);
             var result = new DivisionTransactionsResponse();
-            result.DivisionTransactions.AddRange(transactions?.ConvertAll(t => new DivisionTransactionsGrpc
+            result.DivisionTransactions.AddRange(transactions?.OrderBy(t=>t.TransactionDate).ToList().ConvertAll(t => new DivisionTransactionsGrpc
             {
                 DivisionTransactionsId = t.DivisionTransactionsId,
                 AdvertisingCostsAmount = t.AdvertisingCostsAmount,

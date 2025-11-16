@@ -7,6 +7,7 @@
              xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
              xmlns:view="clr-namespace:BusinessSharkClient.View.DivisionDetail"
              x:Class="BusinessSharkClient.Pages.SawmillDetailPage"
+             x:Name="SawmillDetails"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              ControlTemplate="{StaticResource PageWithStatusBar}"
              Title="Sawmill Detail">
@@ -75,7 +76,11 @@
                                BackgroundColor="Transparent"
                                Clicked="SawmillEdit_OnClicked"/>
 
-                            <syncfusion:SfPopup x:Name="DivisionPopup"
+                        <view:DivisionDetailEditPopupView x:Name="DivisionPopup"
+                                                          Header="Edit Sawmill">
+
+                            </view:DivisionDetailEditPopupView>
+                            <!--<syncfusion:SfPopup x:Name="DivisionPopup"
                                                 AutoSizeMode="Height"
                                                 AppearanceMode="TwoButton"
                                                 AcceptButtonText="SAVE"
@@ -111,11 +116,13 @@
                                         <editors:SfComboBox x:Name="ComboBoxSawmillSize"
                                                             ItemsSource="{Binding Sizes}"
                                                             IsEditable="false"
+                                                            DisplayMemberPath="Size"
+                                                            TextMemberPath="Size"
                                                             MaxDropDownHeight="150" />
                                     </VerticalStackLayout>
                                 </DataTemplate>
                             </syncfusion:SfPopup.ContentTemplate>
-                        </syncfusion:SfPopup>
+                        </syncfusion:SfPopup>-->
 
                             <!-- Name -->
                         <VerticalStackLayout Grid.Row="1" Grid.Column="0">

@@ -91,7 +91,7 @@ namespace BusinessSharkClient.Logic.ViewModels
         [ObservableProperty]
         private double efficiency;
 
-        public ObservableCollection<DivisionSizeModel> Sizes { get; set; }
+        public ObservableCollection<DivisionSizeModel> Sizes { get; set; } = new();
 
 
         public DivisionSizeViewModel SizeViewModel { get; }

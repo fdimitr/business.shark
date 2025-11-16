@@ -10,5 +10,7 @@
         public int MaxTools { get; set; }
 
         public int WarehouseVolume { get; set; }
+
+        public string SelectedValue => $"{Size} hectares";
     }
 }

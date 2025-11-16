@@ -14,7 +14,12 @@ namespace BusinessSharkService.Handlers.Finance
 
         public async Task<List<DivisionTransaction>?> GetByDivisionAsync(int divisionId)
         {
-            return await _dbContext.DivisionTransactions.AsNoTracking().Where(c => c.DivisionId == divisionId).ToListAsync();
+            return await _dbContext.DivisionTransactions.AsNoTracking()
+                .Where(c => c.DivisionId == divisionId)
+                .OrderByDescending(c => c.TransactionDate)
+                .Take(10)
+                .OrderBy(c => c.TransactionDate)
+                .ToListAsync();
         }
     }
 }

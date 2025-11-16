@@ -72,6 +72,9 @@ public partial class SawmillDetailPage : ContentPage
 
     private void SawmillEdit_OnClicked(object? sender, EventArgs e)
     {
-        DivisionPopup.IsOpen = true;
+        DivisionPopup.SawmillName = SawmillDetail.Name;
+        DivisionPopup.Sizes = SawmillDetail.SizeViewModel.Sizes;
+        DivisionPopup.Refresh();
+        DivisionPopup.Show();
     }
 }
