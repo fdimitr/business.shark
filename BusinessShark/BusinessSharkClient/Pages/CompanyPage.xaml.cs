@@ -1,13 +1,15 @@
 ﻿using BusinessSharkClient.Logic;
 using BusinessSharkClient.View.Divisions;
-using System.ComponentModel;
 
-namespace BusinessSharkClient.View;
+namespace BusinessSharkClient.Pages;
 
 public partial class CompanyPage : ContentPage
 {
-    private SawmillProvider _sawmillProvider;
-    private GlobalDataProvider _globalDataProvider; 
+    private readonly SawmillProvider _sawmillProvider;
+    private readonly GlobalDataProvider _globalDataProvider; 
+    private readonly DivisionTransactionProvider _transactionProvider;
+    private readonly DivisionWarehouseProvider _warehouseProvider;
+    private readonly DivisionSizeProvider _divisionSizeProvider;
 
     private string _selectedSection = "Stores";
     public string SelectedSection
@@ -23,11 +25,15 @@ public partial class CompanyPage : ContentPage
         }
     }
 
-    public CompanyPage(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider)
+    public CompanyPage(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionTransactionProvider divisionTransactionProvider, 
+        DivisionWarehouseProvider warehouseProvider, DivisionSizeProvider divisionSizeProvider)
 	{
 		InitializeComponent();
         _sawmillProvider = sawmillProvider;
         _globalDataProvider = globalDataProvider;
+        _transactionProvider = divisionTransactionProvider;
+        _warehouseProvider = warehouseProvider;
+        _divisionSizeProvider = divisionSizeProvider;
         SelectedSection = "Stores";
 
         DynamicContentArea.Content = new StoresListView();
@@ -46,7 +52,7 @@ public partial class CompanyPage : ContentPage
         // Подгружаем нужный контрол
         IView newContent = section switch
         {
-            "Sawmills" => new SawmillListView(_globalDataProvider, _sawmillProvider),
+            "Sawmills" => new SawmillListView(_globalDataProvider, _sawmillProvider, _transactionProvider, _warehouseProvider, _divisionSizeProvider),
             "Warehouses" => new WarehouseListView(),
             "Factories" => new FactoryListView(),
             "Stores" => new StoresListView(),

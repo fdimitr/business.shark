@@ -1,10 +1,10 @@
-﻿using BusinessSharkService;
-using BusinessSharkService.DataAccess.Models;
+﻿using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.Extensions;
 using BusinessSharkService.Handlers.Divisions;
 using BusinessSharkService.Handlers.Interfaces;
+using BusinessSharkShared;
 using Moq;
 
 namespace BusinessSharkTests.Handlers

@@ -1,25 +1,28 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-public class SummaryModel : INotifyPropertyChanged
+namespace BusinessSharkClient.Logic.Models
 {
-    public bool IsFirstLoad { get; set; } = false;
-
-    private double _balance;
-    public double Balance
+    public class SummaryModel : INotifyPropertyChanged
     {
-        get => _balance;
-        set { _balance = value; OnPropertyChanged(); }
-    }
+        public bool IsFirstLoad { get; set; } = false;
 
-    private double _profit;
-    public double Profit
-    {
-        get => _profit;
-        set { _profit = value; OnPropertyChanged(nameof(Profit)); }
-    }
+        private double _balance;
+        public double Balance
+        {
+            get => _balance;
+            set { _balance = value; OnPropertyChanged(); }
+        }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-    private void OnPropertyChanged([CallerMemberName] string? name = null)
-        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        private double _profit;
+        public double Profit
+        {
+            get => _profit;
+            set { _profit = value; OnPropertyChanged(nameof(Profit)); }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string? name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
 }

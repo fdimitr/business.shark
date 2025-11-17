@@ -2,6 +2,7 @@
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.DataAccess.Models.Player;
+using BusinessSharkShared;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

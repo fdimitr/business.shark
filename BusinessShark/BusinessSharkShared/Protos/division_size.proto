@@ -1,0 +1,27 @@
+﻿syntax = "proto3";
+
+
+option csharp_namespace = "BusinessSharkService";
+
+package division_size;
+
+service DivisionSizeService {
+  rpc Load(DivisionSizeRequest) returns (DivisionSizeResponse);
+}
+
+message DivisionSizeRequest {
+  int32 DivisionTypeId = 1;
+}
+
+message DivisionSizeGrpc {
+	int32 DivisionSizeId = 1;
+	int32 Size = 2;
+	double ConstructionCost = 4;
+	int32 MaxEmployees = 5;
+	int32 MaxTools = 6;
+	int32 WarehouseVolume = 7;
+}
+
+message DivisionSizeResponse {
+	repeated DivisionSizeGrpc Sizes = 1;
+}

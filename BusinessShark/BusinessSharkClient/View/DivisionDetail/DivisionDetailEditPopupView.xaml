@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<popup:SfPopup x:Name="SfPopup"
+               xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:popup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
+               xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+               xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+               x:Class="BusinessSharkClient.View.DivisionDetail.DivisionDetailEditPopupView"
+               AutoSizeMode="Height"
+               AppearanceMode="TwoButton"
+               AcceptButtonText="SAVE"
+               DeclineButtonText="CANCEL"
+               ShowCloseButton="True"
+               ShowFooter="True" >
+        <popup:SfPopup.HeaderTemplate>
+            <DataTemplate>
+            <Label Text="{Binding Path=Header, Source={x:Reference SfPopup}}"
+                       x:Name="LblHeader"
+                       VerticalTextAlignment="Center" 
+                       FontSize="18" 
+                       HorizontalTextAlignment="Center"
+                       FontAttributes="Bold"/>
+            </DataTemplate>
+        </popup:SfPopup.HeaderTemplate>
+        <popup:SfPopup.PopupStyle>
+            <popup:PopupStyle CornerRadius="10"/>
+        </popup:SfPopup.PopupStyle>
+        <popup:SfPopup.ContentTemplate>
+            <DataTemplate>
+                <VerticalStackLayout BackgroundColor="White"
+                                     Margin="10,0,10,0"
+                                     Padding="10">
+                    <inputLayout:SfTextInputLayout Hint="Sawmill Name"
+                                                   ContainerType="Outlined"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center">
+                    <Entry Text="{Binding Path=SawmillName, Source={x:Reference SfPopup}}"
+                               MaxLength="30"
+                               Style="{StaticResource TableEntryStyle}"></Entry>
+                    </inputLayout:SfTextInputLayout>
+                    <Label Text="Size:"
+                           VerticalTextAlignment="Center" 
+                           FontSize="14" 
+                           HorizontalTextAlignment="Start"/>
+                <editors:SfComboBox IsEditable="False"
+                                        ItemsSource="{Binding Path=Sizes, Source={x:Reference SfPopup}}"
+                                        DisplayMemberPath="SelectedValue"
+                                        TextMemberPath="SelectedValue" 
+                                        SelectedValuePath="DivisionSizeId">
+                    <editors:SfComboBox.DropDownButtonSettings>
+                        <editors:DropDownButtonSettings Width="50" Height="50" />
+                    </editors:SfComboBox.DropDownButtonSettings>
+                    <editors:SfComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Margin="0,5"
+                                      VerticalOptions="Center"
+                                      HorizontalOptions="Center"
+                                      ColumnDefinitions="48,220"
+                                      RowDefinitions="50">
+                                    <StackLayout HorizontalOptions="Start"
+                                                 VerticalOptions="Center"
+                                                 Grid.Column="1"
+                                                 Margin="5,0,0,0">
+                                        <Label HorizontalTextAlignment="Start"
+                                               VerticalTextAlignment="Center"
+                                               Opacity=".87"
+                                               FontSize="14"
+                                               Text="{Binding Size, StringFormat='{0} hectare'}"/>
+
+                                        <Grid 
+                                            WidthRequest="200"
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Center"
+                                            ColumnDefinitions="*,*">
+                                            <Label HorizontalOptions="Start"
+                                               VerticalTextAlignment="Center"
+                                               Opacity=".54"
+                                               FontSize="12"
+                                               Text="{Binding ConstructionCost, StringFormat='{0:C0}'}"/>
+                                            <Label Grid.Column="1" HorizontalTextAlignment="Start"
+                                                   VerticalTextAlignment="Center"
+                                                   Opacity=".54"
+                                                   FontSize="12"
+                                                   Text="{Binding MaxEmployees, StringFormat='Employees={0}'}"/>
+                                        </Grid>
+                                    </StackLayout>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </editors:SfComboBox.ItemTemplate>
+                </editors:SfComboBox>
+
+            </VerticalStackLayout>
+            </DataTemplate>
+        </popup:SfPopup.ContentTemplate>
+</popup:SfPopup>

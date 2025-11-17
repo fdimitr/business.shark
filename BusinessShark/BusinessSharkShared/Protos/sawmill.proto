@@ -1,6 +1,5 @@
 ﻿syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
 import "division_transaction.proto";
 
 option csharp_namespace = "BusinessSharkService";
@@ -75,8 +74,10 @@ message SawmillToolsGrpc {
 	int32 ToolsId = 1;
 	int32 TotalQuantity = 2;
 	double TechLevel = 3;
-	double Deprecation = 4;
+	double Efficiency = 4;
 	double MaintenanceCostsAmount = 5;
+	int32  MaxQuantity = 6;
+	double WearCoefficient = 7;
 }
 
 message SawmillEmployeesGrpc {

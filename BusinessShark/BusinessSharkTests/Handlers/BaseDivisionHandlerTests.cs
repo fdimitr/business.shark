@@ -1,11 +1,11 @@
-﻿using BusinessSharkService;
-using BusinessSharkService.DataAccess.Models;
+﻿using BusinessSharkService.DataAccess.Models;
 using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.Extensions;
 using BusinessSharkService.Handlers.Context;
 using BusinessSharkService.Handlers.Divisions;
+using BusinessSharkShared;
 using System.Collections.Frozen;
 
 namespace BusinessSharkTests.Handlers

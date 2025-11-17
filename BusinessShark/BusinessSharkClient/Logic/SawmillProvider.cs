@@ -1,15 +1,14 @@
-﻿using BusinessSharkClient.Logic.Models;
-using BusinessSharkClient.Logic.ViewModels;
+﻿using System.Collections.ObjectModel;
+using BusinessSharkClient.Logic.Models;
 using BusinessSharkService;
-using System.Collections.ObjectModel;
 
 namespace BusinessSharkClient.Logic
 {
     public class SawmillProvider
     {
 
-        private SawmillService.SawmillServiceClient _sawmillClient;
-        private GlobalDataProvider _globalDataProvider;
+        private readonly SawmillService.SawmillServiceClient _sawmillClient;
+        private readonly GlobalDataProvider _globalDataProvider;
 
         public SawmillProvider(SawmillService.SawmillServiceClient sawmillClient, GlobalDataProvider globalDataProvider)
         {

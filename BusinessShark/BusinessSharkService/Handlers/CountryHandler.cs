@@ -1,4 +1,5 @@
-﻿using BusinessSharkService.DataAccess.Models.Location;
+﻿using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
+using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.Handlers.Divisions;
 
 namespace BusinessSharkService.Handlers
@@ -30,23 +31,27 @@ namespace BusinessSharkService.Handlers
                 if (stoppingToken.IsCancellationRequested) break;
                 foreach (var factory in city.Factories)
                 {
-                    if (stoppingToken.IsCancellationRequested)
+                    if (stoppingToken.IsCancellationRequested) break;
+                    _factoryHandler.CalculationOfToolWear(factory);
                     _factoryHandler.StartCalculation(factory);
                 }
 
                 foreach (var storage in city.DistributionCenters)
                 {
                     if (stoppingToken.IsCancellationRequested) break;
+                    _storageHandler.CalculationOfToolWear(storage);
                     _storageHandler.StartCalculation(storage);
                 }
                 foreach (var mine in city.Mines)
                 {
                     if (stoppingToken.IsCancellationRequested) break;
+                    _mineHandler.CalculationOfToolWear(mine);
                     _mineHandler.StartCalculation(mine);
                 }
                 foreach (var sawmill in city.Sawmills)
                 {
                     if (stoppingToken.IsCancellationRequested) break;
+                    _sawmillHandler.CalculationOfToolWear(sawmill);
                     _sawmillHandler.StartCalculation(sawmill);
                 }
             }

@@ -33,24 +33,40 @@ public partial class SawmillListView : ContentView, INotifyPropertyChanged
         }
     }
 
-    private SawmillProvider _sawmillProvider;
-    private GlobalDataProvider _globalDataProvider;
+    private readonly SawmillProvider _sawmillProvider;
+    private readonly GlobalDataProvider _globalDataProvider;
+    private readonly DivisionTransactionProvider _transactionProvider;
+    private readonly DivisionWarehouseProvider _warehouseProvider;
+    private readonly DivisionSizeProvider _divisionSizeProvider;
 
-    public SawmillListView(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider)
+    public SawmillListView(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionTransactionProvider transactionProvider, 
+        DivisionWarehouseProvider warehouseProvider, DivisionSizeProvider divisionSizeProvider)
     {
         _sawmillProvider = sawmillProvider;
         _globalDataProvider = globalDataProvider;
+        _transactionProvider = transactionProvider;
+        _warehouseProvider = warehouseProvider;
+        _divisionSizeProvider = divisionSizeProvider;
         InitializeComponent();
 
         OpenDetailsCommand = new Command<SawmillListModel>(OnOpenDetails);
         Loaded += OnLoadingView;
 
         BindingContext = this;
-     }
+        _transactionProvider = transactionProvider;
+    }
 
     public async void OnLoadingView(object? sender, EventArgs e)
     {
-        GroupedSawmills = await _sawmillProvider.LoadList(int.Parse(await SecureStorage.Default.GetAsync("company_id") ?? "0"));
+        try
+        {
+            GroupedSawmills = await _sawmillProvider.LoadList(int.Parse(await SecureStorage.Default.GetAsync("company_id") ?? "0"));
+        }
+        catch (Exception ex)
+        {
+            if (this.Parent is ContentPage page)
+                await page.DisplayAlert("Error", $"An unexpected error occurred: {ex.Message}", "OK");
+        }
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged;
@@ -59,6 +75,15 @@ public partial class SawmillListView : ContentView, INotifyPropertyChanged
 
     private async void OnOpenDetails(SawmillListModel sawmill)
     {
-        await Navigation.PushAsync(new SawmillDetailPage(_globalDataProvider, _sawmillProvider, sawmill.Id));
+        try
+        {
+            var sawmillDetailPage = new SawmillDetailPage(_globalDataProvider, _sawmillProvider, _transactionProvider, _warehouseProvider,_divisionSizeProvider, sawmill.Id);
+            await Navigation.PushAsync(sawmillDetailPage);
+        }
+        catch (Exception ex)
+        {
+            if (this.Parent is ContentPage page)
+                await page.DisplayAlert("Error", $"An unexpected error occurred: {ex.Message}", "OK");
+        }
     }
 }

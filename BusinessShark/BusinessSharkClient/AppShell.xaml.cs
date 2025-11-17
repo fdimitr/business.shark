@@ -1,5 +1,5 @@
-﻿using BusinessSharkClient.Logic.Models;
-using BusinessSharkClient.Logic.ViewModels;
+﻿using BusinessSharkClient.Logic.ViewModels;
+using BusinessSharkClient.Pages;
 using BusinessSharkClient.View;
 
 namespace BusinessSharkClient

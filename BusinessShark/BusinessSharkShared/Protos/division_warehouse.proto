@@ -1,0 +1,49 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "BusinessSharkService";
+
+package division_warehouse;
+
+service DivisionWarehouseService {
+  rpc Load(DivisionWarehouseRequest) returns (DivisionWarehouseResponse);
+  rpc Update(DivisionWarehouseUpdateRequest) returns (DivisionWarehouseUpdateResponse);
+}
+
+message DivisionWarehouseRequest {
+  int32 DivisionId = 1;
+  int32 WarehouseType = 2;
+}
+
+message DivisionWarehouseProductsGrpc {
+	int32 WarehouseProductId = 1;
+	int32 ProductDefinitionId = 2;
+	int32 Quantity = 3;
+	double Quality = 4;
+	double CostPrice = 5;
+	double SalesPrice = 6;
+	int32 SalesLimit = 7;
+	bool AvailableForSale = 8;
+}
+
+message DivisionWarehouseResponse {
+	int32 DivisionWarehouseId = 1;
+	double WarehouseCapacity = 2;
+	repeated DivisionWarehouseProductsGrpc Products = 3;
+}
+
+message DivisionWarehouseUpdateProductsGrpc {
+	int32 WarehouseProductId = 1;
+	double SalesPrice = 6;
+	int32 SalesLimit = 7;
+	bool AvailableForSale = 8;
+}
+
+message DivisionWarehouseUpdateRequest {
+	int32 DivisionWarehouseId = 1;
+	repeated DivisionWarehouseUpdateProductsGrpc Products = 2;
+}
+
+message DivisionWarehouseUpdateResponse {
+	bool Success = 1;
+	string Message = 2;
+}

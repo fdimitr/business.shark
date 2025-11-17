@@ -1,23 +1,28 @@
-﻿using BusinessSharkService.DataAccess;
+﻿using System.Collections.Frozen;
+using System.Diagnostics;
+using BusinessSharkService.DataAccess;
 using BusinessSharkService.DataAccess.Models.Finance;
+using BusinessSharkService.Handlers.Context;
 using BusinessSharkService.Handlers.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Frozen;
-using System.Diagnostics;
 
 namespace BusinessSharkService.Handlers
 {
     public class WorldHandler
     {
+        private readonly ILogger<WorldHandler> _logger;
         private readonly CountryHandler _countryHandler;
         private readonly DataContext _dbContext;
         private readonly IWorldContext _worldContext;
 
-        public WorldHandler(DataContext dbContext, IWorldContext worldContext, CountryHandler countryHandler)
+        public WorldHandler(ILogger<WorldHandler> logger, DataContext dbContext, IWorldContext worldContext, CountryHandler countryHandler)
         {
+            _logger = logger;
             _worldContext = worldContext;
             _dbContext = dbContext;
             _countryHandler = countryHandler;
+
+            _worldContext.CurrentDate = dbContext.Worlds.First().CurrentDate;
 
             // Load All ItemDefinitions
             _worldContext.ProductDefinitions = dbContext.ProductDefinitions
@@ -59,6 +64,9 @@ namespace BusinessSharkService.Handlers
         {
             try
             {
+                _worldContext.CurrentDate = _worldContext.CurrentDate.AddDays(1);
+                _dbContext.Worlds.First().CurrentDate = _worldContext.CurrentDate;
+
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -75,6 +83,9 @@ namespace BusinessSharkService.Handlers
                 {
                     await SaveCalculationData();
                 }
+
+                _dbContext.Worlds.First().CurrentDate = _worldContext.CurrentDate;
+                _logger.LogInformation("Calculation completed in {ElapsedMilliseconds} ms", stopwatch.ElapsedMilliseconds);
             }
             finally
             {
@@ -106,6 +117,7 @@ namespace BusinessSharkService.Handlers
         /// data from each division within a company, and creates a new financial transaction record for each company.
         /// The operation can be cancelled by signaling the provided <paramref name="stoppingToken"/>.</remarks>
         /// <param name="stoppingToken">A token to monitor for cancellation requests, which can be used to stop the operation prematurely.</param>
+        /// <param name="calculationMillisecond"></param>
         private void SummarizingСalculation(CancellationToken stoppingToken, long calculationMillisecond)
         {
             foreach(var company in _dbContext.Companies)
@@ -113,7 +125,7 @@ namespace BusinessSharkService.Handlers
                 var financialTransactions = new FinancialTransaction
                 {
                     CompanyId = company.CompanyId,
-                    TransactionDate = DateTime.UtcNow,
+                    TransactionDate = _worldContext.CurrentDate,
                 };
 
                 if (stoppingToken.IsCancellationRequested) break;
@@ -121,7 +133,6 @@ namespace BusinessSharkService.Handlers
                 {
                     // Here you can add summarizing logic for each division
                     var divTran = division.CurrentTransactions;
-                    if (divTran == null) continue;
 
                     financialTransactions.SalesProductsAmount += divTran.SalesProductsAmount;
                     financialTransactions.PurchasedProductsAmount += divTran.PurchasedProductsAmount;

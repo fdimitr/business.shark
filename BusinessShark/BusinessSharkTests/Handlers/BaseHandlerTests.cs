@@ -1,5 +1,5 @@
-﻿using BusinessSharkService;
-using BusinessSharkService.DataAccess.Models.Items;
+﻿using BusinessSharkService.DataAccess.Models.Items;
+using BusinessSharkShared;
 
 namespace BusinessSharkTests.Handlers
 {

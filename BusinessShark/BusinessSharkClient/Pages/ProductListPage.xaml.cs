@@ -2,7 +2,7 @@ using BusinessSharkClient.Logic;
 using BusinessSharkClient.Logic.Models;
 
 
-namespace BusinessSharkClient.View;
+namespace BusinessSharkClient.Pages;
 
 public partial class ProductListPage : ContentPage
 {

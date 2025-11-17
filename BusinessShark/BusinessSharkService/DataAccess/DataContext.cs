@@ -5,6 +5,7 @@ using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.DataAccess.Models.Items;
 using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.DataAccess.Models.Player;
+using BusinessSharkShared;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -12,6 +13,7 @@ namespace BusinessSharkService.DataAccess
 {
     public sealed class DataContext : DbContext
     {
+        public DbSet<DivisionSize> DivisionSizes { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Division> Divisions { get; set; }
@@ -31,6 +33,7 @@ namespace BusinessSharkService.DataAccess
         public DbSet<Company> Companies { get; set; }
         public DbSet<FinancialTransaction> FinancialTransactions { get; set; }
         public DbSet<DivisionTransaction> DivisionTransactions { get; set; }
+        public DbSet<World> Worlds { get; set; }
 
         public DataContext()
         {
@@ -44,8 +47,8 @@ namespace BusinessSharkService.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Configure relationships and keys if needed
 
+            // Configure relationships and keys if needed
             modelBuilder.Entity<Division>().ToTable("Divisions");
             modelBuilder.Entity<Factory>().ToTable("Factories");
             modelBuilder.Entity<DistributionCenter>().ToTable("DistributionCenters");
@@ -86,6 +89,14 @@ namespace BusinessSharkService.DataAccess
                 .HasColumnName("xmin")
                 .HasColumnType("xid")
                 .ValueGeneratedOnAddOrUpdate();
+
+            modelBuilder.Entity<World>()
+
+                .HasData(new World
+            {
+                Id = 1,
+                CurrentDate = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+            });
 
             // **************** Seeding Product Categories **************************
             modelBuilder.Entity<ProductCategory>().HasData(new ProductCategory
@@ -183,6 +194,69 @@ namespace BusinessSharkService.DataAccess
                     Population = 800000,
                     AverageSalary = 2000.0
                 });
+
+                modelBuilder.Entity<DivisionSize>().HasData(
+                    new DivisionSize
+                    {
+                        DivisionSizeId = 1, 
+                        DivisionTypeId = (int)DivisionType.Sawmill, 
+                        Size = 10,
+                        WarehouseVolume = 1000,
+                        ConstructionCost = 700000, 
+                        MaxEmployeesQuantity = 6, 
+                        MaxToolsQuantity = 3
+                    },
+                    new DivisionSize
+                    {
+                        DivisionSizeId = 2, 
+                        DivisionTypeId = (int)DivisionType.Sawmill, 
+                        Size = 50,
+                        WarehouseVolume = 5000,
+                        ConstructionCost = 3500000, 
+                        MaxEmployeesQuantity = 10, 
+                        MaxToolsQuantity = 5
+                    },
+                    new DivisionSize
+                    {
+                        DivisionSizeId = 3, 
+                        DivisionTypeId = (int)DivisionType.Sawmill, 
+                        Size = 100,
+                        WarehouseVolume = 10000,
+                        ConstructionCost = 7000000, 
+                        MaxEmployeesQuantity = 20, 
+                        MaxToolsQuantity = 10
+                    },
+                    new DivisionSize
+                    {
+                        DivisionSizeId = 4, 
+                        DivisionTypeId = (int)DivisionType.Sawmill, 
+                        Size = 500,
+                        WarehouseVolume = 50000,
+                        ConstructionCost = 35000000,
+                        MaxEmployeesQuantity = 100, 
+                        MaxToolsQuantity = 50
+                    },
+                    new DivisionSize
+                    {
+                        DivisionSizeId = 5, 
+                        DivisionTypeId = (int)DivisionType.Sawmill,
+                        Size = 1000,
+                        WarehouseVolume = 10000,
+                        ConstructionCost = 70000000,
+                        MaxEmployeesQuantity = 200,
+                        MaxToolsQuantity = 100
+                    },
+                    new DivisionSize
+                    {
+                        DivisionSizeId = 6,
+                        DivisionTypeId = (int)DivisionType.Sawmill,
+                        Size = 2000,
+                        WarehouseVolume = 200000,
+                        ConstructionCost = 140000000,
+                        MaxEmployeesQuantity = 400,
+                        MaxToolsQuantity = 200
+                    }
+                );
 
                 // **************** Seeding Test Data (Admin Company) from JSON ****************
                 string filePath = Path.Combine(AppContext.BaseDirectory, "DataAccess\\AdminSeeds.json");

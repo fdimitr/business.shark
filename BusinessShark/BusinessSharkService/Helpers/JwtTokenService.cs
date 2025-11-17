@@ -8,17 +8,20 @@ namespace BusinessSharkService.Helpers;
 
 public class JwtTokenService
 {
+    private readonly IConfiguration _config;
     private readonly string _key;
     private readonly string _issuer;
-    private readonly TimeSpan _tokenLifetime = TimeSpan.FromMinutes(15);
+    private readonly TimeSpan _tokenLifetime;
 
     // This is a simple in-memory store for refresh tokens.
     private readonly Dictionary<string, string> _refreshTokens = new();
 
-    public JwtTokenService(string key, string issuer)
+    public JwtTokenService(IConfiguration config, string key, string issuer)
     {
+        _config = config;
         _key = key;
         _issuer = issuer;
+        _tokenLifetime = TimeSpan.FromMinutes(int.Parse(_config["TokenSettings:TokenLifetimeMinutes"] ?? "15"));
     }
 
     public (string accessToken, string refreshToken) GenerateTokens(string username)

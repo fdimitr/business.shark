@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace BusinessSharkClient.Converters
 {
     public class SectionToColorConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             var selected = value as string;
             var current = parameter as string;
@@ -19,6 +14,6 @@ namespace BusinessSharkClient.Converters
                 : Colors.Transparent;           // прозрачный, если нет
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => null;
     }
 }

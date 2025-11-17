@@ -1,22 +1,30 @@
 using BusinessSharkClient.Logic;
 using BusinessSharkService;
+using CommunityToolkit.Maui.Extensions;
 using Grpc.Core;
 
-namespace BusinessSharkClient.View;
+namespace BusinessSharkClient.Pages;
 
 public partial class LoginPage : ContentPage
 {
     private AuthService.AuthServiceClient _authServiceClient;
-    private CompanyService.CompanyServiceClient _companyServiceClient;
     private GlobalDataProvider _globalDataProvider;
 
-    public LoginPage(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider, CompanyService.CompanyServiceClient companyServiceClient)
+    public LoginPage(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider)
 	{
 		InitializeComponent();
         _authServiceClient = authServiceClient;
         _globalDataProvider = globalDataProvider;
-        _companyServiceClient = companyServiceClient;
         Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
+    }
+
+    private void OnCreateAcountClicked(object sender, EventArgs e)
+    {
+        // Goto to shell application main page
+        if (Application.Current!.Windows.Count > 0)
+        {
+            Application.Current.Windows[0].Page = new CreateAccountPage(_authServiceClient, _globalDataProvider);
+        }
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)
@@ -37,15 +45,14 @@ public partial class LoginPage : ContentPage
             else
             {
                 await SecureStorage.Default.SetAsync("access_token", loginResult.AccessToken);
+                await SecureStorage.Default.SetAsync("refresh_token", loginResult.RefreshToken);
                 await SecureStorage.Default.SetAsync("current_user", EmailEntry.Text);
                 await SecureStorage.Default.SetAsync("player_id", loginResult.PlayerId.ToString());
+                await SecureStorage.Default.SetAsync("company_id", loginResult.CompanyId.ToString());
+                await SecureStorage.Default.SetAsync("company_name", loginResult.CompanyName);
 
                 // Load global data
                 ShowPopup("Synchronizing data ....");
-                var company = await _companyServiceClient.GetByPlayerAsync(new GetByPlayerRequest { PlayerId = loginResult.PlayerId });
-                await SecureStorage.Default.SetAsync("company_id", company.CompanyId.ToString());
-                await SecureStorage.Default.SetAsync("company_name", company.Name);
-
                 await _globalDataProvider.LoadData();
 
                 // Goto to shell application main page

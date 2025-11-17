@@ -1,16 +1,28 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using BusinessSharkClient.Logic.Models;
+using BusinessSharkShared;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BusinessSharkClient.Logic.ViewModels
 {
     public partial class SawmillDetailViewModel : ObservableObject
     {
-        private SawmillProvider _sawmillProvider;
-        private GlobalDataProvider _globalDataProvider;
+        public ICommand SaveDivisionDetailCommand { get; }
+        private readonly SawmillProvider _sawmillProvider;
+        private readonly GlobalDataProvider _globalDataProvider;
 
-        public SawmillDetailViewModel(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider) 
-        { 
+        public SawmillDetailViewModel(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionSizeProvider divisionSizeProvider) 
+        {
             _sawmillProvider = sawmillProvider;
             _globalDataProvider = globalDataProvider;
+            SaveDivisionDetailCommand = new Command(OnSaveDivisionDetail);
+            SizeViewModel = new(divisionSizeProvider);
+
+        }
+
+        private void OnSaveDivisionDetail(object obj)
+        {
         }
 
         public int DivisionId { get; set; }
@@ -19,16 +31,16 @@ namespace BusinessSharkClient.Logic.ViewModels
         private ImageSource? productIcon;
 
         [ObservableProperty]
-        private string name;
+        private string? name;
 
         [ObservableProperty]
-        private string description;
+        private string? description;
 
         [ObservableProperty]
-        private string city;
+        private string? city;
 
         [ObservableProperty]
-        private string countryFlag;
+        private string? countryFlag;
 
         [ObservableProperty]
         private int volumeCapacity;
@@ -56,33 +68,47 @@ namespace BusinessSharkClient.Logic.ViewModels
         private double qualityBonus;
 
         [ObservableProperty]
-        private int workerCount = 45;
+        private int workerCount;
 
         [ObservableProperty]
-        private double qualification = 0.76;
+        private double qualification;
 
         [ObservableProperty]
-        private double salary = 38000;
+        private double salary;
 
         [ObservableProperty]
-        private double trainingProgress = 0.15;
+        private double trainingProgress;
 
         [ObservableProperty]
-        private int equipmentCount = 15;
+        private int equipmentCount;
 
         [ObservableProperty]
-        private double equipmentTechLevel = 0.82;
+        private double equipmentTechLevel;
 
         [ObservableProperty]
-        private double wear = 0.12;
+        private double wear;
+
+        [ObservableProperty]
+        private double efficiency;
+
+        public ObservableCollection<DivisionSizeModel> Sizes { get; set; } = new();
+
+
+        public DivisionSizeViewModel SizeViewModel { get; }
 
 
         internal async Task LoadAsync(int divisionId)
         {
             var response = await _sawmillProvider.LoadDetail(divisionId);
 
+            await SizeViewModel.LoadAsync(DivisionType.Sawmill);
+            foreach (var size in SizeViewModel.Sizes)
+            {
+                Sizes.Add(size);
+            }
+
             // Cache product definitions for fast lookup
-            var productDefition = _globalDataProvider.ProductDefinitions.FirstOrDefault(p => p.ProductDefinitionId == response.ProductDefinitionId);
+            var productDefinition = _globalDataProvider.ProductDefinitions.FirstOrDefault(p => p.ProductDefinitionId == response.ProductDefinitionId);
 
             // SAWMILL
             DivisionId = divisionId;
@@ -95,19 +121,19 @@ namespace BusinessSharkClient.Logic.ViewModels
             TechLevel = response.TechLevel;
             ResourceDepositQuality = response.ResourceDepositQuality;
 
-            if (productDefition != null)
+            if (productDefinition != null)
             {
-                ProductIcon = productDefition.Image;
+                ProductIcon = productDefinition.Image;
             }
 
             // PRODUCTION
             QualityBonus = response.QualityBonus;
             QuantityBonus = response.QuantityBonus;
 
-            var divisionStatistic = DivisionTransactionViewModel.GetLastTransaction(response.DivisionTransactions.ToList());
-            Balance = divisionStatistic.Balance;
-            LastProductionQuantity = divisionStatistic.QuantityProduced;
-            LastProductionQuality = divisionStatistic.QualityProduced;
+            var divisionStatistics = DivisionTransactionViewModel.GetLastTransaction(response.DivisionTransactions.ToList());
+            Balance = divisionStatistics.Balance;
+            LastProductionQuantity = divisionStatistics.QuantityProduced;
+            LastProductionQuality = divisionStatistics.QualityProduced;
 
             // Employee
             WorkerCount = response.Employees.TotalQuantity;
@@ -118,7 +144,8 @@ namespace BusinessSharkClient.Logic.ViewModels
             // Equipment
             EquipmentCount = response.Tools.TotalQuantity;
             EquipmentTechLevel = response.Tools.TechLevel;
-            Wear = response.Tools.Deprecation;
+            Wear = response.Tools.WearCoefficient;
+            Efficiency = response.Tools.Efficiency;
         }
 
     }

@@ -9,6 +9,8 @@ namespace BusinessSharkService.Handlers.Context
 {
     public class WorldContext : IWorldContext
     {
+        public DateTime CurrentDate { get; set; }
+
         public List<Country> Countries { get; set; } = new();
         public required FrozenDictionary<int, ProductDefinition> ProductDefinitions { get; set; }
         public Dictionary<int, Division> Divisions { get; set; } = new();

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:BusinessSharkClient.Logic.ViewModels"
+             xmlns:local="clr-namespace:BusinessSharkClient.Pages"
+             xmlns:syncfusion="http://schemas.syncfusion.com/maui"
+             xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:view="clr-namespace:BusinessSharkClient.View.DivisionDetail"
              x:Class="BusinessSharkClient.Pages.SawmillDetailPage"
+             x:Name="SawmillDetails"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              ControlTemplate="{StaticResource PageWithStatusBar}"
-             Shell.NavBarIsVisible="False"
              Title="Sawmill Detail">
-
     <ContentPage.Resources>
         <Style x:Key="DottedLineStyle" TargetType="GraphicsView">
             <Setter Property="HeightRequest" Value="1" />
@@ -18,57 +22,31 @@
     <ScrollView>
         <VerticalStackLayout>
             <!-- 🔹 Командная панель -->
-            <Grid ColumnDefinitions="50, Auto,*"  
-                    Grid.Column="0" Grid.Row="0" 
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray950}}">
-                <ImageButton x:Name="BackButton"
-                            Grid.Column="0"
-                            Source="arrow_dropleft_48_w.png" 
-                            Clicked="OnBackButtonClicked"
-                            HeightRequest="30"
-                            WidthRequest="30"
-                            VerticalOptions="Center"
-                            HorizontalOptions="Start"
-                            Aspect="AspectFit">
-                    <!-- Use a standard back arrow icon (e.g., from FontAwesome or a .png) -->
-                    <!-- As a fallback, we can use text -->
-                    <ImageButton.Triggers>
-                        <Trigger TargetType="ImageButton" Property="Source" Value="back_icon.png">
-                            <Setter Property="BackgroundColor" Value="Transparent" />
-                        </Trigger>
-                    </ImageButton.Triggers>
-                </ImageButton>
-
-                <Label Grid.Column="1"
-                        Text="{Binding Title}"
-                        TextColor="{StaticResource White}"
-                        FontSize="20"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center" />
-            </Grid>
-            <HorizontalStackLayout HorizontalOptions="Start" Padding="5" Spacing="20" Grid.Column="0" Grid.Row="1">
+            <HorizontalStackLayout HorizontalOptions="Start" Padding="5" Spacing="20" Grid.Column="0" Grid.Row="1"
+                                   x:DataType="local:SawmillDetailPage">
                 <ImageButton Source="finances.png"
                                 HeightRequest="60"
                                 WidthRequest="60"
                                 BackgroundColor="Transparent"
-                                Command="{Binding OpenFinanceCommand}" />
-                <ImageButton Source="supply.png"
-                                HeightRequest="60"
-                                WidthRequest="60"
-                                BackgroundColor="Transparent"
-                                Command="{Binding OpenSupplyCommand}" />
+                                Command="{Binding OpenDivisionAnalyticsCommand}" />
+                <ImageButton Source="financial_statistics.png"
+                             HeightRequest="60"
+                             WidthRequest="60"
+                             BackgroundColor="Transparent"
+                             Command="{Binding OpenFinancialStatisticsCommand}" />
                 <ImageButton Source="sales_warehouse.png"
                                 HeightRequest="60"
                                 WidthRequest="60"
                                 BackgroundColor="Transparent"
-                                Command="{Binding OpenSalesCommand}" />
+                                Command="{Binding OpenDivisionWarehouseCommand}" />
             </HorizontalStackLayout>
 
             <VerticalStackLayout 
                 x:Name="DataStackLayout"
                 Padding="10"
-                Spacing="20">
+                Spacing="20"
+                BindingContext="SawmillDetail"
+                x:DataType="viewmodel:SawmillDetailViewModel">
                 <!-- 🔸 Секция "Лесопилка" -->
                 <Border Style="{StaticResource SectionBorderStyle}">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
@@ -76,23 +54,77 @@
                             <Label Text="Sawmill:" 
                                    Style="{StaticResource SectionTitleStyle}"
                                    Margin="0,0,20,0"
+                                   VerticalOptions="Center"
                                    Grid.ColumnSpan="2" />
-                            <Label Text="Woods" Style="{StaticResource FieldNameStyle}" Grid.ColumnSpan="2" />
+                            <Label Text="Woods" 
+                                   Style="{StaticResource FieldNameStyle}" 
+                                   VerticalOptions="Center"
+                                   Grid.ColumnSpan="2" />
                             <Image Source="{Binding ProductIcon}"
                                 Grid.Row="0" Grid.Column="1"
-                                HeightRequest="24"
-                                WidthRequest="24"
+                                HeightRequest="35"
+                                WidthRequest="35"
                                 Margin="5,0,0,0"
                                 VerticalOptions="Start" />
-
                         </HorizontalStackLayout>
-                        <Image Source="icon_edit.png"
+                        <ImageButton Source="icon_edit.png"
+                                Style ="{StaticResource LiteImageButton}"
                                Grid.Row="0" Grid.Column="2"
                                HeightRequest="20"
                                WidthRequest="20"
                                HorizontalOptions="End"
-                               BackgroundColor="Transparent"/>
-                        <!-- Name -->
+                               BackgroundColor="Transparent"
+                               Clicked="SawmillEdit_OnClicked"/>
+
+                        <view:DivisionDetailEditPopupView x:Name="DivisionPopup"
+                                                          Header="Edit Sawmill">
+
+                            </view:DivisionDetailEditPopupView>
+                            <!--<syncfusion:SfPopup x:Name="DivisionPopup"
+                                                AutoSizeMode="Height"
+                                                AppearanceMode="TwoButton"
+                                                AcceptButtonText="SAVE"
+                                                DeclineButtonText="CANCEL"
+                                                ShowCloseButton="True"
+                                                ShowFooter="True" >
+                                <syncfusion:SfPopup.HeaderTemplate>
+                                <DataTemplate>
+                                    <Label Text="Edit Sawmill" 
+                                           VerticalTextAlignment="Center" 
+                                           FontSize="18" 
+                                           HorizontalTextAlignment="Center" 
+                                           FontAttributes="Bold"/>
+                                </DataTemplate>
+                            </syncfusion:SfPopup.HeaderTemplate>
+                            <syncfusion:SfPopup.PopupStyle>
+                                <syncfusion:PopupStyle CornerRadius="10"/>
+                            </syncfusion:SfPopup.PopupStyle>
+                            <syncfusion:SfPopup.ContentTemplate>
+                                <DataTemplate>
+                                    <VerticalStackLayout BackgroundColor="White"
+                                                         Margin="10,0,10,0"
+                                                         Padding="10">
+                                        <syncfusion:SfTextInputLayout Hint="Sawmill Name"
+                                                                      ContainerType="Outlined"
+                                                                      HorizontalOptions="Center"
+                                                                      VerticalOptions="Center">
+                                            <Entry Text="{Binding Name}"
+                                                   MaxLength="30"
+                                                   Style="{StaticResource TableEntryStyle}"></Entry>
+                                        </syncfusion:SfTextInputLayout>
+                                        <Label Text="Size:"></Label>
+                                        <editors:SfComboBox x:Name="ComboBoxSawmillSize"
+                                                            ItemsSource="{Binding Sizes}"
+                                                            IsEditable="false"
+                                                            DisplayMemberPath="Size"
+                                                            TextMemberPath="Size"
+                                                            MaxDropDownHeight="150" />
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </syncfusion:SfPopup.ContentTemplate>
+                        </syncfusion:SfPopup>-->
+
+                            <!-- Name -->
                         <VerticalStackLayout Grid.Row="1" Grid.Column="0">
                             <Label Text="Name:" Style="{StaticResource FieldNameStyle}" />
                             <GraphicsView Style="{StaticResource DottedLineStyle}" />
@@ -269,7 +301,7 @@
 
                 <!-- 🔸 Секция "Оборудование" -->
                 <Border Style="{StaticResource SectionBorderStyle}">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
                         <Label Text="Equipment" Style="{StaticResource SectionTitleStyle}" Grid.ColumnSpan="2" />
                         <Image Source="icon_edit.png"
                                Grid.Row="0" Grid.Column="1"
@@ -307,6 +339,16 @@
                             <Label Text="{Binding Wear, StringFormat='{0:N2}'}" Style="{StaticResource FieldValueStyle}" />
                             <GraphicsView Style="{StaticResource DottedLineStyle}" />
                         </VerticalStackLayout>
+
+                        <!-- Efficiency -->
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="0">
+                            <Label Text="Efficiency:" Style="{StaticResource FieldNameStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="1">
+                            <Label Text="{Binding Efficiency, StringFormat='{0:P2}'}" Style="{StaticResource FieldValueStyle}" />
+                            <GraphicsView Style="{StaticResource DottedLineStyle}" />
+                        </VerticalStackLayout>
                     </Grid>
                 </Border>
 
@@ -340,4 +382,5 @@
     </ScrollView>
 
 </ContentPage>
+    
     

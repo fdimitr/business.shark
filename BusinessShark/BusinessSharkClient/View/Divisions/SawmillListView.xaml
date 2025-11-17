@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:BusinessSharkClient.Logic.Models"
+             xmlns:local="clr-namespace:BusinessSharkClient.View.Divisions" 
              x:Class="BusinessSharkClient.View.Divisions.SawmillListView"
-             xmlns:viewmodels="clr-namespace:BusinessSharkClient.Logic.Models">
+             x:DataType="local:SawmillListView">
 
     <VerticalStackLayout Padding="5" Spacing="5">
 
@@ -17,7 +19,7 @@
         <!-- Division List -->
         <CollectionView ItemsSource="{Binding GroupedSawmills}" IsGrouped="True" SelectionMode="None">
             <CollectionView.GroupHeaderTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="viewmodel:SawmillListGroup">
                     <HorizontalStackLayout BackgroundColor="#F2F2F2">
                         <!-- City + Flag -->
                         <Label Text="{Binding City}" FontAttributes="Bold" FontSize="14" Padding="5"/>
@@ -26,7 +28,7 @@
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="viewmodel:SawmillListModel">
                     <Grid ColumnDefinitions="1.5*,*,30" Padding="5" ColumnSpacing="5">
                         
                         <VerticalStackLayout Grid.Column="0">
@@ -50,8 +52,8 @@
                                    VerticalOptions="Center"
                                    HorizontalTextAlignment="Start" />
                             <Image Source="{Binding ProductIcon}"
-                                   HeightRequest="24"
-                                   WidthRequest="24"
+                                   HeightRequest="35"
+                                   WidthRequest="35"
                                    Margin="5,0,0,0"
                                    VerticalOptions="Center" />
                         </HorizontalStackLayout>
@@ -69,7 +71,8 @@
                                 BorderWidth="1"
                                 BorderColor="DarkGrey"
                                 TextColor="Black"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentView}}, Path=BindingContext.OpenDetailsCommand}"
+                               
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:SawmillListView}}, Path=OpenDetailsCommand, x:DataType=local:SawmillListView}"
                                 CommandParameter="{Binding .}" />
                     </Grid>
                 </DataTemplate>

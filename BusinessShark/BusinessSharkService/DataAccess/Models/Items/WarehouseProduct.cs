@@ -21,8 +21,17 @@ namespace BusinessSharkService.DataAccess.Models.Items
         [Comment("Stored quantity")]
         public int Quantity { get; set; }
 
-        [Comment("Price of the product in storage")]
-        public double UnitPrice { get; set; }
+        [Comment("Cost price of the product in storage")]
+        public double CostPrice { get; set; }
+
+        [Comment("Price of the product for selling")]
+        public double SalesPrice { get; set; }
+
+        [Comment("A sales limit, a restriction that limits the quantity of ordered products for sale.")]
+        public int SalesLimit { get; set; }
+
+        [Comment("Indicates whether the product is available for sale")]
+        public bool AvailableForSale { get; set; }
 
         [Comment("Current price of the product in production")]
         public double ProcessingPrice { get; set; }
@@ -47,7 +56,7 @@ namespace BusinessSharkService.DataAccess.Models.Items
                 ProductDefinitionId = this.ProductDefinitionId,
                 ProductDefinition = this.ProductDefinition,
                 Quality = this.Quality,
-                UnitPrice = this.UnitPrice
+                CostPrice = this.CostPrice
             };
         }
     }

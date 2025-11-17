@@ -8,9 +8,10 @@
 
     <Color x:Key="Primary">#3560A0</Color>
     <Color x:Key="DeepPrimary">#1D3871</Color>
+    <Color x:Key="SemiPrimary">#6F97CE</Color>
     <Color x:Key="PrimaryDark">#ac99ea</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>
-    <Color x:Key="Secondary">#E8F2FF</Color>
+    <Color x:Key="Secondary">#CCE1FF</Color>
     <Color x:Key="SecondaryDarkText">#9880e5</Color>
     <Color x:Key="Tertiary">#2B0B98</Color>
 

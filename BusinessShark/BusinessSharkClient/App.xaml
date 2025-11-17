@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:BusinessSharkClient.Converters"
              xmlns:local="clr-namespace:BusinessSharkClient"
+             xmlns:model="clr-namespace:BusinessSharkClient.Logic.Models"
              x:Class="BusinessSharkClient.App">
 
     <Application.Resources>
@@ -21,11 +22,13 @@
                     <Border Grid.Row="1"
                             BackgroundColor="{DynamicResource Secondary}"
                             Stroke="{DynamicResource Secondary}"
-                            Padding="5">
+                            Padding="5"
+                            BindingContext="{x:Static local:App.Summary}"
+                            x:DataType="model:SummaryModel">
                         <Grid ColumnDefinitions ="Auto,Auto,*" RowDefinitions="Auto">
                             <HorizontalStackLayout Grid.Column="0" Grid.Row="0">
                                 <Label Text="Balance: " TextColor="Black" FontSize="14"/>
-                                <Label Text="{Binding Source={x:Static local:App.Summary}, Path=Balance, Converter={StaticResource NumberWithSpacesConverter}}"
+                                <Label Text="{Binding Balance, Converter={StaticResource NumberWithSpacesConverter}}"
                                        TextColor="DarkOrange"
                                        FontSize="14"
                                        FontAttributes="Bold"/>
@@ -33,8 +36,8 @@
                             <HorizontalStackLayout Grid.Column="1" Grid.Row="0">
                                 <Label Text="Profit: " TextColor="Black" Margin="10,0,0,0" FontSize="14"/>
                                 <Label
-                                    Text="{Binding Source={x:Static local:App.Summary}, Path=Profit, Converter={StaticResource NumberWithSpacesConverter}}"
-                                    TextColor="{Binding Source={x:Static local:App.Summary}, Path=Profit, Converter={StaticResource AmountToColorConverter}}"
+                                    Text="{Binding Profit, Converter={StaticResource NumberWithSpacesConverter}}"
+                                    TextColor="{Binding Profit, Converter={StaticResource AmountToColorConverter}}"
                                     FontAttributes="Bold"
                                     FontSize="14" />
                             </HorizontalStackLayout>
