@@ -52,6 +52,8 @@ namespace BusinessSharkService.GrpcServices
                 },
             }));
 
+            response.Timestamp = productDefinitions.Max(p => p.TimeStamp);
+
             return response;
         }
 

@@ -25,7 +25,7 @@
       "RawMaterialReserves": "500000000",
       "ProductDefinitionId": "1",
       "ResourceDepositQuality": "1",
-      "VolumeCapacity": "1000",
+      "DivisionSizeId": "1",
       "Description": "This is an example of a large note, which I hope will be displayed correctly without any problem",
       "RentalCost": "400"
     },
@@ -38,7 +38,7 @@
       "RawMaterialReserves": "450000000",
       "ProductDefinitionId": "1",
       "ResourceDepositQuality": "2",
-      "VolumeCapacity": "600",
+      "DivisionSizeId": "1",
       "RentalCost": "800"
     }
   ],

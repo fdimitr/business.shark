@@ -16,6 +16,7 @@ namespace BusinessSharkService.Handlers.Divisions
         {
             return await _dbContext.Sawmills
                 .AsNoTracking()
+                .Include(s=>s.DivisionSize)
                 .Include(s => s.ProductDefinition)
                 .Include(s => s.City)
                     .ThenInclude(c => c!.Country)
@@ -27,6 +28,7 @@ namespace BusinessSharkService.Handlers.Divisions
         {
             return await _dbContext.Sawmills
                 .AsNoTracking()
+                .Include(s => s.DivisionSize)
                 .Include(s => s.ProductDefinition)
                 .Include(s => s.Tools)
                 .Include(s => s.Employees)

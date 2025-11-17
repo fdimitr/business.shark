@@ -26,8 +26,8 @@ namespace BusinessSharkService.DataAccess.Models.Divisions
         [StringLength(300)] 
         public string? Description { get; set; }
 
-        [Comment("The volume capacity of the division warehouse")]
-        public int VolumeCapacity { get; set; }
+        public int DivisionSizeId { get; set; }
+        public DivisionSize? DivisionSize { get; set; }
 
         [Comment("The cost of renting this division per month. Based on the city metric and city location")]
         public double RentalCost { get; set; }

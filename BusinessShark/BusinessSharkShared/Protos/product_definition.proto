@@ -13,7 +13,7 @@ message ProductDefinitionRequest {
 }
 
 message ComponentUnitGrpc {
-  int32 ComponentDefinitionId = 1;     
+  int32 ComponentDefinitionId = 1;
   double ProductionQuantity = 2;
   double QualityImpact = 3;
 }
@@ -38,4 +38,5 @@ message ProductDefinitionGrpc {
 
 message ProductDefinitionResponse {
 	repeated ProductDefinitionGrpc ProductDefinitions = 1;
+	uint32 Timestamp = 2;
 }

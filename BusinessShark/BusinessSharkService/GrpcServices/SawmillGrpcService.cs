@@ -1,5 +1,4 @@
 ﻿using BusinessSharkService.Handlers.Divisions;
-using BusinessSharkService.Handlers.Finance;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 
@@ -25,9 +24,9 @@ namespace BusinessSharkService.GrpcServices
                 DivisionId = s.DivisionId,
                 Name = s.Name,
                 City = s.City != null ? s.City.Name : string.Empty,
-                CountryCode = s.City != null && s.City.Country != null ? s.City.Country.Code : string.Empty,
+                CountryCode = s.City != null ? s.City.Country.Code : string.Empty,
                 ProductDefinitionId = s.ProductDefinitionId,
-                VolumeCapacity = s.VolumeCapacity
+                VolumeCapacity = s.DivisionSize?.Size ?? 0
             }));
             return response;
 
@@ -45,9 +44,9 @@ namespace BusinessSharkService.GrpcServices
                 DivisionId = sawmill.DivisionId,
                 Name = sawmill.Name,
                 City = sawmill.City != null ? sawmill.City.Name : string.Empty,
-                CountryCode = sawmill.City != null && sawmill.City.Country != null ? sawmill.City.Country.Code : string.Empty,
+                CountryCode = sawmill.City != null ? sawmill.City.Country.Code : string.Empty,
                 ProductDefinitionId = sawmill.ProductDefinitionId,
-                VolumeCapacity = sawmill.VolumeCapacity,
+                VolumeCapacity = sawmill.DivisionSize?.Size ?? 0,
                 ResourceDepositQuality = sawmill.ResourceDepositQuality,
                 RawMaterialReserves = sawmill.RawMaterialReserves,
                 TechLevel = sawmill.TechLevel,

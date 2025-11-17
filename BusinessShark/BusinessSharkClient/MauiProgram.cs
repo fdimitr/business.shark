@@ -1,8 +1,12 @@
-﻿using BusinessSharkClient.Logic;
+using BusinessSharkClient.Data;
+using BusinessSharkClient.Interceptors;
+using BusinessSharkClient.Logic;
 using CommunityToolkit.Maui;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
+using LiveChartsCore.SkiaSharpView.Maui;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
 
@@ -36,6 +40,31 @@ namespace BusinessSharkClient
             });
             var invoker = channel.Intercept(new Interceptors.SecurityInterceptor());
 
+            string dbPath = Path.Combine(
+                FileSystem.AppDataDirectory,
+                "BusinessSharkData.db"
+            );
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlite($"Filename={dbPath}");
+            });
+
+
+            var authServiceClient = new BusinessSharkService.AuthService.AuthServiceClient(channel);
+            builder.Services.AddScoped(services => authServiceClient);
+            builder.Services.AddScoped<IAuthService>(service => new AuthClientService(authServiceClient));
+            builder.Services.AddSingleton<SecurityInterceptor>();
+
+            builder.Services.AddSingleton(services =>
+            {
+                // Важно: инжектируем interceptor с DI
+                var interceptor = services.GetRequiredService<SecurityInterceptor>();
+                var invoker = channel.Intercept(interceptor);
+
+                return invoker;
+            });
+
             // Grpc clients
             builder.Services.AddScoped(services => new BusinessSharkService.Greeter.GreeterClient(invoker));
             builder.Services.AddScoped(services => new BusinessSharkService.AuthService.AuthServiceClient(channel));
@@ -52,7 +81,16 @@ namespace BusinessSharkClient
             builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
+            builder.ConfigureSyncfusionCore();
+
+            var app = builder.Build();
+
+            // Database initialization
+            using var scope = app.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            DbInitializer.Initialize(db);
+
+            return app;
         }
     }
 }
