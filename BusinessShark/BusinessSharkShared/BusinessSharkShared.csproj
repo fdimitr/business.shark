@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.32.1" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.72.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>    
+    <None Remove="Protos\greet.proto" />
+    <None Remove="Protos\auth.proto" />
+    <None Remove="Protos\product_definition.proto" />
+    <None Remove="Protos\category.proto" />
+    <None Remove="Protos\summary.proto" />
+    <None Remove="Protos\company.proto" />
+    <None Remove="Protos\sawmill.proto" />
+    <None Remove="Protos\division_transaction.proto" />
+    <None Remove="Protos\division_warehouse.proto" />
+    <None Remove="Protos\division_size.proto" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+    <Protobuf Include="Protos\greet.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\auth.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\product_definition.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\category.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\summary.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\company.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\sawmill.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\division_transaction.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\division_warehouse.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\division_size.proto" ProtoRoot="Protos" />
+  </ItemGroup>
+
+</Project>

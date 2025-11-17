@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="BusinessSharkClient.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:BusinessSharkClient"
+    Title="BusinessSharkClient"
+    Shell.FlyoutBehavior="Flyout">
+
+    <Shell.TitleView>
+        <Grid Padding="0" Margin="0,5,0,0" ColumnDefinitions="Auto,*">
+            <VerticalStackLayout Grid.Column="0">
+                <Label Text="{Binding CompanyName}"
+                       FontSize="12"
+                       VerticalOptions="Center"
+                       TextColor="{DynamicResource ShellForegroundColor}" />
+                <Label Text="{Binding Title}"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       TextColor="{DynamicResource ShellForegroundColor}" />
+            </VerticalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="10" ColumnDefinitions="Auto, *" ColumnSpacing="15">
+                <!-- Иконка -->
+                <Image
+                    Source="{Binding FlyoutIcon}"
+                    WidthRequest="80"
+                    HeightRequest="80"
+                    Aspect="AspectFit"
+                    VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding Title}"
+                        VerticalOptions="Center"
+                        FontSize="18"
+                        TextColor="{DynamicResource ShellForegroundColor}" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <ShellContent
+        Title="Login"
+        IsVisible="False"
+        ContentTemplate="{DataTemplate local:Pages.LoginPage}"
+        Route="LoginPage" />
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+    <FlyoutItem Title="Office" Icon="office80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:Pages.OfficePage}"
+			Title="Office" />
+    </FlyoutItem>
+    <FlyoutItem Title="Company" Icon="mycompany80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:Pages.CompanyPage}"
+			Title="Company" />
+    </FlyoutItem>
+    <FlyoutItem Title="Construction" Icon="construction80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:Pages.ConstructionPage}"
+			Title="Construction" />
+    </FlyoutItem>
+    <FlyoutItem Title="Analitics" Icon="analitics80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:Pages.AnaliticsPage}"
+			Title="Analitics" />
+    </FlyoutItem>
+    <FlyoutItem Title="Product List" Icon="product_list80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:Pages.ProductListPage}"
+			Title="Product List" />
+    </FlyoutItem>
+    <FlyoutItem Title="World" Icon="world80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:Pages.WorldPage}"
+			Title="World" />
+    </FlyoutItem>    
+    <FlyoutItem Title="Documentation" Icon="documentation80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:Pages.DocumentationPage}"
+			Title="Documentation" />
+    </FlyoutItem>
+    <FlyoutItem Title="Profile" Icon="profile80x80.png" >
+        <ShellContent
+			Shell.NavBarIsVisible="true"
+            ContentTemplate="{DataTemplate local:Pages.ProfilePage}"
+			Title="Profile" />
+    </FlyoutItem>
+</Shell>

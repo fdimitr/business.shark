@@ -1,0 +1,107 @@
+{
+  "Players": [
+    {
+      "PlayerId": "1",
+      "Name": "Admin",
+      "Login": "Admin",
+      "Password": "150000.GnJjXH6wUC5Z3thWTF6PDg==.i2aOuZvSiByIn7u47wSee+r3z6nqyRgs9hLqfQ6FKGs="
+    }
+  ],
+  "Companies": [
+    {
+      "CompanyId": 1,
+      "PlayerId": 1,
+      "Name": "Admin Enterprise",
+      "Balance": "1000000.0"
+    }
+  ],
+  "Sawmills": [
+    {
+      "DivisionId": "1",
+      "CompanyId": "1",
+      "CityId": "1",
+      "Name": "Admin Sawmill (UA)",
+      "TechLevel": "1",
+      "RawMaterialReserves": "500000000",
+      "ProductDefinitionId": "1",
+      "ResourceDepositQuality": "1",
+      "VolumeCapacity": "1000",
+      "Description": "This is an example of a large note, which I hope will be displayed correctly without any problem",
+      "RentalCost": "400"
+    },
+    {
+      "DivisionId": "2",
+      "CompanyId": "1",
+      "CityId": "4",
+      "Name": "Admin Sawmill (PL)",
+      "TechLevel": "1",
+      "RawMaterialReserves": "450000000",
+      "ProductDefinitionId": "1",
+      "ResourceDepositQuality": "2",
+      "VolumeCapacity": "600",
+      "RentalCost": "800"
+    }
+  ],
+  "Warehouses": [
+    {
+      "DivisionId": "1",
+      "WarehouseId": "1",
+      "VolumeCapacity": "1000",
+      "Type": "0"
+    },
+    {
+      "DivisionId": "1",
+      "WarehouseId": "2",
+      "VolumeCapacity": "1000",
+      "Type": "1"
+    },
+    {
+      "DivisionId": "2",
+      "WarehouseId": "3",
+      "VolumeCapacity": "600",
+      "Type": "0"
+    },
+    {
+      "DivisionId": "2",
+      "WarehouseId": "4",
+      "VolumeCapacity": "600",
+      "Type": "1"
+    }
+  ],
+  "Tools": [
+    {
+      "ToolsId": "1",
+      "DivisionId": "1",
+      "TechLevel": "25",
+      "TotalQuantity": "5",
+      "MaxQuantity": "5",
+      "WearCoefficient": "0.0",
+      "WarrantyDays":  "5",
+    },
+    {
+      "ToolsId": "2",
+      "DivisionId": "2",
+      "TechLevel": "5",
+      "TotalQuantity": "3",
+      "MaxQuantity": "5",
+      "WearCoefficient": "0.0",
+      "WarrantyDays": "7"
+    }
+  ],
+  "Employees": [
+    {
+      "EmployeesId": "1",
+      "DivisionId": "1",
+      "SkillLevel": "3",
+      "SalaryPerEmployee": "150",
+      "TotalQuantity": "5"
+    },
+    {
+      "EmployeesId": "2",
+      "DivisionId": "2",
+      "SkillLevel": "4",
+      "SalaryPerEmployee": "400",
+      "TotalQuantity": "3"
+    }
+  ]
+}

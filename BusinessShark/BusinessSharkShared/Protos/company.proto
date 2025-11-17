@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "BusinessSharkService";
+
+package company;
+
+service CompanyService {
+  rpc GetByPlayer(GetByPlayerRequest) returns (GetByPlayerResponse);
+}
+
+message GetByPlayerRequest {
+	int32 PlayerId = 1;
+}
+message GetByPlayerResponse {
+  int32	CompanyId = 1;
+  string Name = 2;
+}
+

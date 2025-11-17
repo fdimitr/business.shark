@@ -1,0 +1,88 @@
+﻿syntax = "proto3";
+
+import "division_transaction.proto";
+
+option csharp_namespace = "BusinessSharkService";
+
+package sawmill;
+
+service SawmillService {
+  rpc LoadList(SawmillListRequest) returns (SawmillListResponse);
+  rpc LoadDetail(SawmillRequest) returns (SawmillResponse);
+}
+
+// LoadList 
+message SawmillListRequest {
+  int32 CompanyId = 1;
+}
+
+message SawmillListGrpc {
+  int32 DivisionId = 1;
+  string CountryCode = 2; 
+  string City = 3;
+  string Name = 4;
+  int32 ProductDefinitionId = 5;
+  int32 VolumeCapacity = 6;
+}
+
+message SawmillListResponse {
+	repeated SawmillListGrpc Sawmills = 1;
+}
+
+// Load
+message SawmillRequest {
+  int32 DivisionId = 1;
+}
+
+message SawmillResponse {
+  int32 DivisionId = 1;
+  string CountryCode = 2; 
+  string City = 3;
+  string Name = 4;
+  string Description = 5;
+  int32 ProductDefinitionId = 6;
+  int32 VolumeCapacity = 7;
+
+  double ResourceDepositQuality = 8;
+  double RawMaterialReserves = 9;
+  double TechLevel = 10;
+  double PlantingCosts = 11;
+  double RentalCost = 12;
+  SawmillWarhouseGrpc OutputWarehouse = 13;
+  SawmillToolsGrpc Tools = 14;
+  SawmillEmployeesGrpc Employees = 15;
+  repeated division_transaction.DivisionTransactionsGrpc DivisionTransactions = 16;
+  double QuantityBonus = 17;
+  double QualityBonus = 18;
+}
+
+message SawmillWarhouseGrpc {
+	int32 WarehouseId = 1;
+	int32 VolumeCapacity = 2;
+	repeated SawmillWarehouseProductsGrpc Products = 3;
+}
+
+message SawmillWarehouseProductsGrpc {
+	int32 WarehouseProductId = 1;
+	int32 Quantity = 2;
+	double Quality = 3;
+	double UnitPrice = 4;
+	int32 ProductDefinitionId = 5;
+}
+
+message SawmillToolsGrpc {
+	int32 ToolsId = 1;
+	int32 TotalQuantity = 2;
+	double TechLevel = 3;
+	double Efficiency = 4;
+	double MaintenanceCostsAmount = 5;
+	int32  MaxQuantity = 6;
+	double WearCoefficient = 7;
+}
+
+message SawmillEmployeesGrpc {
+	int32 EmployeesId = 1;
+	int32 TotalQuantity = 2;
+	double SkillLevel = 3;
+	double SalaryPerEmployee = 4;
+}

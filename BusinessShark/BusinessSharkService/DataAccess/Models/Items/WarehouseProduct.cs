@@ -1,0 +1,63 @@
+﻿using BusinessSharkService.DataAccess.Models.Divisions;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
+namespace BusinessSharkService.DataAccess.Models.Items
+{
+    [Comment("They represent product located in warehouses and participating in production")]
+    public class WarehouseProduct : ICloneable
+    {
+        [Key]
+        public int WarehouseProductId { get; set; }
+        public int WarehouseId { get; set; }
+        public Warehouse? Warehouse { get; set; }
+
+        public int ProductDefinitionId { get; set; }
+        public ProductDefinition? ProductDefinition { get; set; }
+
+        [Comment("Stored quality")]
+        public double Quality { get; set; }
+
+        [Comment("Stored quantity")]
+        public int Quantity { get; set; }
+
+        [Comment("Cost price of the product in storage")]
+        public double CostPrice { get; set; }
+
+        [Comment("Price of the product for selling")]
+        public double SalesPrice { get; set; }
+
+        [Comment("A sales limit, a restriction that limits the quantity of ordered products for sale.")]
+        public int SalesLimit { get; set; }
+
+        [Comment("Indicates whether the product is available for sale")]
+        public bool AvailableForSale { get; set; }
+
+        [Comment("Current price of the product in production")]
+        public double ProcessingPrice { get; set; }
+
+        [Comment("Current quality of the product in production")]
+        public double ProcessingQuality { get; set; }
+
+        [Comment("Current quantity of the product in production")]
+        public int ProcessingQuantity { get; set; }
+
+        public void ResetProcessing()
+        {
+            ProcessingQuality = 0;
+            ProcessingQuantity = 0;
+            ProcessingPrice = 0;
+        }
+
+        public object Clone()
+        {
+            return new WarehouseProduct
+            {
+                ProductDefinitionId = this.ProductDefinitionId,
+                ProductDefinition = this.ProductDefinition,
+                Quality = this.Quality,
+                CostPrice = this.CostPrice
+            };
+        }
+    }
+}

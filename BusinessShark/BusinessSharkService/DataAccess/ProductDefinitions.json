@@ -1,0 +1,263 @@
+[
+  {
+    "ProductDefinitionId": 1,
+    "ProductCategoryId": 1,
+    "Name": "Wood",
+    "BaseProductionCount": 50,
+    "BaseProductionPrice": 5,
+    "DeliveryPrice": 0.6,
+    "Volume": 1.5,
+    "TechImpactQuality": 0.4,
+    "ToolImpactQuality": 0.3,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.4,
+    "ToolImpactQuantity": 0.3,
+    "WorkerImpactQuantity": 0.3,
+    "IconPath": "Resources\\Products\\Icons\\icon_woods.png",
+    "ImagePath": "Resources\\Products\\Images\\woods.png"
+  },
+  {
+    "ProductDefinitionId": 2,
+    "ProductCategoryId": 1,
+    "Name": "Leather",
+    "BaseProductionCount": 8,
+    "BaseProductionPrice": 15,
+    "DeliveryPrice": 0.2,
+    "Volume": 0.3,
+    "TechImpactQuality": 0.3,
+    "ToolImpactQuality": 0.3,
+    "WorkerImpactQuality": 0.4,
+
+    "TechImpactQuantity": 0.3,
+    "ToolImpactQuantity": 0.3,
+    "WorkerImpactQuantity": 0.4,
+    "IconPath": "Resources\\Products\\Icons\\icon_leather.png",
+    "ImagePath": "Resources\\Products\\Images\\leather.png"
+  },
+  {
+    "ProductDefinitionId": 6,
+    "ProductCategoryId": 1,
+    "Name": "Clay",
+    "BaseProductionCount": 30,
+    "BaseProductionPrice": 2,
+    "DeliveryPrice": 0.8,
+    "Volume": 0.2,
+    "TechImpactQuality": 0.5,
+    "ToolImpactQuality": 0.3,
+    "WorkerImpactQuality": 0.2,
+
+    "TechImpactQuantity": 0.5,
+    "ToolImpactQuantity": 0.3,
+    "WorkerImpactQuantity": 0.2,
+    "IconPath": "Resources\\Products\\Icons\\icon_clay.png",
+    "ImagePath": "Resources\\Products\\Images\\clay.png"
+  },
+  {
+    "ProductDefinitionId": 8,
+    "ProductCategoryId": 1,
+    "Name": "Coal",
+    "BaseProductionCount": 200,
+    "BaseProductionPrice": 0.8,
+    "DeliveryPrice": 0.2,
+    "Volume": 0.05,
+    "TechImpactQuality": 0.3,
+    "ToolImpactQuality": 0.4,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.3,
+    "ToolImpactQuantity": 0.4,
+    "WorkerImpactQuantity": 0.3,
+    "IconPath": "Resources\\Products\\Icons\\icon_coal.png",
+    "ImagePath": "Resources\\Products\\Images\\coal.png"
+  },
+  {
+    "ProductDefinitionId": 9,
+    "ProductCategoryId": 1,
+    "Name": "Iron Ore",
+    "BaseProductionCount": 150,
+    "BaseProductionPrice": 0.3,
+    "DeliveryPrice": 0.1,
+    "Volume": 0.05,
+    "TechImpactQuality": 0.3,
+    "ToolImpactQuality": 0.4,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.3,
+    "ToolImpactQuantity": 0.4,
+    "WorkerImpactQuantity": 0.3,
+    "IconPath": "Resources\\Products\\Icons\\icon_iron_ore.png",
+    "ImagePath": "Resources\\Products\\Images\\iron_ore.png"
+  },
+  {
+    "ProductDefinitionId": 10,
+    "ProductCategoryId": 1,
+    "Name": "Cooper Ore",
+    "BaseProductionCount": 120,
+    "BaseProductionPrice": 0.5,
+    "DeliveryPrice": 0.1,
+    "Volume": 0.05,
+    "TechImpactQuality": 0.3,
+    "ToolImpactQuality": 0.4,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.3,
+    "ToolImpactQuantity": 0.4,
+    "WorkerImpactQuantity": 0.3,
+    "IconPath": "Resources\\Products\\Icons\\icon_cooper_ore.png",
+    "ImagePath": "Resources\\Products\\Images\\cooper_ore.png"
+  },
+  {
+    "ProductDefinitionId": 12,
+    "ProductCategoryId": 1,
+    "Name": "Quartz",
+    "BaseProductionCount": 80,
+    "BaseProductionPrice": 1.2,
+    "DeliveryPrice": 0.4,
+    "Volume": 0.02,
+    "TechImpactQuality": 0.2,
+    "ToolImpactQuality": 0.4,
+    "WorkerImpactQuality": 0.4,
+
+    "TechImpactQuantity": 0.2,
+    "ToolImpactQuantity": 0.4,
+    "WorkerImpactQuantity": 0.4,
+    "IconPath": "Resources\\Products\\Icons\\icon_quartz.png",
+    "ImagePath": "Resources\\Products\\Images\\quartz.png"
+  },
+  {
+    "ProductDefinitionId": 5,
+    "ProductCategoryId": 2,
+    "Name": "Table",
+    "BaseProductionCount": 10,
+    "BaseProductionPrice": 45.0,
+    "DeliveryPrice": 1.5,
+    "Volume": 1,
+    "TechImpactQuality": 0.2,
+    "ToolImpactQuality": 0.2,
+    "WorkerImpactQuality": 0.3,
+    "TechImpactQuantity": 0.1,
+    "ToolImpactQuantity": 0.2,
+    "WorkerImpactQuantity": 0.3,
+    "IconPath": "Resources\\Products\\Icons\\icon_table.png",
+    "ImagePath": "Resources\\Products\\Images\\table.png",
+
+    "ComponentUnits": [
+      {
+        "ProductDefinitionId": 5,
+        "ComponentDefinitionId": 1,
+        "ProductionQuantity": 5,
+        "QualityImpact": 0.2
+      }
+    ]
+  },
+  {
+    "ProductDefinitionId": 7,
+    "ProductCategoryId": 2,
+    "Name": "Leather Sofa",
+    "BaseProductionCount": 7,
+    "BaseProductionPrice": 110.0,
+    "DeliveryPrice": 3.0,
+    "Volume": 2,
+    "TechImpactQuality": 0.2,
+    "ToolImpactQuality": 0.1,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.1,
+    "ToolImpactQuantity": 0.2,
+    "WorkerImpactQuantity": 0.3,
+    "IconPath": "Resources\\Products\\Icons\\icon_sofa.png",
+    "ImagePath": "Resources\\Products\\Images\\sofa.png",
+
+    "ComponentUnits": [
+      {
+        "ComponentDefinitionId": 1,
+        "ProductionQuantity": 5,
+        "QualityImpact": 0.2
+      },
+      {
+        "ComponentDefinitionId": 2,
+        "ProductionQuantity": 5,
+        "QualityImpact": 0.2
+      }
+    ]
+  },
+  {
+    "ProductDefinitionId": 3,
+    "ProductCategoryId": 2,
+    "Name": "Bed",
+    "BaseProductionCount": 10,
+    "BaseProductionPrice": 60.0,
+    "DeliveryPrice": 2.0,
+    "Volume": 2,
+    "TechImpactQuality": 0.3,
+    "ToolImpactQuality": 0.1,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.1,
+    "ToolImpactQuantity": 0.2,
+    "WorkerImpactQuantity": 0.3,
+    "IconPath": "Resources\\Products\\Icons\\icon_bed.png",
+    "ImagePath": "Resources\\Products\\Images\\bed.png",
+
+    "ComponentUnits": [
+      {
+        "ComponentDefinitionId": 1,
+        "ProductionQuantity": 4,
+        "QualityImpact": 0.3
+      }
+    ]
+  },
+  {
+    "ProductDefinitionId": 4,
+    "ProductCategoryId": 2,
+    "Name": "Chair",
+    "BaseProductionCount": 15,
+    "BaseProductionPrice": 35.0,
+    "DeliveryPrice": 1.0,
+    "Volume": 1,
+    "TechImpactQuality": 0.3,
+    "ToolImpactQuality": 0.1,
+    "WorkerImpactQuality": 0.4,
+
+    "TechImpactQuantity": 0.1,
+    "ToolImpactQuantity": 0.2,
+    "WorkerImpactQuantity": 0.3,
+    "IconPath": "Resources\\Products\\Icons\\icon_chair.png",
+    "ImagePath": "Resources\\Products\\Images\\chair.png",
+
+    "ComponentUnits": [
+      {
+        "ComponentDefinitionId": 1,
+        "ProductionQuantity": 2,
+        "QualityImpact": 0.2
+      }
+    ]
+  },
+  {
+    "ProductDefinitionId": 11,
+    "ProductCategoryId": 3,
+    "Name": "Clayware",
+    "BaseProductionCount": 35,
+    "BaseProductionPrice": 12.0,
+    "DeliveryPrice": 0.3,
+    "Volume": 0.1,
+    "TechImpactQuality": 0.4,
+    "ToolImpactQuality": 0.05,
+    "WorkerImpactQuality": 0.3,
+
+    "TechImpactQuantity": 0.1,
+    "ToolImpactQuantity": 0.2,
+    "WorkerImpactQuantity": 0.3,
+    "IconPath": "Resources\\Products\\Icons\\icon_clayware.png",
+    "ImagePath": "Resources\\Products\\Images\\clayware.png",
+
+    "ComponentUnits": [
+      {
+        "ComponentDefinitionId": 6,
+        "ProductionQuantity": 4,
+        "QualityImpact": 0.25
+      }
+    ]
+  }
+]
