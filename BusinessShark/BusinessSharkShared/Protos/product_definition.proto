@@ -1,5 +1,7 @@
 ﻿syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option csharp_namespace = "BusinessSharkService";
 
 package product_definition;
@@ -9,7 +11,7 @@ service ProductDefinitionService {
 }
 
 message ProductDefinitionRequest {
-  uint32 Timestamp = 1;
+  google.protobuf.Timestamp Timestamp = 1;
 }
 
 message ComponentUnitGrpc {
@@ -38,5 +40,5 @@ message ProductDefinitionGrpc {
 
 message ProductDefinitionResponse {
 	repeated ProductDefinitionGrpc ProductDefinitions = 1;
-	uint32 Timestamp = 2;
+	google.protobuf.Timestamp UpdatedAt = 2;
 }

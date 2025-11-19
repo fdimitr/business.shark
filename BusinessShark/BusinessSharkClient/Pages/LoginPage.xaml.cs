@@ -1,24 +1,26 @@
+using BusinessSharkClient.Data.Sync;
 using BusinessSharkClient.Logic;
 using BusinessSharkService;
-using CommunityToolkit.Maui.Extensions;
 using Grpc.Core;
 
 namespace BusinessSharkClient.Pages;
 
 public partial class LoginPage : ContentPage
 {
-    private AuthService.AuthServiceClient _authServiceClient;
-    private GlobalDataProvider _globalDataProvider;
+    private readonly AuthService.AuthServiceClient _authServiceClient;
+    private readonly GlobalDataProvider _globalDataProvider;
+    private readonly ProductDefinitionSyncHandler _productDefinitionSyncHandler;
 
-    public LoginPage(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider)
+    public LoginPage(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider, ProductDefinitionSyncHandler productDefinitionSyncHandler)
 	{
 		InitializeComponent();
         _authServiceClient = authServiceClient;
         _globalDataProvider = globalDataProvider;
+        _productDefinitionSyncHandler = productDefinitionSyncHandler;
         Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
     }
 
-    private void OnCreateAcountClicked(object sender, EventArgs e)
+    private void OnCreateAccountClicked(object sender, EventArgs e)
     {
         // Goto to shell application main page
         if (Application.Current!.Windows.Count > 0)
@@ -53,6 +55,8 @@ public partial class LoginPage : ContentPage
 
                 // Load global data
                 ShowPopup("Synchronizing data ....");
+
+                await _productDefinitionSyncHandler.PullAsync();
                 await _globalDataProvider.LoadData();
 
                 // Goto to shell application main page

@@ -1,6 +1,12 @@
 using BusinessSharkClient.Data;
+using BusinessSharkClient.Data.Entities;
+using BusinessSharkClient.Data.Repositories;
+using BusinessSharkClient.Data.Repositories.Interfaces;
+using BusinessSharkClient.Data.Sync;
+using BusinessSharkClient.Data.Sync.Interfaces;
 using BusinessSharkClient.Interceptors;
 using BusinessSharkClient.Logic;
+using BusinessSharkClient.Logic.Models;
 using BusinessSharkClient.Logic.System;
 using CommunityToolkit.Maui;
 using Grpc.Core;
@@ -127,6 +133,15 @@ namespace BusinessSharkClient
                 var invoker = services.GetRequiredService<CallInvoker>();
                 return new BusinessSharkService.DivisionSizeService.DivisionSizeServiceClient(invoker);
             });
+
+            // Repositories
+            builder.Services.AddScoped(typeof(ILocalRepository<>), typeof(EfLocalRepository<>));
+            builder.Services.AddScoped<ProductDefinitionRepository>();
+            builder.Services.AddScoped<ComponentUnitRepository>();
+
+            // Sync Handlers
+            builder.Services.AddScoped<ISyncHandler<ProductDefinitionEntity>, ProductDefinitionSyncHandler>();
+            builder.Services.AddScoped<ProductDefinitionSyncHandler>();
 
             // Providers
             builder.Services.AddSingleton<GlobalDataProvider>();

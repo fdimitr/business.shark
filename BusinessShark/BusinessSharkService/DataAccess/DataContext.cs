@@ -82,14 +82,6 @@ namespace BusinessSharkService.DataAccess
                 .HasForeignKey(p => p.WarehouseId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ProductDefinition>()
-                .Property(p => p.TimeStamp)
-                .IsRowVersion()
-                .IsConcurrencyToken()
-                .HasColumnName("xmin")
-                .HasColumnType("xid")
-                .ValueGeneratedOnAddOrUpdate();
-
             modelBuilder.Entity<World>()
 
                 .HasData(new World
@@ -130,10 +122,12 @@ namespace BusinessSharkService.DataAccess
                 // добавляем данные в модель
                 foreach (var productDefinition in data)
                 {
+                    productDefinition.UpdatedAt = DateTime.UtcNow;
                     modelBuilder.Entity<ProductDefinition>().HasData(productDefinition);
 
                     foreach (var componentUnit in productDefinition.ComponentUnits)
                     {
+                        componentUnit.UpdatedAt = DateTime.UtcNow;
                         componentUnit.ProductDefinitionId = productDefinition.ProductDefinitionId;
                         // Seeding Component Units
                         modelBuilder.Entity<ComponentUnit>().HasData(componentUnit);

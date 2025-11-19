@@ -85,7 +85,7 @@
                         x:Name="BtnCreateAccount"
                         Text="Create your Account"
                         TextColor="{DynamicResource Primary}"
-                        Clicked="OnCreateAcountClicked"/>
+                        Clicked="OnCreateAccountClicked"/>
             </VerticalStackLayout>
             <Grid x:Name="OverlayPanel"
                         VerticalOptions="Center"

@@ -1,9 +1,11 @@
-﻿using BusinessSharkClient.Data.Entities.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using BusinessSharkClient.Data.Entities.Interfaces;
 
 namespace BusinessSharkClient.Data.Entities
 {
-    public class ClientProductDefinition : IEntity
+    public class ProductDefinitionEntity : IEntity
     {
+        [Key]
         public int Id { get; set; }
         public DateTime UpdatedAt { get; set; }
         public bool IsDirty { get; set; }
@@ -20,7 +22,7 @@ namespace BusinessSharkClient.Data.Entities
         public double ToolImpactQuantity { get; set; }
         public double WorkerImpactQuantity { get; set; }
         public double DeliveryPrice { get; set; }
-        public uint TimeStamp { get; set; }
         public byte[] Image { get; set; }
+        public List<ComponentUnitEntity> ComponentUnits { get; set; } = new();
     }
 }

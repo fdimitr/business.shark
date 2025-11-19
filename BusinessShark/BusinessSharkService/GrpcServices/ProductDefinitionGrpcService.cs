@@ -1,5 +1,6 @@
 ﻿using BusinessSharkService.Handlers;
 using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 
@@ -19,40 +20,43 @@ namespace BusinessSharkService.GrpcServices
 
         public override async Task<ProductDefinitionResponse> Sync(ProductDefinitionRequest request, ServerCallContext context)
         {
-            var productDefinitions = await _productDefinitionHandler.PreloadProductDefinitionsAsync(request.Timestamp);
+            var productDefinitions = await _productDefinitionHandler.PreloadProductDefinitionsAsync(request.Timestamp.ToDateTime());
 
             var response = new ProductDefinitionResponse();
-            response.ProductDefinitions.AddRange(productDefinitions.ConvertAll(pd => new ProductDefinitionGrpc
+            if (productDefinitions.Any())
             {
-                ProductDefinitionId = pd.ProductDefinitionId,
-                ProductCategoryId = pd.ProductCategoryId,
-                Name = pd.Name,
-                Volume = pd.Volume,
-                BaseProductionCount = pd.BaseProductionCount,
-                BaseProductionPrice = (double)pd.BaseProductionPrice,
-                TechImpactQuality = pd.TechImpactQuality,
-                ToolImpactQuality = pd.ToolImpactQuality,
-                WorkerImpactQuality = pd.WorkerImpactQuality,
-
-                TechImpactQuantity = pd.TechImpactQuantity,
-                ToolImpactQuantity = pd.ToolImpactQuantity,
-                WorkerImpactQuantity = pd.WorkerImpactQuantity,
-
-                DeliveryPrice = (double)pd.DeliveryPrice,
-                Image = ByteString.CopyFrom(GetImage(pd.ImagePath)),
-
-                ComponentUnits =
+                response.ProductDefinitions.AddRange(productDefinitions.ConvertAll(pd => new ProductDefinitionGrpc
                 {
-                    pd.ComponentUnits.ConvertAll(cu => new ComponentUnitGrpc
-                    {
-                        ProductionQuantity = cu.ProductionQuantity,
-                        ComponentDefinitionId = cu.ComponentDefinitionId,
-                        QualityImpact = cu.QualityImpact,
-                    })
-                },
-            }));
+                    ProductDefinitionId = pd.ProductDefinitionId,
+                    ProductCategoryId = pd.ProductCategoryId,
+                    Name = pd.Name,
+                    Volume = pd.Volume,
+                    BaseProductionCount = pd.BaseProductionCount,
+                    BaseProductionPrice = (double)pd.BaseProductionPrice,
+                    TechImpactQuality = pd.TechImpactQuality,
+                    ToolImpactQuality = pd.ToolImpactQuality,
+                    WorkerImpactQuality = pd.WorkerImpactQuality,
 
-            response.Timestamp = productDefinitions.Max(p => p.TimeStamp);
+                    TechImpactQuantity = pd.TechImpactQuantity,
+                    ToolImpactQuantity = pd.ToolImpactQuantity,
+                    WorkerImpactQuantity = pd.WorkerImpactQuantity,
+
+                    DeliveryPrice = (double)pd.DeliveryPrice,
+                    Image = ByteString.CopyFrom(GetImage(pd.ImagePath)),
+
+                    ComponentUnits =
+                    {
+                        pd.ComponentUnits.ConvertAll(cu => new ComponentUnitGrpc
+                        {
+                            ProductionQuantity = cu.ProductionQuantity,
+                            ComponentDefinitionId = cu.ComponentDefinitionId,
+                            QualityImpact = cu.QualityImpact,
+                        })
+                    },
+                }));
+
+                response.UpdatedAt = Timestamp.FromDateTime(productDefinitions.Max(p => p.UpdatedAt));
+            }
 
             return response;
         }

@@ -58,9 +58,7 @@ namespace BusinessSharkService.DataAccess.Models.Items
         [StringLength(50)]
         public string? ImagePath { get; set; }
 
-        [Timestamp]
-        [Column("xmin", TypeName = "xid")]
-        public uint TimeStamp { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         // Thresholds: monetary -> decimal, attractiveness coefficient -> double.
         //public double MinAttractivenessThreshold { get; set; } = 0d;
@@ -68,9 +66,6 @@ namespace BusinessSharkService.DataAccess.Models.Items
 
         // Demand coefficient
         public double Necessity { get; set; }
-
-
-
 
         public void CheckQualityTotalImpact()
         {

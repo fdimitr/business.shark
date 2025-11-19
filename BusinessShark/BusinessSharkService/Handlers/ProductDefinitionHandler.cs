@@ -4,18 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSharkService.Handlers
 {
-    public class ProductDefinitionHandler
+    public class ProductDefinitionHandler(DataContext dbContext)
     {
-        private  readonly DataContext _dbContext;
-        public ProductDefinitionHandler(DataContext dbContext)
+        public async Task<List<ProductDefinition>> PreloadProductDefinitionsAsync(DateTime updatedAt)
         {
-            _dbContext = dbContext;
-        }
-
-        public async Task<List<ProductDefinition>> PreloadProductDefinitionsAsync(uint timeStamp)
-        {
-            var productDefinitions = await _dbContext.ProductDefinitions.Include(p=>p.ComponentUnits).ToListAsync();
-            return productDefinitions.Where(pd => pd.TimeStamp > timeStamp).ToList();
+            var productDefinitions = await dbContext.ProductDefinitions
+                .Where(pd => pd.UpdatedAt > updatedAt)
+                .Include(p=>p.ComponentUnits).ToListAsync();
+            return productDefinitions;
         }
     }
 }

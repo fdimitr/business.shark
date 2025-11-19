@@ -49,9 +49,9 @@ public partial class CreateAccountPage : ContentPage
     // Обработчик кнопки "Log in"
     private void OnNavigateToLoginClicked(object sender, EventArgs e)
     {
-        if (Application.Current!.Windows.Count > 0)
-        {
-            Application.Current.Windows[0].Page = new LoginPage(_authServiceClient, _globalDataProvider);
-        }
+        //if (Application.Current!.Windows.Count > 0)
+        //{
+        //    Application.Current.Windows[0].Page = new LoginPage(_authServiceClient, _globalDataProvider);
+        //}
     }
 }

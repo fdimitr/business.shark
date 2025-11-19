@@ -1,29 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BusinessSharkClient.Data.Entities;
+﻿using BusinessSharkClient.Data.Entities;
 using BusinessSharkClient.Data.Repositories.Interfaces;
 using BusinessSharkClient.Data.Sync.Interfaces;
 using BusinessSharkService;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging;
 
 namespace BusinessSharkClient.Data.Sync
 {
     public class ProductDefinitionSyncHandler(
-        ILocalRepository<ClientProductDefinition> repo,
+        ILocalRepository<ProductDefinitionEntity> repo,
         ProductDefinitionService.ProductDefinitionServiceClient remote,
         AppDbContext db,
-        ILogger<ProductDefinitionSyncHandler> logger) : ISyncHandler<ClientProductDefinition>
+        ILogger<ProductDefinitionSyncHandler> logger) : ISyncHandler<ProductDefinitionEntity>
     {
-        private readonly ILocalRepository<ClientProductDefinition> _repo = repo;
-        private ProductDefinitionService.ProductDefinitionServiceClient _remote = remote;
-        private readonly AppDbContext _db = db;
-        private readonly ILogger<ProductDefinitionSyncHandler> _logger = logger;
-        private const int BatchSize = 50;
-
         public string EntityName => "ProductDefinition";
+
         public Task<bool> PushAsync(CancellationToken token = default)
         {
             throw new NotImplementedException();
@@ -34,16 +25,21 @@ namespace BusinessSharkClient.Data.Sync
             // Получаем lastSync из AppState
             var lastSync = await GetLastSyncAsync();
 
-            var pull = await _remote.SyncAsync(new ProductDefinitionRequest { Timestamp = (uint)(lastSync ?? 0) });
+            var pull = await remote.SyncAsync(new ProductDefinitionRequest
+            {
+                Timestamp = lastSync != null
+                    ? Timestamp.FromDateTime(lastSync.Value)
+                    : Timestamp.FromDateTime(DateTime.MinValue.ToUniversalTime())
+            });
 
             if (!pull.ProductDefinitions.Any()) return false;
 
             // Обновляем локально в транзакции
-            await using var tx = await _db.Database.BeginTransactionAsync(token);
+            await using var tx = await db.Database.BeginTransactionAsync(token);
             try
             {
                 // apply updated/inserted
-                var upserts = pull.ProductDefinitions.Select(u => new ClientProductDefinition
+                var upserts = pull.ProductDefinitions.Select(u => new ProductDefinitionEntity
                 {
                     Id = u.ProductDefinitionId,
                     Name = u.Name,
@@ -60,46 +56,52 @@ namespace BusinessSharkClient.Data.Sync
                     ToolImpactQuantity = u.ToolImpactQuantity,
                     WorkerImpactQuantity = u.WorkerImpactQuantity,
                     DeliveryPrice = u.DeliveryPrice,
-                    UpdatedAt = DateTime.UtcNow,
-                    TimeStamp = pull.Timestamp,
-                    Image = u.Image.ToByteArray()
+                    UpdatedAt = pull.UpdatedAt.ToDateTime(),
+                    Image = u.Image.ToByteArray(),
+                    ComponentUnits = u.ComponentUnits.Select(cuGrpc => new ComponentUnitEntity
+                    {
+                        ProductDefinitionId = u.ProductDefinitionId,
+                        Id = cuGrpc.ComponentDefinitionId,
+                        ProductionQuantity = cuGrpc.ProductionQuantity,
+                        QualityImpact = cuGrpc.QualityImpact
+                    }).ToList()
                 });
 
-                await _repo.UpsertRangeAsync(upserts);
+                await repo.UpsertRangeAsync(upserts);
 
-                await SetLastSyncAsync(pull.Timestamp);
+                await SetLastSyncAsync(pull.UpdatedAt.ToDateTime());
                 await tx.CommitAsync(token);
                 return true;
             }
             catch (Exception ex)
             {
                 await tx.RollbackAsync(token);
-                _logger.LogError(ex, "Pull failed for {Entity}", EntityName);
+                logger.LogError(ex, "Pull failed for {Entity}", EntityName);
                 return false;
             }
         }
 
         // Helpers for lastSync (используйте таблицу AppState)
-        private async Task<uint?> GetLastSyncAsync()
+        private async Task<DateTime?> GetLastSyncAsync()
         {
-            var appState = await _db.DataStates.FindAsync($"{EntityName}_lastsync");
+            var appState = await db.DataStates.FindAsync($"{EntityName}_lastsync");
             if (appState == null) return null;
-            return appState.Value;
+            return DateTime.SpecifyKind(appState.Value, DateTimeKind.Utc);
         }
 
-        private async Task SetLastSyncAsync(uint ts)
+        private async Task SetLastSyncAsync(DateTime dt)
         {
             var key = $"{EntityName}_lastsync";
-            var appState = await _db.DataStates.FindAsync(key);
+            var appState = await db.DataStates.FindAsync(key);
             if (appState == null)
             {
-                _db.DataStates.Add(new DataState { Key = key, Value = ts });
+                db.DataStates.Add(new DataState { Key = key, Value = dt });
             }
             else
             {
-                appState.Value = ts;
+                appState.Value = dt;
             }
-            await _db.SaveChangesAsync();
+            await db.SaveChangesAsync();
         }
     }
 }

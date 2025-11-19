@@ -1,4 +1,5 @@
-﻿using BusinessSharkClient.Logic;
+﻿using BusinessSharkClient.Data.Sync;
+using BusinessSharkClient.Logic;
 using BusinessSharkClient.Logic.Models;
 using BusinessSharkClient.Pages;
 using BusinessSharkService;
@@ -13,28 +14,29 @@ namespace BusinessSharkClient
             {
                 canvas.StrokeColor = Color.FromRgb(235,235,235);
                 canvas.StrokeSize = 1;
-                canvas.StrokeDashPattern = new float[] { 4, 2 }; // 4px линия, 2px пробел
+                canvas.StrokeDashPattern = [4, 2]; // 4px линия, 2px пробел
                 canvas.DrawLine(0, 0, dirtyRect.Width, 0);
             }
         }
 
         public static SummaryModel Summary { get; } = new();
 
-        private CompanyService.CompanyServiceClient _companyServiceClient;
-        private AuthService.AuthServiceClient _authServiceClient;
-        private GlobalDataProvider _globalDataProvider;
-        private SummaryService.SummaryServiceClient _summaryServiceClient;
+        private readonly AuthService.AuthServiceClient _authServiceClient;
+        private readonly GlobalDataProvider _globalDataProvider;
+        private readonly SummaryService.SummaryServiceClient _summaryServiceClient;
+        private readonly ProductDefinitionSyncHandler _productDefinitionSyncHandler;
 
         public App(AuthService.AuthServiceClient authServiceClient,
             CompanyService.CompanyServiceClient companyServiceClient,
             SummaryService.SummaryServiceClient summaryServiceClient,
-            GlobalDataProvider globalDataProvider)
+            ProductDefinitionSyncHandler productDefinitionSyncHandler,
+        GlobalDataProvider globalDataProvider)
         {
             InitializeComponent();
             _authServiceClient = authServiceClient;
-            _companyServiceClient = companyServiceClient;
             _globalDataProvider = globalDataProvider;
             _summaryServiceClient = summaryServiceClient;
+            _productDefinitionSyncHandler = productDefinitionSyncHandler;
 
             BindingContext = Summary;
 
@@ -43,7 +45,7 @@ namespace BusinessSharkClient
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new LoginPage(_authServiceClient, _globalDataProvider));
+            return new Window(new LoginPage(_authServiceClient, _globalDataProvider, _productDefinitionSyncHandler));
         }
 
         public async void OnLoad(object sender, EventArgs e)

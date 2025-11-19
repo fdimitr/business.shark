@@ -1,78 +1,66 @@
-﻿using BusinessSharkClient.Logic.Models;
+﻿using BusinessSharkClient.Data.Repositories;
+using BusinessSharkClient.Logic.Models;
 using BusinessSharkService;
 
 namespace BusinessSharkClient.Logic
 {
-    public class GlobalDataProvider
+    public class GlobalDataProvider(ProductDefinitionRepository productDefinitionRepository)
     {
         public List<ProductDefinitionModel> ProductDefinitions { get; set; } = new List<ProductDefinitionModel>();
         public List<ProductCategoryModel> ProductCategories { get; set; } = new List<ProductCategoryModel>();
 
-        private ProductDefinitionService.ProductDefinitionServiceClient _productDefinitionClient;
-        private ProductCategoryService.ProductCategoryServiceClient _productCategoryClient;
-
-        public GlobalDataProvider(ProductDefinitionService.ProductDefinitionServiceClient productDefinitionClient,
-            ProductCategoryService.ProductCategoryServiceClient productCategoryClient)
-        {
-            _productDefinitionClient = productDefinitionClient;
-            _productCategoryClient = productCategoryClient;
-        }
-
         public async Task LoadData()
         {
             // Product Category
-            var responseCategory = await _productCategoryClient.LoadAsync(new Google.Protobuf.WellKnownTypes.Empty());
-            if (responseCategory == null) return;
+            //var responseCategory = await _productCategoryClient.LoadAsync(new Google.Protobuf.WellKnownTypes.Empty());
+            //if (responseCategory == null) return;
 
-            ProductCategories.Clear();
-            foreach (var catGrpc in responseCategory.ProductCategories)
-            {
-                var catModel = new ProductCategoryModel
-                {
-                    ProductCategoryId = catGrpc.ProductCategoryId,
-                    Name = catGrpc.Name,
-                    SortOrder = catGrpc.SortOrder
-                };
-                ProductCategories.Add(catModel);
-            }
+            //ProductCategories.Clear();
+            //foreach (var catGrpc in responseCategory.ProductCategories)
+            //{
+            //    var catModel = new ProductCategoryModel
+            //    {
+            //        ProductCategoryId = catGrpc.ProductCategoryId,
+            //        Name = catGrpc.Name,
+            //        SortOrder = catGrpc.SortOrder
+            //    };
+            //    ProductCategories.Add(catModel);
+            //}
 
             // Product Definition
-            var responseDefinition = await _productDefinitionClient.SyncAsync(new ProductDefinitionRequest { Timestamp = 0 });
-            if (responseDefinition == null) return;
+            var definitions = await productDefinitionRepository.GetAllAsync();
 
             ProductDefinitions.Clear();
-            foreach (var defGrpc in responseDefinition.ProductDefinitions)
+            foreach (var def in definitions)
             {
                 var defModel = new ProductDefinitionModel
                 {
-                    ProductDefinitionId = defGrpc.ProductDefinitionId,
-                    ProductCategoryId = defGrpc.ProductCategoryId,
-                    Name = defGrpc.Name,
+                    ProductDefinitionId = def.Id,
+                    ProductCategoryId = def.ProductCategoryId,
+                    Name = def.Name,
 
-                    BaseProductionCount = defGrpc.BaseProductionCount,
-                    DeliveryPrice = (decimal)defGrpc.DeliveryPrice,
-                    Volume = defGrpc.Volume,
+                    BaseProductionCount = def.BaseProductionCount,
+                    DeliveryPrice = (decimal)def.DeliveryPrice,
+                    Volume = def.Volume,
 
-                    TechImpactQuality = defGrpc.TechImpactQuality,
-                    ToolImpactQuality = defGrpc.ToolImpactQuality,
-                    WorkerImpactQuality = defGrpc.WorkerImpactQuality,
-                    TechImpactQuantity = defGrpc.TechImpactQuantity,
+                    TechImpactQuality = def.TechImpactQuality,
+                    ToolImpactQuality = def.ToolImpactQuality,
+                    WorkerImpactQuality = def.WorkerImpactQuality,
+                    TechImpactQuantity = def.TechImpactQuantity,
 
-                    ToolImpactQuantity = defGrpc.ToolImpactQuantity,
-                    WorkerImpactQuantity = defGrpc.WorkerImpactQuantity,
-                    Image = ImageSource.FromStream(() => new MemoryStream(defGrpc.Image.ToByteArray())),
-                    ComponentUnits = defGrpc.ComponentUnits.Select(cuGrpc => new ComponentUnitModel
+                    ToolImpactQuantity = def.ToolImpactQuantity,
+                    WorkerImpactQuantity = def.WorkerImpactQuantity,
+                    Image = ImageSource.FromStream(() => new MemoryStream(def.Image)),
+                    ComponentUnits = def.ComponentUnits.Select(cuGrpc => new ComponentUnitModel
                     {
-                        ProductDefinitionId = defGrpc.ProductDefinitionId,
-                        ComponentDefinitionId = cuGrpc.ComponentDefinitionId,
+                        ProductDefinitionId = def.Id,
+                        ComponentDefinitionId = cuGrpc.Id,
                         ProductionQuantity = cuGrpc.ProductionQuantity,
                         QualityImpact = cuGrpc.QualityImpact
                     }).ToList()
                 };
 
                 ProductDefinitions.Add(defModel);
-
-
             }
         }
     }

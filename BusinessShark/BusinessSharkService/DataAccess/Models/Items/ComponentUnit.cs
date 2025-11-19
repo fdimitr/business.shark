@@ -20,5 +20,6 @@ namespace BusinessSharkService.DataAccess.Models.Items
         public double QualityImpact { get; set; }
 
         public ProductDefinition? ProductDefinition { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
