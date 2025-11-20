@@ -12,6 +12,9 @@ namespace BusinessSharkService.DataAccess.Models.Location
         [Required]
         [StringLength(30)]
         public required string Name { get; set; }
+
+        [Required]
+        [StringLength(2)]
         public required string Code { get; set; }
 
         [Required]

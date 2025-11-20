@@ -43,19 +43,16 @@ namespace BusinessSharkClient.Data.Sync
             }
         }
 
-        public async Task StartCriticalBackgroundSync(CancellationToken token)
+        public async Task StartGlobalDataSync(CancellationToken token)
         {
             // load and sorting handlers
             foreach (var handler in handlers.Where(h => h.Priority == SyncPriority.Critical).OrderBy(h => h.Priority))
-                await _queue.Writer.WriteAsync(handler, token);{
-}
-            // loading sync worker tasks
-            for (int i = 0; i < 2; i++)
             {
                 // Critical sync usually company independent
-                _ = Task.Run(() => WorkerLoop(0, token), token);
+                await handler.PullAsync(0, token);
             }
         }
     }
+
 
 }

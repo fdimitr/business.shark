@@ -9,7 +9,6 @@ namespace BusinessSharkClient.Data.Entities
     public class ComponentUnitEntity : IEntity
     {
         public int Id { get; set; }
-        public DateTime UpdatedAt { get; set; }
         public bool IsDirty { get; set; }
         public bool IsDeleted { get; set; }
         public int ProductDefinitionId { get; set; }

@@ -53,8 +53,7 @@ namespace BusinessSharkClient.Data.Sync
                     Id = u.ProductCategoryId,
                     Name = u.Name,
                     IsDeleted = false,
-                    IsDirty = false,
-                    UpdatedAt = pull.UpdatedAt.ToDateTime()
+                    IsDirty = false
                 });
 
                 await repo.UpsertRangeAsync(upserts);

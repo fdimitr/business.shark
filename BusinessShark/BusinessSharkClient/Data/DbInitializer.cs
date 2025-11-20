@@ -2,7 +2,7 @@
 {
     public static class DbInitializer
     {
-        private const bool DEV_RESET_DB = false;
+        private const bool DEV_RESET_DB = true;
 
         public static void Initialize(AppDbContext db)
         {

@@ -58,7 +58,6 @@ namespace BusinessSharkClient.Data.Sync
                     ToolImpactQuantity = u.ToolImpactQuantity,
                     WorkerImpactQuantity = u.WorkerImpactQuantity,
                     DeliveryPrice = u.DeliveryPrice,
-                    UpdatedAt = pull.UpdatedAt.ToDateTime(),
                     Image = u.Image.ToByteArray(),
                     ComponentUnits = u.ComponentUnits.Select(cuGrpc => new ComponentUnitEntity
                     {

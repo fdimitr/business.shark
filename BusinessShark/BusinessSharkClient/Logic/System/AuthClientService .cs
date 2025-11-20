@@ -10,19 +10,13 @@ namespace BusinessSharkClient.Logic.System
         Task<bool> RefreshTokenAsync();
     }
 
-    public class AuthClientService : IAuthService
+    public class AuthClientService(AuthService.AuthServiceClient authServiceClient) : IAuthService
     {
-        private AuthService.AuthServiceClient _authServiceClient;
         private readonly SemaphoreSlim _refreshLock = new(1, 1);
-
-        public AuthClientService(AuthService.AuthServiceClient authServiceClient)
-        {
-            _authServiceClient = authServiceClient;
-        }
 
         public async Task<string> GetValidAccessTokenAsync()
         {
-            var accessToken = SecureStorage.GetAsync("access_token").GetAwaiter().GetResult();
+            var accessToken = await SecureStorage.GetAsync("access_token").ConfigureAwait(false);
 
             if (IsTokenExpiringSoon(accessToken))
             {
@@ -30,7 +24,7 @@ namespace BusinessSharkClient.Logic.System
                 try
                 {
                     // Проверим снова после ожидания — возможно, другой поток уже обновил
-                    accessToken = SecureStorage.GetAsync("access_token").GetAwaiter().GetResult();
+                    accessToken = await SecureStorage.GetAsync("access_token").ConfigureAwait(false);
                     if (IsTokenExpiringSoon(accessToken))
                     {
                         await RefreshTokenAsync();
@@ -42,13 +36,13 @@ namespace BusinessSharkClient.Logic.System
                 }
             }
 
-            accessToken = SecureStorage.GetAsync("access_token").GetAwaiter().GetResult();
+            accessToken = await SecureStorage.GetAsync("access_token").ConfigureAwait(false);
             return accessToken ?? string.Empty;
         }
 
         public async Task<bool> RefreshTokenAsync()
         {
-            var refreshToken = SecureStorage.GetAsync("refresh_token").GetAwaiter().GetResult();
+            var refreshToken = await SecureStorage.GetAsync("refresh_token").ConfigureAwait(false);
 
             if (string.IsNullOrEmpty(refreshToken))
                 return false;
@@ -56,7 +50,7 @@ namespace BusinessSharkClient.Logic.System
             AuthResponse? response = null;
             try
             {
-                response = await _authServiceClient.RefreshTokenAsync(new RefreshRequest { RefreshToken = refreshToken });
+                response = await authServiceClient.RefreshTokenAsync(new RefreshRequest { RefreshToken = refreshToken });
             }
             catch (Exception)
             {
@@ -65,8 +59,8 @@ namespace BusinessSharkClient.Logic.System
 
             if (response == null) return false;
 
-            await SecureStorage.SetAsync("access_token", response.AccessToken);
-            await SecureStorage.SetAsync("refresh_token", response.RefreshToken);
+            await SecureStorage.SetAsync("access_token", response.AccessToken).ConfigureAwait(false);
+            await SecureStorage.SetAsync("refresh_token", response.RefreshToken).ConfigureAwait(false);
 
             return true;
         }

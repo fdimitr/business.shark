@@ -12,7 +12,7 @@ namespace BusinessSharkClient.Data.Repositories
             => await _set.AsNoTracking().OrderBy(x => x.Id).ToListAsync();
 
         public async Task<List<T>> GetDirtyAsync(int batchSize = 100)
-            => await _set.Where(x => x.IsDirty).OrderBy(x => x.UpdatedAt).Take(batchSize).ToListAsync();
+            => await _set.Where(x => x.IsDirty).OrderBy(x => x.Id).Take(batchSize).ToListAsync();
 
         public async Task UpsertAsync(T entity)
         {

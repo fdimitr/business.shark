@@ -7,11 +7,14 @@ namespace BusinessSharkClient.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public DateTime UpdatedAt { get; set; }
         public bool IsDirty { get; set; }
         public bool IsDeleted { get; set; }
         public int ProductCategoryId { get; set; }
-        public string Name { get; set; }
+
+        [Required]
+        [StringLength(30)]
+        public required string Name { get; set; }
+
         public double Volume { get; set; }
         public double BaseProductionCount { get; set; }
         public double BaseProductionPrice { get; set; }
@@ -22,7 +25,7 @@ namespace BusinessSharkClient.Data.Entities
         public double ToolImpactQuantity { get; set; }
         public double WorkerImpactQuantity { get; set; }
         public double DeliveryPrice { get; set; }
-        public byte[] Image { get; set; }
+        public required byte[] Image { get; set; }
         public List<ComponentUnitEntity> ComponentUnits { get; set; } = new();
     }
 }

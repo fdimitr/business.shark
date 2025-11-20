@@ -29,18 +29,6 @@ public partial class LoginPage : ContentPage
         }
     }
 
-    private async void LoginPage_OnLoaded(object? sender, EventArgs e)
-    {
-        try
-        {
-            await _syncEngine.StartCriticalBackgroundSync(CancellationToken.None);
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Error", $"An unexpected error occurred on LoginPage_OnLoaded: {ex.Message}", "OK");
-        }
-    }
-
     private async void OnLoginClicked(object sender, EventArgs e)
 	{
         try
@@ -56,7 +44,6 @@ public partial class LoginPage : ContentPage
             if (string.IsNullOrEmpty(loginResult.AccessToken))
             {
                 await DisplayAlert("Error", "Invalid username or password", "OK");
-                return;
             }
             else
             {
@@ -69,6 +56,7 @@ public partial class LoginPage : ContentPage
 
                 // Load global data
                 ShowPopup("Synchronizing data ....");
+                await _syncEngine.StartGlobalDataSync(CancellationToken.None);
 
                 await _syncEngine.StartBackgroundSync(loginResult.CompanyId, CancellationToken.None);
 
