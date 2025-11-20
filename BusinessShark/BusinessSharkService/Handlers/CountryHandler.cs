@@ -1,28 +1,24 @@
-﻿using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
+﻿using BusinessSharkService.DataAccess;
 using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.Handlers.Divisions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSharkService.Handlers
 {
-    public class CountryHandler
+    public class CountryHandler(
+        DataContext dataContext,
+        FactoryHandler factoryHandler,
+        DistributionCenterHandler storageHandler,
+        MineHandler mineHandler,
+        SawmillHandler sawmillHandler)
     {
-        private readonly FactoryHandler _factoryHandler;
-        private readonly DistributionCenterHandler _storageHandler;
-        private readonly MineHandler _mineHandler;
-        private readonly SawmillHandler _sawmillHandler;
 
-        public CountryHandler(
-            FactoryHandler factoryHandler,
-            DistributionCenterHandler storageHandler,
-            MineHandler mineHandler,
-            SawmillHandler sawmillHandler)
+        public async Task<List<Country>> GetCountriesAsync(DateTime updatedAt)
         {
-            _factoryHandler = factoryHandler;
-            _storageHandler = storageHandler;
-            _mineHandler = mineHandler;
-            _sawmillHandler = sawmillHandler;
+            return await dataContext.Countries
+                .Where(c => c.UpdatedAt > updatedAt)
+                .ToListAsync();
         }
-
 
         public void StartCalculation(CancellationToken stoppingToken, Country country)
         {
@@ -32,27 +28,27 @@ namespace BusinessSharkService.Handlers
                 foreach (var factory in city.Factories)
                 {
                     if (stoppingToken.IsCancellationRequested) break;
-                    _factoryHandler.CalculationOfToolWear(factory);
-                    _factoryHandler.StartCalculation(factory);
+                    factoryHandler.CalculationOfToolWear(factory);
+                    factoryHandler.StartCalculation(factory);
                 }
 
                 foreach (var storage in city.DistributionCenters)
                 {
                     if (stoppingToken.IsCancellationRequested) break;
-                    _storageHandler.CalculationOfToolWear(storage);
-                    _storageHandler.StartCalculation(storage);
+                    storageHandler.CalculationOfToolWear(storage);
+                    storageHandler.StartCalculation(storage);
                 }
                 foreach (var mine in city.Mines)
                 {
                     if (stoppingToken.IsCancellationRequested) break;
-                    _mineHandler.CalculationOfToolWear(mine);
-                    _mineHandler.StartCalculation(mine);
+                    mineHandler.CalculationOfToolWear(mine);
+                    mineHandler.StartCalculation(mine);
                 }
                 foreach (var sawmill in city.Sawmills)
                 {
                     if (stoppingToken.IsCancellationRequested) break;
-                    _sawmillHandler.CalculationOfToolWear(sawmill);
-                    _sawmillHandler.StartCalculation(sawmill);
+                    sawmillHandler.CalculationOfToolWear(sawmill);
+                    sawmillHandler.StartCalculation(sawmill);
                 }
             }
         }
@@ -63,19 +59,19 @@ namespace BusinessSharkService.Handlers
             {
                 foreach (var factory in city.Factories)
                 {
-                    _factoryHandler.CompleteCalculation(factory);
+                    factoryHandler.CompleteCalculation(factory);
                 }
                 foreach (var storage in city.DistributionCenters)
                 {
-                    _storageHandler.CompleteCalculation(storage);
+                    storageHandler.CompleteCalculation(storage);
                 }
                 foreach (var mine in city.Mines)
                 {
-                    _mineHandler.CompleteCalculation(mine);
+                    mineHandler.CompleteCalculation(mine);
                 }
                 foreach (var sawmill in city.Sawmills)
                 {
-                    _sawmillHandler.CompleteCalculation(sawmill);
+                    sawmillHandler.CompleteCalculation(sawmill);
                 }
             }
         }

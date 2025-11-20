@@ -5,6 +5,7 @@ namespace BusinessSharkClient.Data.Sync.Interfaces
     public interface ISyncHandler
     {
         string EntityName { get; }
+        SyncPriority Priority { get; }
         Task<bool> PushAsync(CancellationToken token = default);
         Task<bool> PullAsync(CancellationToken token = default);
     }

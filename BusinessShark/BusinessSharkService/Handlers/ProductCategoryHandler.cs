@@ -4,17 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSharkService.Handlers
 {
-    public class ProductCategoryHandler
+    public class ProductCategoryHandler(DataContext dbContext)
     {
-        private readonly DataContext _dbContext;
-        public ProductCategoryHandler(DataContext dbContext)
+        public async Task<List<ProductCategory>> LoadAsync(DateTime timeStamp)
         {
-            _dbContext = dbContext;
-        }
-
-        public async Task<List<ProductCategory>> LoadAsync()
-        {
-            return await _dbContext.Categories.AsNoTracking().ToListAsync();
+            return await dbContext.Categories.Where(c=>c.UpdatedAt > timeStamp).AsNoTracking().ToListAsync();
         }
     }
 }

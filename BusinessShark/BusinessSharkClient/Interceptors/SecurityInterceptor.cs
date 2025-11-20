@@ -4,15 +4,9 @@ using Grpc.Core.Interceptors;
 
 namespace BusinessSharkClient.Interceptors
 {
-    public class SecurityInterceptor : Interceptor
+    public class SecurityInterceptor(IAuthService authService) : Interceptor
     {
-        private readonly IAuthService _authService;
         private readonly SemaphoreSlim _refreshLock = new(1, 1);
-
-        public SecurityInterceptor(IAuthService authService)
-        {
-            _authService = authService;
-        }
 
         public override AsyncUnaryCall<TResponse> AsyncUnaryCall<TRequest, TResponse>(TRequest request, ClientInterceptorContext<TRequest, TResponse> context, AsyncUnaryCallContinuation<TRequest, TResponse> continuation)
         {
@@ -33,7 +27,7 @@ namespace BusinessSharkClient.Interceptors
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unauthenticated)
             {
                 // Если токен истёк, пробуем обновить
-                if (_authService.RefreshTokenAsync().Result)
+                if (authService.RefreshTokenAsync().Result)
                 {
                     var retryContext = PrepareInterceptorContextAsync(context).GetAwaiter().GetResult();
                     return base.BlockingUnaryCall(request, retryContext, continuation);
@@ -51,7 +45,7 @@ namespace BusinessSharkClient.Interceptors
             where TRequest : class
             where TResponse : class
         {
-            var token = await _authService.GetValidAccessTokenAsync();
+            var token = await authService.GetValidAccessTokenAsync();
 
             var headers = new Metadata
             {
@@ -91,7 +85,7 @@ namespace BusinessSharkClient.Interceptors
                     await _refreshLock.WaitAsync();
                     try
                     {
-                        if (await _authService.RefreshTokenAsync())
+                        if (await authService.RefreshTokenAsync())
                         {
                             var retryContext = await PrepareInterceptorContextAsync(context);
                             var retryCall = base.AsyncUnaryCall(request, retryContext, continuation);

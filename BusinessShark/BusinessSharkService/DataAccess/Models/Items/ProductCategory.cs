@@ -12,5 +12,6 @@ namespace BusinessSharkService.DataAccess.Models.Items
         public required string Name { get; set; }
 
         public int SortOrder { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

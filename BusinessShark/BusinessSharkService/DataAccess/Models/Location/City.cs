@@ -19,6 +19,9 @@ namespace BusinessSharkService.DataAccess.Models.Location
         [StringLength(30)]
         public required string Name { get; set; }
 
+        [Required]
+        public DateTime UpdatedAt { get; set; }
+
         [Comment("The happiness level")]
         public int Happiness { get; set; } = 0;
 

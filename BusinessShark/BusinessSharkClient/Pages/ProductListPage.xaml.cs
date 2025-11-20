@@ -6,7 +6,7 @@ namespace BusinessSharkClient.Pages;
 
 public partial class ProductListPage : ContentPage
 {
-    private GlobalDataProvider _globalDataProvider;
+    private readonly GlobalDataProvider _globalDataProvider;
 
     public ProductListPage(GlobalDataProvider globalDataProvider)
     {

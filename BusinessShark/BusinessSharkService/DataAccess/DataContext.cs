@@ -95,19 +95,22 @@ namespace BusinessSharkService.DataAccess
             {
                 ProductCategoryId = 1,
                 Name = "Raw Materials",
-                SortOrder = 1
+                SortOrder = 1,
+                UpdatedAt = DateTime.UtcNow
             });
             modelBuilder.Entity<ProductCategory>().HasData(new ProductCategory
             {
                 ProductCategoryId = 2,
                 Name = "Household Furniture",
-                SortOrder = 2
+                SortOrder = 2,
+                UpdatedAt = DateTime.UtcNow
             });
             modelBuilder.Entity<ProductCategory>().HasData(new ProductCategory
             {
                 ProductCategoryId = 3,
                 Name = "Tableware",
-                SortOrder = 3
+                SortOrder = 3,
+                UpdatedAt = DateTime.UtcNow
             });
 
             // **************** Seeding Product Definition from JSON ****************
@@ -143,6 +146,7 @@ namespace BusinessSharkService.DataAccess
                     CountryId = 1,
                     Code = "UA",
                     Name = "Ukraine",
+                    UpdatedAt = DateTime.UtcNow
                 });
 
                 modelBuilder.Entity<Country>().HasData(new Country
@@ -150,6 +154,7 @@ namespace BusinessSharkService.DataAccess
                     CountryId = 2,
                     Code = "PL",
                     Name = "Poland",
+                    UpdatedAt = DateTime.UtcNow
                 });
 
                 modelBuilder.Entity<City>().HasData(new City
@@ -159,7 +164,8 @@ namespace BusinessSharkService.DataAccess
                     CountryId = 1,
                     Country = null!,
                     Population = 1500000,
-                    AverageSalary = 1300.0
+                    AverageSalary = 1300.0,
+                    UpdatedAt = DateTime.UtcNow
                 });
                 modelBuilder.Entity<City>().HasData(new City
                 {
@@ -168,7 +174,8 @@ namespace BusinessSharkService.DataAccess
                     CountryId = 1,
                     Country = null!,
                     Population = 3000000,
-                    AverageSalary = 1500.0
+                    AverageSalary = 1500.0,
+                    UpdatedAt = DateTime.UtcNow
                 });
                 modelBuilder.Entity<City>().HasData(new City
                 {
@@ -177,7 +184,8 @@ namespace BusinessSharkService.DataAccess
                     CountryId = 1,
                     Country = null!,
                     Population = 800000,
-                    AverageSalary = 1200.0
+                    AverageSalary = 1200.0,
+                    UpdatedAt = DateTime.UtcNow
                 });
                 modelBuilder.Entity<City>().HasData(new City
                 {
@@ -186,7 +194,8 @@ namespace BusinessSharkService.DataAccess
                     CountryId = 2,
                     Country = null!,
                     Population = 800000,
-                    AverageSalary = 2000.0
+                    AverageSalary = 2000.0,
+                    UpdatedAt = DateTime.UtcNow
                 });
 
                 modelBuilder.Entity<DivisionSize>().HasData(

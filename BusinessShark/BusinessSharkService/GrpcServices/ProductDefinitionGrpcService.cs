@@ -7,20 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 namespace BusinessSharkService.GrpcServices
 {
     [Authorize]
-    public class ProductDefinitionGrpcService : ProductDefinitionService.ProductDefinitionServiceBase
+    public class ProductDefinitionGrpcService(
+        ILogger<ProductDefinitionGrpcService> logger, ProductDefinitionHandler productDefinitionHandler) : ProductDefinitionService.ProductDefinitionServiceBase
     {
-        private readonly ILogger<ProductDefinitionGrpcService> _logger;
-        private readonly ProductDefinitionHandler _productDefinitionHandler;
-
-        public ProductDefinitionGrpcService(ILogger<ProductDefinitionGrpcService> logger, ProductDefinitionHandler productDefinitionHandler)
-        {
-            _logger = logger;
-            _productDefinitionHandler = productDefinitionHandler;
-        }
-
         public override async Task<ProductDefinitionResponse> Sync(ProductDefinitionRequest request, ServerCallContext context)
         {
-            var productDefinitions = await _productDefinitionHandler.PreloadProductDefinitionsAsync(request.Timestamp.ToDateTime());
+            var productDefinitions = await productDefinitionHandler.PreloadProductDefinitionsAsync(request.Timestamp.ToDateTime());
 
             var response = new ProductDefinitionResponse();
             if (productDefinitions.Any())
@@ -76,7 +68,7 @@ namespace BusinessSharkService.GrpcServices
 
                 if (!File.Exists(fullPath))
                 {
-                    _logger.LogWarning("Image file not found: {Path}", fullPath);
+                    logger.LogWarning("Image file not found: {Path}", fullPath);
                     return [];
                 }
 
@@ -84,7 +76,7 @@ namespace BusinessSharkService.GrpcServices
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Failed to load image at path '{Path}'", path);
+                logger.LogWarning(ex, "Failed to load image at path '{Path}'", path);
                 return [];
             }
         }

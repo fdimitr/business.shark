@@ -1,12 +1,18 @@
 ﻿syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option csharp_namespace = "BusinessSharkService";
 import "google/protobuf/empty.proto";
 
 package category;
 
 service ProductCategoryService {
-  rpc Load(google.protobuf.Empty) returns (ProductCategoryResponse);
+  rpc Sync(ProductCategoryRequest) returns (ProductCategoryResponse);
+}
+
+message ProductCategoryRequest {
+  google.protobuf.Timestamp Timestamp = 1;
 }
 
 message ProductCategoryGrpc {
@@ -17,4 +23,5 @@ message ProductCategoryGrpc {
 
 message ProductCategoryResponse {
 	repeated ProductCategoryGrpc ProductCategories = 1;
+	google.protobuf.Timestamp UpdatedAt = 2;
 }

@@ -1,31 +1,32 @@
 ﻿using BusinessSharkService.Handlers;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BusinessSharkService.GrpcServices
 {
     [Authorize]
-    public class ProductCategoryGrpService : ProductCategoryService.ProductCategoryServiceBase
+    public class ProductCategoryGrpService(
+        ILogger<ProductDefinitionGrpcService> logger, ProductCategoryHandler productCategoryHandler) : ProductCategoryService.ProductCategoryServiceBase
     {
-        private readonly ILogger<ProductDefinitionGrpcService> _logger;
-        private readonly ProductCategoryHandler _productCategoryHandler;
+        private readonly ILogger<ProductDefinitionGrpcService> _logger = logger;
 
-        public ProductCategoryGrpService(ILogger<ProductDefinitionGrpcService> logger, ProductCategoryHandler productCategoryHandler)
-        {
-            _logger = logger;
-            _productCategoryHandler = productCategoryHandler;
-        }
-
-        public override async Task<ProductCategoryResponse> Load(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
+        public override async Task<ProductCategoryResponse> Sync(ProductCategoryRequest request, ServerCallContext context)
         {             
-            var productCategories = await _productCategoryHandler.LoadAsync();
+            var productCategories = await productCategoryHandler.LoadAsync(request.Timestamp.ToDateTime());
             var response = new ProductCategoryResponse();
-            response.ProductCategories.AddRange(productCategories.ConvertAll(pc => new ProductCategoryGrpc
+            if (productCategories.Any())
             {
-                ProductCategoryId = pc.ProductCategoryId,
-                Name = pc.Name,
-                SortOrder = pc.SortOrder
-            }));
+                response.ProductCategories.AddRange(productCategories.ConvertAll(pc => new ProductCategoryGrpc
+                {
+                    ProductCategoryId = pc.ProductCategoryId,
+                    Name = pc.Name,
+                    SortOrder = pc.SortOrder
+                }));
+
+                response.UpdatedAt = Timestamp.FromDateTime(productCategories.Max(p => p.UpdatedAt));
+            }
+
             return response;
         }
     }

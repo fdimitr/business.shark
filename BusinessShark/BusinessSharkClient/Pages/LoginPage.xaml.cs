@@ -9,14 +9,14 @@ public partial class LoginPage : ContentPage
 {
     private readonly AuthService.AuthServiceClient _authServiceClient;
     private readonly GlobalDataProvider _globalDataProvider;
-    private readonly ProductDefinitionSyncHandler _productDefinitionSyncHandler;
+    private readonly SyncEngine _syncEngine;
 
-    public LoginPage(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider, ProductDefinitionSyncHandler productDefinitionSyncHandler)
+    public LoginPage(AuthService.AuthServiceClient authServiceClient, GlobalDataProvider globalDataProvider, SyncEngine syncEngine)
 	{
 		InitializeComponent();
         _authServiceClient = authServiceClient;
         _globalDataProvider = globalDataProvider;
-        _productDefinitionSyncHandler = productDefinitionSyncHandler;
+        _syncEngine = syncEngine;
         Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
     }
 
@@ -31,14 +31,16 @@ public partial class LoginPage : ContentPage
 
     private async void OnLoginClicked(object sender, EventArgs e)
 	{
-        ShowPopup("Authentification ....");
+        ShowPopup("Authentication ....");
         try
         {
             var loginResult = await _authServiceClient.LoginAsync(new LoginRequest
-            {
-                Username = EmailEntry.Text,
-                Password = PasswordEntry.Text
-            });
+                {
+                    Username = EmailEntry.Text,
+                    Password = PasswordEntry.Text,
+                },
+                deadline: DateTime.UtcNow.AddSeconds(5));
+
             if (string.IsNullOrEmpty(loginResult.AccessToken))
             {
                 await DisplayAlert("Error", "Invalid username or password", "OK");
@@ -56,7 +58,9 @@ public partial class LoginPage : ContentPage
                 // Load global data
                 ShowPopup("Synchronizing data ....");
 
-                await _productDefinitionSyncHandler.PullAsync();
+                await _syncEngine.StartCriticalSync();
+                await _syncEngine.StartBackgroundSync(CancellationToken.None);
+
                 await _globalDataProvider.LoadData();
 
                 // Goto to shell application main page

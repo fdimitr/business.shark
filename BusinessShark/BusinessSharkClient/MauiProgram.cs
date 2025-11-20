@@ -51,7 +51,7 @@ namespace BusinessSharkClient
             var handler = new GrpcWebHandler(GrpcWebMode.GrpcWebText, new HttpClientHandler());
             var channel = GrpcChannel.ForAddress(baseAddress, new GrpcChannelOptions
             {
-                HttpHandler = handler
+                HttpHandler = handler,
             });
 
             string dbPath = Path.Combine(
@@ -63,7 +63,6 @@ namespace BusinessSharkClient
             {
                 options.UseSqlite($"Filename={dbPath}");
             });
-
 
             var authServiceClient = new BusinessSharkService.AuthService.AuthServiceClient(channel);
             builder.Services.AddScoped(services => authServiceClient);
@@ -136,12 +135,11 @@ namespace BusinessSharkClient
 
             // Repositories
             builder.Services.AddScoped(typeof(ILocalRepository<>), typeof(EfLocalRepository<>));
-            builder.Services.AddScoped<ProductDefinitionRepository>();
-            builder.Services.AddScoped<ComponentUnitRepository>();
 
             // Sync Handlers
-            builder.Services.AddScoped<ISyncHandler<ProductDefinitionEntity>, ProductDefinitionSyncHandler>();
-            builder.Services.AddScoped<ProductDefinitionSyncHandler>();
+            builder.Services.AddScoped<ISyncHandler, ProductDefinitionSyncHandler>();
+            builder.Services.AddScoped<ISyncHandler, ProductCategorySyncHandler>();
+            builder.Services.AddScoped<SyncEngine>();
 
             // Providers
             builder.Services.AddSingleton<GlobalDataProvider>();

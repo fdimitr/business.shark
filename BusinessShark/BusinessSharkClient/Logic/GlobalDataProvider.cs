@@ -1,34 +1,33 @@
-﻿using BusinessSharkClient.Data.Repositories;
+﻿using BusinessSharkClient.Data.Entities;
+using BusinessSharkClient.Data.Repositories.Interfaces;
 using BusinessSharkClient.Logic.Models;
-using BusinessSharkService;
 
 namespace BusinessSharkClient.Logic
 {
-    public class GlobalDataProvider(ProductDefinitionRepository productDefinitionRepository)
+    public class GlobalDataProvider(ILocalRepository<ProductDefinitionEntity> pDrepo, ILocalRepository<ProductCategoryEntity> pCRepo)
     {
-        public List<ProductDefinitionModel> ProductDefinitions { get; set; } = new List<ProductDefinitionModel>();
-        public List<ProductCategoryModel> ProductCategories { get; set; } = new List<ProductCategoryModel>();
+        public List<ProductDefinitionModel> ProductDefinitions { get; set; } = new();
+        public List<ProductCategoryModel> ProductCategories { get; set; } = new();
 
         public async Task LoadData()
         {
             // Product Category
-            //var responseCategory = await _productCategoryClient.LoadAsync(new Google.Protobuf.WellKnownTypes.Empty());
-            //if (responseCategory == null) return;
+            var categories = await pCRepo.GetAllAsync();
 
-            //ProductCategories.Clear();
-            //foreach (var catGrpc in responseCategory.ProductCategories)
-            //{
-            //    var catModel = new ProductCategoryModel
-            //    {
-            //        ProductCategoryId = catGrpc.ProductCategoryId,
-            //        Name = catGrpc.Name,
-            //        SortOrder = catGrpc.SortOrder
-            //    };
-            //    ProductCategories.Add(catModel);
-            //}
+            ProductCategories.Clear();
+            foreach (var cat in categories)
+            {
+                var catModel = new ProductCategoryModel
+                {
+                    ProductCategoryId = cat.Id,
+                    Name = cat.Name,
+                    SortOrder = cat.SortOrder
+                };
+                ProductCategories.Add(catModel);
+            }
 
             // Product Definition
-            var definitions = await productDefinitionRepository.GetAllAsync();
+            var definitions = await pDrepo.GetAllAsync();
 
             ProductDefinitions.Clear();
             foreach (var def in definitions)

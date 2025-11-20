@@ -11,18 +11,20 @@ namespace BusinessSharkClient.Data.Sync
         ILocalRepository<ProductDefinitionEntity> repo,
         ProductDefinitionService.ProductDefinitionServiceClient remote,
         AppDbContext db,
-        ILogger<ProductDefinitionSyncHandler> logger) : ISyncHandler<ProductDefinitionEntity>
+        ILogger<ProductDefinitionSyncHandler> logger) : ProductBaseSyncHandler(db), ISyncHandler<ProductDefinitionEntity>
     {
-        public string EntityName => "ProductDefinition";
+        public override string EntityName => "ProductDefinition";
+        public SyncPriority Priority => SyncPriority.Critical;
 
         public Task<bool> PushAsync(CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            // ProductDefinition is not pushed from client to server
+            return Task.FromResult(true);
         }
 
         public async Task<bool> PullAsync(CancellationToken token = default)
         {
-            // Получаем lastSync из AppState
+            // Get lastSync from DataState
             var lastSync = await GetLastSyncAsync();
 
             var pull = await remote.SyncAsync(new ProductDefinitionRequest
@@ -35,7 +37,7 @@ namespace BusinessSharkClient.Data.Sync
             if (!pull.ProductDefinitions.Any()) return false;
 
             // Обновляем локально в транзакции
-            await using var tx = await db.Database.BeginTransactionAsync(token);
+            await using var tx = await dbContext.Database.BeginTransactionAsync(token);
             try
             {
                 // apply updated/inserted
@@ -79,29 +81,6 @@ namespace BusinessSharkClient.Data.Sync
                 logger.LogError(ex, "Pull failed for {Entity}", EntityName);
                 return false;
             }
-        }
-
-        // Helpers for lastSync (используйте таблицу AppState)
-        private async Task<DateTime?> GetLastSyncAsync()
-        {
-            var appState = await db.DataStates.FindAsync($"{EntityName}_lastsync");
-            if (appState == null) return null;
-            return DateTime.SpecifyKind(appState.Value, DateTimeKind.Utc);
-        }
-
-        private async Task SetLastSyncAsync(DateTime dt)
-        {
-            var key = $"{EntityName}_lastsync";
-            var appState = await db.DataStates.FindAsync(key);
-            if (appState == null)
-            {
-                db.DataStates.Add(new DataState { Key = key, Value = dt });
-            }
-            else
-            {
-                appState.Value = dt;
-            }
-            await db.SaveChangesAsync();
         }
     }
 }

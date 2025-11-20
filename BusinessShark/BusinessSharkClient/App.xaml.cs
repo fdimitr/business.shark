@@ -24,19 +24,18 @@ namespace BusinessSharkClient
         private readonly AuthService.AuthServiceClient _authServiceClient;
         private readonly GlobalDataProvider _globalDataProvider;
         private readonly SummaryService.SummaryServiceClient _summaryServiceClient;
-        private readonly ProductDefinitionSyncHandler _productDefinitionSyncHandler;
+        private readonly SyncEngine _syncEngine;
 
         public App(AuthService.AuthServiceClient authServiceClient,
-            CompanyService.CompanyServiceClient companyServiceClient,
             SummaryService.SummaryServiceClient summaryServiceClient,
-            ProductDefinitionSyncHandler productDefinitionSyncHandler,
-        GlobalDataProvider globalDataProvider)
+            SyncEngine syncEngine,
+            GlobalDataProvider globalDataProvider)
         {
             InitializeComponent();
             _authServiceClient = authServiceClient;
             _globalDataProvider = globalDataProvider;
             _summaryServiceClient = summaryServiceClient;
-            _productDefinitionSyncHandler = productDefinitionSyncHandler;
+            _syncEngine = syncEngine;
 
             BindingContext = Summary;
 
@@ -45,7 +44,7 @@ namespace BusinessSharkClient
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new LoginPage(_authServiceClient, _globalDataProvider, _productDefinitionSyncHandler));
+            return new Window(new LoginPage(_authServiceClient, _globalDataProvider, _syncEngine));
         }
 
         public async void OnLoad(object sender, EventArgs e)

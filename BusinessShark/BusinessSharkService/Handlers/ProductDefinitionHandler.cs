@@ -10,7 +10,9 @@ namespace BusinessSharkService.Handlers
         {
             var productDefinitions = await dbContext.ProductDefinitions
                 .Where(pd => pd.UpdatedAt > updatedAt)
-                .Include(p=>p.ComponentUnits).ToListAsync();
+                .Include(p=>p.ComponentUnits)
+                .AsNoTracking()
+                .ToListAsync();
             return productDefinitions;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using BusinessSharkService.DataAccess;
 using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.Handlers.Divisions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSharkService.Handlers
 {
@@ -11,6 +12,13 @@ namespace BusinessSharkService.Handlers
         public CityHandler(DataContext dataContext, DistributionCenterHandler storageHandler)
         {
             _dataContext = dataContext;
+        }
+
+        public async Task<List<City>> GetCitiesAsync(DateTime updatedAt)
+        {
+            return await _dataContext.Cities
+                .Where(c => c.UpdatedAt > updatedAt)
+                .ToListAsync();
         }
 
         public async Task StartCalculation(CancellationToken stoppingToken, City city)
