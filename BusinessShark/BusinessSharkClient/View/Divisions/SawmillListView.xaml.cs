@@ -12,13 +12,13 @@ public partial class SawmillListView : ContentView, INotifyPropertyChanged
 {
     public ICommand OpenDetailsCommand { get; }
 
-    private ObservableCollection<SawmillListGroup> _groupedSawmills = new ObservableCollection<SawmillListGroup>
-    {
-            new SawmillListGroup("Loading...", "loading.png", new List<SawmillListModel>
-            {
-                new SawmillListModel { Name = "Please wait", ProductName = "Loading data...", Volume = "" }
-            })
-    };
+    private ObservableCollection<SawmillListGroup> _groupedSawmills =
+    [
+        new SawmillListGroup("Loading...", "loading.png", new List<SawmillListModel>
+        {
+            new SawmillListModel { Name = "Please wait", ProductName = "Loading data...", Volume = "" }
+        })
+    ];
 
     public ObservableCollection<SawmillListGroup> GroupedSawmills
     {

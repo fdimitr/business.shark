@@ -11,7 +11,7 @@ namespace BusinessSharkClient.Data.Sync
         ILocalRepository<ProductCategoryEntity> repo,
         ProductCategoryService.ProductCategoryServiceClient remote,
         AppDbContext db,
-        ILogger<ProductCategorySyncHandler> logger) : ProductBaseSyncHandler(db), ISyncHandler<ProductCategoryEntity>
+        ILogger<ProductCategorySyncHandler> logger) : BaseSyncHandler(db), ISyncHandler<ProductCategoryEntity>
     {
         public override string EntityName => "ProductCategory";
         public SyncPriority Priority => SyncPriority.Critical;
@@ -21,7 +21,7 @@ namespace BusinessSharkClient.Data.Sync
             return Task.FromResult(true);
         }
 
-        public async Task<bool> PullAsync(CancellationToken token = default)
+        public async Task<bool> PullAsync(int companyId, CancellationToken token = default)
         {
             // Get lastSync from DataState
             var lastSync = await GetLastSyncAsync();

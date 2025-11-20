@@ -1,5 +1,8 @@
 ﻿syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
 import "division_transaction.proto";
 
 option csharp_namespace = "BusinessSharkService";
@@ -9,6 +12,36 @@ package sawmill;
 service SawmillService {
   rpc LoadList(SawmillListRequest) returns (SawmillListResponse);
   rpc LoadDetail(SawmillRequest) returns (SawmillResponse);
+  rpc Sync(SawmillSyncRequest) returns (SawmillSyncResponse);
+}
+
+// Sync
+message SawmillSyncRequest {	
+  int32 CompanyId = 1;
+  google.protobuf.Timestamp Timestamp = 2;
+}
+
+message SawmillSyncResponse {
+	repeated SawmillsGrpc Sawmills = 1;
+  	google.protobuf.Timestamp UpdatedAt = 2;
+}
+
+message SawmillsGrpc {
+  int32 DivisionId = 1;
+  int32 CompanyId = 2;
+  string CountryCode = 3; 
+  string City = 4;
+  string Name = 5;
+ google.protobuf.StringValue Description = 6;
+  int32 ProductDefinitionId = 7;
+  int32 VolumeCapacity = 8;
+  double ResourceDepositQuality = 9;
+  double RawMaterialReserves = 10;
+  double TechLevel = 11;
+  double PlantingCosts = 12;
+  double RentalCost = 13;
+  double QuantityBonus = 14;
+  double QualityBonus = 15;
 }
 
 // LoadList 

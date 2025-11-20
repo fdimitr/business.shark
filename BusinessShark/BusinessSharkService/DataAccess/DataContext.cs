@@ -283,6 +283,7 @@ namespace BusinessSharkService.DataAccess
                 }
                 foreach (var sawmill in sawmills)
                 {
+                    sawmill.UpdatedAt = DateTime.UtcNow;
                     modelBuilder.Entity<Sawmill>().HasData(sawmill);
                 }
                 foreach (var warehouse in warehouses)

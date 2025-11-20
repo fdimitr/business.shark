@@ -6,20 +6,44 @@ using Microsoft.AspNetCore.Authorization;
 namespace BusinessSharkService.GrpcServices
 {
     [Authorize]
-    public class SawmillGrpcService : SawmillService.SawmillServiceBase
+    public class SawmillGrpcService(ILogger<ProductDefinitionGrpcService> logger, SawmillHandler sawmillHandler) : SawmillService.SawmillServiceBase
     {
-        private readonly ILogger<ProductDefinitionGrpcService> _logger;
-        private readonly SawmillHandler _sawmillHandler;
+        private readonly ILogger<ProductDefinitionGrpcService> _logger = logger;
 
-        public SawmillGrpcService(ILogger<ProductDefinitionGrpcService> logger,  SawmillHandler sawmillHandler)
+        public override async Task<SawmillSyncResponse> Sync(SawmillSyncRequest request, ServerCallContext context)
         {
-            _logger = logger;
-            _sawmillHandler = sawmillHandler;
+            var sawmills = await sawmillHandler.LoadListAsync(request.CompanyId, request.Timestamp.ToDateTime());
+            var response = new SawmillSyncResponse();
+            if (sawmills.Any())
+            {
+                response.Sawmills.AddRange(sawmills.ConvertAll(s => new SawmillsGrpc
+                {
+                    DivisionId = s.DivisionId,
+                    Name = s.Name,
+                    City = s.City != null ? s.City.Name : string.Empty,
+                    CountryCode = s.City != null ? s.City.Country.Code : string.Empty,
+                    ProductDefinitionId = s.ProductDefinitionId,
+                    VolumeCapacity = s.DivisionSize?.Size ?? 0,
+                    ResourceDepositQuality = s.ResourceDepositQuality,
+                    RawMaterialReserves = s.RawMaterialReserves,
+                    TechLevel = s.TechLevel,
+                    PlantingCosts = s.PlantingCosts,
+                    QualityBonus = s.QualityBonus,
+                    QuantityBonus = s.QuantityBonus,
+                    CompanyId = request.CompanyId,
+                    Description = s.Description,
+                    RentalCost = s.RentalCost
+                }));
+
+                response.UpdatedAt = Timestamp.FromDateTime(sawmills.Max(p => p.UpdatedAt));
+            }
+
+            return response;
         }
 
         public override async Task<SawmillListResponse> LoadList(SawmillListRequest request, ServerCallContext context)
         {
-            var sawmills = await _sawmillHandler.LoadListAsync(request.CompanyId);
+            var sawmills = await sawmillHandler.LoadListAsync(request.CompanyId, DateTime.MinValue);
             var response = new SawmillListResponse();
             response.Sawmills.AddRange(sawmills.ConvertAll(s => new SawmillListGrpc
             {
@@ -36,7 +60,7 @@ namespace BusinessSharkService.GrpcServices
 
         public override async Task<SawmillResponse> LoadDetail(SawmillRequest request, ServerCallContext context)
         {
-            var sawmill = await _sawmillHandler.LoadAsync(request.DivisionId);
+            var sawmill = await sawmillHandler.LoadAsync(request.DivisionId);
             if (sawmill == null)
             {
                 throw new RpcException(new Status(StatusCode.NotFound, $"Sawmill with DivisionId {request.DivisionId} not found."));

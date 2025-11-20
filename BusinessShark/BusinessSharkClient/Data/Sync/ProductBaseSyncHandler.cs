@@ -2,7 +2,7 @@
 
 namespace BusinessSharkClient.Data.Sync
 {
-    public class ProductBaseSyncHandler(AppDbContext db)
+    public class BaseSyncHandler(AppDbContext db)
     {
         protected readonly AppDbContext dbContext = db;
 

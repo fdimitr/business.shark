@@ -130,22 +130,22 @@ namespace BusinessSharkClient.Logic.ViewModels
             QualityBonus = response.QualityBonus;
             QuantityBonus = response.QuantityBonus;
 
-            var divisionStatistics = DivisionTransactionViewModel.GetLastTransaction(response.DivisionTransactions.ToList());
-            Balance = divisionStatistics.Balance;
-            LastProductionQuantity = divisionStatistics.QuantityProduced;
-            LastProductionQuality = divisionStatistics.QualityProduced;
+            //var divisionStatistics = DivisionTransactionViewModel.GetLastTransaction(response.DivisionTransactions.ToList());
+            //Balance = divisionStatistics.Balance;
+            //LastProductionQuantity = divisionStatistics.QuantityProduced;
+            //LastProductionQuality = divisionStatistics.QualityProduced;
 
-            // Employee
-            WorkerCount = response.Employees.TotalQuantity;
-            Qualification = response.Employees.SkillLevel;
-            Salary = response.Employees.SalaryPerEmployee;
-            TrainingProgress = 0;
+            //// Employee
+            //WorkerCount = response.Employees.TotalQuantity;
+            //Qualification = response.Employees.SkillLevel;
+            //Salary = response.Employees.SalaryPerEmployee;
+            //TrainingProgress = 0;
 
-            // Equipment
-            EquipmentCount = response.Tools.TotalQuantity;
-            EquipmentTechLevel = response.Tools.TechLevel;
-            Wear = response.Tools.WearCoefficient;
-            Efficiency = response.Tools.Efficiency;
+            //// Equipment
+            //EquipmentCount = response.Tools.TotalQuantity;
+            //EquipmentTechLevel = response.Tools.TechLevel;
+            //Wear = response.Tools.WearCoefficient;
+            //Efficiency = response.Tools.Efficiency;
         }
 
     }

@@ -30,6 +30,7 @@ public partial class ProductListPage : ContentPage
             }
         }
     }
+
     private IView CreateCategoryTable(string categoryName, List<ProductDefinitionModel> productDefinitions)
     {
         var container = new VerticalStackLayout
@@ -96,15 +97,15 @@ public partial class ProductListPage : ContentPage
                 var image = new Image
                 {
                     Source = product.Image,
-                    HeightRequest = 40,
-                    WidthRequest = 40,
+                    HeightRequest = 60,
+                    WidthRequest = 60,
                     Aspect = Aspect.AspectFit
                 };
 
                 var name = new Label
                 {
                     Text = product.Name,
-                    FontSize = 14,
+                    FontSize = 16,
                     HorizontalOptions = LayoutOptions.Center
                 };
 

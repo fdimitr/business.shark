@@ -4,7 +4,7 @@ using BusinessSharkClient.Logic.Models;
 
 namespace BusinessSharkClient.Logic
 {
-    public class GlobalDataProvider(ILocalRepository<ProductDefinitionEntity> pDrepo, ILocalRepository<ProductCategoryEntity> pCRepo)
+    public class GlobalDataProvider(ILocalRepository<ProductDefinitionEntity> pDRepo, ILocalRepository<ProductCategoryEntity> pCRepo)
     {
         public List<ProductDefinitionModel> ProductDefinitions { get; set; } = new();
         public List<ProductCategoryModel> ProductCategories { get; set; } = new();
@@ -27,7 +27,7 @@ namespace BusinessSharkClient.Logic
             }
 
             // Product Definition
-            var definitions = await pDrepo.GetAllAsync();
+            var definitions = await pDRepo.GetAllAsync();
 
             ProductDefinitions.Clear();
             foreach (var def in definitions)

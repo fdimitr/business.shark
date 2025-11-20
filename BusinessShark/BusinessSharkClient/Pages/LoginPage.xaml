@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BusinessSharkClient.Pages.LoginPage"
+             Loaded="LoginPage_OnLoaded"
              Title="Login">
     <Grid RowDefinitions=".3*, .7*">
         <Image Aspect="AspectFill"  Source="business_plan.png" />

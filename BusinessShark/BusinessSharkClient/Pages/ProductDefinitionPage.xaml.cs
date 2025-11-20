@@ -7,7 +7,7 @@ public partial class ProductDefinitionPage : ContentPage
 {
     public ProductDefinitionModel CurrentProduct { get; set; }
 
-    private GlobalDataProvider _globalDataProvider;
+    private readonly GlobalDataProvider _globalDataProvider;
 
     public ProductDefinitionPage(ProductDefinitionModel product, GlobalDataProvider globalDataProvider)
     {

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Buffers.Text;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using BusinessSharkService.DataAccess;
-using BusinessSharkService.DataAccess.Models.Divisions;
 using BusinessSharkService.DataAccess.Models.Divisions.RawMaterialProducers;
 using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.DataAccess.Models.Items;
@@ -15,15 +12,14 @@ namespace BusinessSharkService.Handlers.Divisions
 {
     public class SawmillHandler(IWorldContext worldContext, DataContext dbContext) : DivisionHandler<Sawmill>(worldContext)
     {
-        public async Task<List<Sawmill>> LoadListAsync(int companyId)
+        public async Task<List<Sawmill>> LoadListAsync(int companyId, DateTime timeStamp)
         {
             return await dbContext.Sawmills
                 .AsNoTracking()
                 .Include(s=>s.DivisionSize)
-                .Include(s => s.ProductDefinition)
                 .Include(s => s.City)
                     .ThenInclude(c => c!.Country)
-                .Where(s => s.CompanyId == companyId)
+                .Where(s => s.CompanyId == companyId && s.UpdatedAt > timeStamp)
                 .ToListAsync();
         }
 

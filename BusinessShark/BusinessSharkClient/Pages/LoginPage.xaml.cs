@@ -29,11 +29,23 @@ public partial class LoginPage : ContentPage
         }
     }
 
-    private async void OnLoginClicked(object sender, EventArgs e)
-	{
-        ShowPopup("Authentication ....");
+    private async void LoginPage_OnLoaded(object? sender, EventArgs e)
+    {
         try
         {
+            await _syncEngine.StartCriticalBackgroundSync(CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"An unexpected error occurred on LoginPage_OnLoaded: {ex.Message}", "OK");
+        }
+    }
+
+    private async void OnLoginClicked(object sender, EventArgs e)
+	{
+        try
+        {
+            ShowPopup("Authentication ....");
             var loginResult = await _authServiceClient.LoginAsync(new LoginRequest
                 {
                     Username = EmailEntry.Text,
@@ -58,8 +70,7 @@ public partial class LoginPage : ContentPage
                 // Load global data
                 ShowPopup("Synchronizing data ....");
 
-                await _syncEngine.StartCriticalSync();
-                await _syncEngine.StartBackgroundSync(CancellationToken.None);
+                await _syncEngine.StartBackgroundSync(loginResult.CompanyId, CancellationToken.None);
 
                 await _globalDataProvider.LoadData();
 
@@ -74,12 +85,10 @@ public partial class LoginPage : ContentPage
         catch (RpcException rpcEx) when (rpcEx.StatusCode == StatusCode.Unavailable)
         {
             await DisplayAlert("Error", "Cannot connect to the server. Please try again later.", "OK");
-            return;
         }
         catch (Exception ex)
         {
             await DisplayAlert("Error", $"An unexpected error occurred: {ex.Message}", "OK");
-            return;
         }
         finally
         {

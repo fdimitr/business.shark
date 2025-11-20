@@ -139,6 +139,7 @@ namespace BusinessSharkClient
             // Sync Handlers
             builder.Services.AddScoped<ISyncHandler, ProductDefinitionSyncHandler>();
             builder.Services.AddScoped<ISyncHandler, ProductCategorySyncHandler>();
+            builder.Services.AddScoped<ISyncHandler, SawmillSyncHandler>();
             builder.Services.AddScoped<SyncEngine>();
 
             // Providers
