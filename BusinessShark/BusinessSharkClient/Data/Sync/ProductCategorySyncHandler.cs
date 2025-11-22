@@ -1,4 +1,5 @@
 ﻿using BusinessSharkClient.Data.Entities;
+using BusinessSharkClient.Data.Repositories;
 using BusinessSharkClient.Data.Repositories.Interfaces;
 using BusinessSharkClient.Data.Sync.Interfaces;
 using BusinessSharkService;
@@ -9,9 +10,9 @@ namespace BusinessSharkClient.Data.Sync
 {
     public class ProductCategorySyncHandler(
         ILocalRepository<ProductCategoryEntity> repo,
+        DataStateRepository repoDataState,
         ProductCategoryService.ProductCategoryServiceClient remote,
-        AppDbContext db,
-        ILogger<ProductCategorySyncHandler> logger) : BaseSyncHandler(db), ISyncHandler<ProductCategoryEntity>
+        ILogger<ProductCategorySyncHandler> logger) : BaseSyncHandler(repoDataState), ISyncHandler<ProductCategoryEntity>
     {
         public override string EntityName => "ProductCategory";
         public SyncPriority Priority => SyncPriority.Critical;
@@ -44,7 +45,6 @@ namespace BusinessSharkClient.Data.Sync
 
             if (!pull.ProductCategories.Any()) return false;
 
-            await using var tx = await DbContext.Database.BeginTransactionAsync(token);
             try
             {
                                 // apply updated/inserted
@@ -59,12 +59,10 @@ namespace BusinessSharkClient.Data.Sync
                 await repo.UpsertRangeAsync(upserts, token);
 
                 await SetLastSyncAsync(pull.UpdatedAt.ToDateTime());
-                await tx.CommitAsync(token);
                 return true;
             }
             catch (Exception ex)
             {
-                await tx.RollbackAsync(token);
                 logger.LogError(ex, "Pull failed for {Entity}", EntityName);
                 return false;
             }

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using BusinessSharkClient.Data.Entities.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,5 +19,7 @@ namespace BusinessSharkClient.Data.Entities
         public ImageSource? Image { get; set; }
         [NotMapped]
         public string? Name { get; set; }
+
+        public object[] GetKeyValues() => [ProductDefinitionId, Id];
     }
 }

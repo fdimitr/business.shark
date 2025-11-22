@@ -18,5 +18,7 @@ namespace BusinessSharkClient.Data.Entities
         public double Efficiency { get; set; }
         public double MaintenanceCosts { get; set; }
         public int WarrantyDays { get; set; }
+
+        public object[] GetKeyValues() => [Id];
     }
 }

@@ -27,5 +27,7 @@ namespace BusinessSharkClient.Data.Entities
         public double DeliveryPrice { get; set; }
         public required byte[] Image { get; set; }
         public List<ComponentUnitEntity> ComponentUnits { get; set; } = new();
+
+        public object[] GetKeyValues() => [Id];
     }
 }

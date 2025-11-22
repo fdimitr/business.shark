@@ -1,4 +1,5 @@
 ﻿using BusinessSharkClient.Data.Entities;
+using BusinessSharkClient.Data.Repositories;
 using BusinessSharkClient.Data.Repositories.Interfaces;
 using BusinessSharkClient.Data.Sync.Interfaces;
 using BusinessSharkService;
@@ -8,9 +9,9 @@ using Microsoft.Extensions.Logging;
 namespace BusinessSharkClient.Data.Sync
 {
     public class SawmillSyncHandler(ILocalRepository<SawmillEntity> repo,
+        DataStateRepository repoDataState,
         SawmillService.SawmillServiceClient remote,
-        AppDbContext db,
-        ILogger<SawmillSyncHandler> logger) : BaseSyncHandler(db), ISyncHandler<SawmillEntity>
+        ILogger<SawmillSyncHandler> logger) : BaseSyncHandler(repoDataState), ISyncHandler<SawmillEntity>
     {
         public override string EntityName => "Sawmills";
         public SyncPriority Priority => SyncPriority.High;
@@ -36,7 +37,6 @@ namespace BusinessSharkClient.Data.Sync
 
             if (!pull.Sawmills.Any()) return false;
 
-            await using var tx = await DbContext.Database.BeginTransactionAsync(token);
             try
             {
                 var upserts = pull.Sawmills.Select(s => new SawmillEntity
@@ -60,12 +60,10 @@ namespace BusinessSharkClient.Data.Sync
 
                 await repo.UpsertRangeAsync(upserts, token);
                 await SetLastSyncAsync(pull.UpdatedAt.ToDateTime());
-                await tx.CommitAsync(token);
                 return true;
             }
             catch (Exception ex)
             {
-                await tx.RollbackAsync(token);
                 logger.LogError(ex, "Pull failed for {Entity}", EntityName);
                 return false;
             }

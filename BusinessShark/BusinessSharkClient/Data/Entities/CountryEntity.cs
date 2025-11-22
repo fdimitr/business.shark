@@ -17,5 +17,7 @@ namespace BusinessSharkClient.Data.Entities
         [Required]
         [StringLength(2)]
         public required string Code { get; set; }
+
+        public object[] GetKeyValues() => [Id];
     }
 }

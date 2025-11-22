@@ -21,5 +21,7 @@ namespace BusinessSharkClient.Data.Entities
         public double LandTax { get; set; }
         public int WealthLevel { get; set; }
         public int Happiness { get; set; }
+
+        public object[] GetKeyValues() => [Id];
     }
 }

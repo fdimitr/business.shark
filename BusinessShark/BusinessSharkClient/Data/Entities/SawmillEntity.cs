@@ -37,5 +37,7 @@ namespace BusinessSharkClient.Data.Entities
         public double RentalCost { get; set; }
         public double QuantityBonus { get; set; }
         public double QualityBonus { get; set; }
+
+        public object[] GetKeyValues() => [Id];
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BusinessSharkClient.Data.Entities;
+using BusinessSharkClient.Data.Repositories;
 using BusinessSharkClient.Data.Repositories.Interfaces;
 using BusinessSharkClient.Data.Sync.Interfaces;
 using BusinessSharkService;
@@ -8,10 +9,11 @@ using Microsoft.Extensions.Logging;
 namespace BusinessSharkClient.Data.Sync
 {
     public class ProductDefinitionSyncHandler(
-        ILocalRepository<ProductDefinitionEntity> repo,
+        ILocalRepository<ProductDefinitionEntity> repoProd,
+        ILocalRepository<ComponentUnitEntity> repoComp,
+        DataStateRepository repoDataState,
         ProductDefinitionService.ProductDefinitionServiceClient remote,
-        AppDbContext db,
-        ILogger<ProductDefinitionSyncHandler> logger) : BaseSyncHandler(db), ISyncHandler<ProductDefinitionEntity>
+        ILogger<ProductDefinitionSyncHandler> logger) : BaseSyncHandler(repoDataState), ISyncHandler<ProductDefinitionEntity>
     {
         public override string EntityName => "ProductDefinition";
         public SyncPriority Priority => SyncPriority.Critical;
@@ -36,8 +38,6 @@ namespace BusinessSharkClient.Data.Sync
 
             if (!pull.ProductDefinitions.Any()) return false;
 
-            // Обновляем локально в транзакции
-            await using var tx = await DbContext.Database.BeginTransactionAsync(token);
             try
             {
                 // apply updated/inserted
@@ -66,17 +66,18 @@ namespace BusinessSharkClient.Data.Sync
                         ProductionQuantity = cuGrpc.ProductionQuantity,
                         QualityImpact = cuGrpc.QualityImpact
                     }).ToList()
-                });
+                }).ToList();
 
-                await repo.UpsertRangeAsync(upserts, token);
+                await repoProd.UpsertRangeAsync(upserts, token);
+
+                var upsertsComponents = upserts.SelectMany(u => u.ComponentUnits).ToList();
+                await repoComp.UpsertRangeAsync(upsertsComponents, token);  
 
                 await SetLastSyncAsync(pull.UpdatedAt.ToDateTime());
-                await tx.CommitAsync(token);
                 return true;
             }
             catch (Exception ex)
             {
-                await tx.RollbackAsync(token);
                 logger.LogError(ex, "Pull failed for {Entity}", EntityName);
                 return false;
             }

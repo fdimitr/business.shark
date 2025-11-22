@@ -15,5 +15,7 @@ namespace BusinessSharkClient.Data.Entities
         public required string Name { get; set; }
 
         public int SortOrder { get; set; }
+
+        public object[] GetKeyValues() => [Id];
     }
 }

@@ -5,5 +5,7 @@
         int Id { get; set; }
         bool IsDirty { get; set; }        // need to sync with server
         bool IsDeleted { get; set; }      // soft-delete
+
+        object?[]? GetKeyValues();
     }
 }

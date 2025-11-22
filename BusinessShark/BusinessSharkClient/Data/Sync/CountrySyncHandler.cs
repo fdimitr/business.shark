@@ -1,4 +1,5 @@
 ﻿using BusinessSharkClient.Data.Entities;
+using BusinessSharkClient.Data.Repositories;
 using BusinessSharkClient.Data.Repositories.Interfaces;
 using BusinessSharkClient.Data.Sync.Interfaces;
 using BusinessSharkService;
@@ -9,9 +10,9 @@ namespace BusinessSharkClient.Data.Sync
 {
     public class CountrySyncHandler(
         ILocalRepository<CountryEntity> repo,
+        DataStateRepository repoDataState,
         CountryService.CountryServiceClient remote,
-        AppDbContext db,
-        ILogger<CountrySyncHandler> logger) : BaseSyncHandler(db), ISyncHandler<CountryEntity>
+        ILogger<CountrySyncHandler> logger) : BaseSyncHandler(repoDataState), ISyncHandler<CountryEntity>
     {
         public override string EntityName => "Country";
         public SyncPriority Priority { get; } = SyncPriority.Critical;
@@ -44,7 +45,6 @@ namespace BusinessSharkClient.Data.Sync
 
             if (!pull.Countries.Any()) return false;
 
-            await using var tx = await DbContext.Database.BeginTransactionAsync(token);
             try
             {
                 // apply updated/inserted
@@ -60,12 +60,10 @@ namespace BusinessSharkClient.Data.Sync
                 await repo.UpsertRangeAsync(upserts, token);
 
                 await SetLastSyncAsync(pull.UpdatedAt.ToDateTime());
-                await tx.CommitAsync(token);
                 return true;
             }
             catch (Exception ex)
             {
-                await tx.RollbackAsync(token);
                 logger.LogError(ex, "Pull failed for {Entity}", EntityName);
                 return false;
             }

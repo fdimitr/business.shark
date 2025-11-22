@@ -9,7 +9,7 @@ namespace BusinessSharkClient.Data.Repositories.Interfaces
         Task UpsertAsync(T entity, CancellationToken token);
         Task UpsertRangeAsync(IEnumerable<T> entities, CancellationToken token);
         Task MarkCleanAsync(IEnumerable<T> entities, CancellationToken token);
-        Task<T?> GetByIdAsync(int id);
+        Task<T?> GetByIdAsync(params object[] keys);
         Task DeleteAsync(T entity, CancellationToken token);
         IQueryable<T> Query();
     }

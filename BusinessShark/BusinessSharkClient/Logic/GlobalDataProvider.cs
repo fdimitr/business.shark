@@ -4,7 +4,7 @@ using BusinessSharkClient.Logic.Models;
 
 namespace BusinessSharkClient.Logic
 {
-    public class GlobalDataProvider(ILocalRepository<ProductDefinitionEntity> pDRepo, ILocalRepository<ProductCategoryEntity> pCRepo)
+    public class GlobalDataProvider(ILocalRepository<ProductDefinitionEntity> pDRepo, ILocalRepository<ComponentUnitEntity> cRepo, ILocalRepository<ProductCategoryEntity> pCRepo)
     {
         public List<ProductDefinitionModel> ProductDefinitions { get; set; } = new();
         public List<ProductCategoryModel> ProductCategories { get; set; } = new();
@@ -28,6 +28,7 @@ namespace BusinessSharkClient.Logic
 
             // Product Definition
             var definitions = await pDRepo.GetAllAsync();
+            var components = await cRepo.GetAllAsync();
 
             ProductDefinitions.Clear();
             foreach (var def in definitions)
@@ -50,13 +51,14 @@ namespace BusinessSharkClient.Logic
                     ToolImpactQuantity = def.ToolImpactQuantity,
                     WorkerImpactQuantity = def.WorkerImpactQuantity,
                     Image = ImageSource.FromStream(() => new MemoryStream(def.Image)),
-                    ComponentUnits = def.ComponentUnits.Select(cuGrpc => new ComponentUnitModel
-                    {
-                        ProductDefinitionId = def.Id,
-                        ComponentDefinitionId = cuGrpc.Id,
-                        ProductionQuantity = cuGrpc.ProductionQuantity,
-                        QualityImpact = cuGrpc.QualityImpact
-                    }).ToList()
+                    ComponentUnits = components.Where(c => c.ProductDefinitionId == def.Id).Select(cuGrpc =>
+                        new ComponentUnitModel
+                        {
+                            ProductDefinitionId = def.Id,
+                            ComponentDefinitionId = cuGrpc.Id,
+                            ProductionQuantity = cuGrpc.ProductionQuantity,
+                            QualityImpact = cuGrpc.QualityImpact
+                        }).ToList()
                 };
 
                 ProductDefinitions.Add(defModel);

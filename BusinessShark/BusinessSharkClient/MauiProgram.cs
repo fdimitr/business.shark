@@ -57,7 +57,7 @@ namespace BusinessSharkClient
                 "BusinessSharkData.db"
             );
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
+            builder.Services.AddDbContextFactory<AppDbContext>(options =>
             {
                 options.UseSqlite($"Filename={dbPath}");
             });
@@ -151,6 +151,7 @@ namespace BusinessSharkClient
 
             // Repositories
             builder.Services.AddScoped(typeof(ILocalRepository<>), typeof(EfLocalRepository<>));
+            builder.Services.AddScoped<DataStateRepository>();
 
             // Sync Handlers
             builder.Services.AddScoped<ISyncHandler, ProductDefinitionSyncHandler>();
@@ -178,7 +179,8 @@ namespace BusinessSharkClient
 
             // Database initialization
             using var scope = app.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var dbFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+            using var db = dbFactory.CreateDbContext();
             DbInitializer.Initialize(db);
 
             return app;
