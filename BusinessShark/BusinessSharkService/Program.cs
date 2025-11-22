@@ -11,6 +11,7 @@ using BusinessSharkService.Handlers.Context;
 using BusinessSharkService.Handlers.Divisions;
 using BusinessSharkService.Handlers.Finance;
 using BusinessSharkService.Handlers.Interfaces;
+using BusinessSharkService.Handlers.Location;
 using BusinessSharkService.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -103,6 +104,7 @@ builder.Services.AddScoped<DivisionTransactionHandler>();
 builder.Services.AddScoped<WarehouseHandler>();
 builder.Services.AddScoped<WarehouseProductsHandler>();
 builder.Services.AddScoped<DivisionSizeHandler>();
+builder.Services.AddScoped<ToolsHandler>();
 
 builder.Services.AddHostedService<CalculationService>();
 
@@ -115,6 +117,9 @@ app.UseCors();
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 
 // Configure the HTTP request pipeline.
+app.MapGrpcService<ToolsGrpcService>().EnableGrpcWeb();
+app.MapGrpcService<CityGrpcService>().EnableGrpcWeb();
+app.MapGrpcService<CountryGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<DivisionSizeGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<DivisionWarehouseGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<DivisionTransactionGrpcService>().EnableGrpcWeb();

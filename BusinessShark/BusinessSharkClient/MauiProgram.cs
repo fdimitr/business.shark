@@ -1,12 +1,10 @@
 using BusinessSharkClient.Data;
-using BusinessSharkClient.Data.Entities;
 using BusinessSharkClient.Data.Repositories;
 using BusinessSharkClient.Data.Repositories.Interfaces;
 using BusinessSharkClient.Data.Sync;
 using BusinessSharkClient.Data.Sync.Interfaces;
 using BusinessSharkClient.Interceptors;
 using BusinessSharkClient.Logic;
-using BusinessSharkClient.Logic.Models;
 using BusinessSharkClient.Logic.System;
 using CommunityToolkit.Maui;
 using Grpc.Core;
@@ -133,6 +131,24 @@ namespace BusinessSharkClient
                 return new BusinessSharkService.DivisionSizeService.DivisionSizeServiceClient(invoker);
             });
 
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.CityService.CityServiceClient(invoker);
+            });
+
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.CountryService.CountryServiceClient(invoker);
+            });
+
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.ToolsService.ToolsServiceClient(invoker);
+            });
+
             // Repositories
             builder.Services.AddScoped(typeof(ILocalRepository<>), typeof(EfLocalRepository<>));
 
@@ -140,6 +156,9 @@ namespace BusinessSharkClient
             builder.Services.AddScoped<ISyncHandler, ProductDefinitionSyncHandler>();
             builder.Services.AddScoped<ISyncHandler, ProductCategorySyncHandler>();
             builder.Services.AddScoped<ISyncHandler, SawmillSyncHandler>();
+            builder.Services.AddScoped<ISyncHandler, CitySyncHandler>();
+            builder.Services.AddScoped<ISyncHandler, CountrySyncHandler>();
+            builder.Services.AddScoped<ISyncHandler, ToolsSyncHandler>();
             builder.Services.AddScoped<SyncEngine>();
 
             // Providers
@@ -148,6 +167,7 @@ namespace BusinessSharkClient
             builder.Services.AddScoped<DivisionTransactionProvider>();
             builder.Services.AddScoped<DivisionWarehouseProvider>();
             builder.Services.AddScoped<DivisionSizeProvider>();
+            builder.Services.AddScoped<ToolsProvider>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

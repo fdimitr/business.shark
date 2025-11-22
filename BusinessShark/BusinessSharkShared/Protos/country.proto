@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BusinessSharkService";
+import "google/protobuf/empty.proto";
+
+package country;
+
+service CountryService {
+  rpc Sync(CountrySyncRequest) returns (CountrySyncResponse);
+}
+
+message CountrySyncRequest {
+  google.protobuf.Timestamp Timestamp = 1;
+}
+
+message CountryGrpc {
+  int32 CountryId = 1;
+  string Name = 2;
+  string Code = 3;
+}
+
+message CountrySyncResponse {
+  repeated CountryGrpc Countries = 1;
+  google.protobuf.Timestamp UpdatedAt = 2;
+}

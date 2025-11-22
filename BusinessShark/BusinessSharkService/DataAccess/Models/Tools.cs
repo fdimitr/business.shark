@@ -31,6 +31,8 @@ namespace BusinessSharkService.DataAccess.Models
         [Comment("warranty period in days during which the defect does not wear out")]
         public int WarrantyDays { get; set; }
 
+        public DateTime UpdatedAt { get; set; }
+
         // Computed property for efficiency
         [NotMapped]
         public double Efficiency => CalculateEfficiency();

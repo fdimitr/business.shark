@@ -38,15 +38,17 @@ public partial class SawmillListView : ContentView, INotifyPropertyChanged
     private readonly DivisionTransactionProvider _transactionProvider;
     private readonly DivisionWarehouseProvider _warehouseProvider;
     private readonly DivisionSizeProvider _divisionSizeProvider;
+    private readonly ToolsProvider _toolsProvider;
 
     public SawmillListView(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionTransactionProvider transactionProvider, 
-        DivisionWarehouseProvider warehouseProvider, DivisionSizeProvider divisionSizeProvider)
+        DivisionWarehouseProvider warehouseProvider, DivisionSizeProvider divisionSizeProvider, ToolsProvider toolsProvider)
     {
         _sawmillProvider = sawmillProvider;
         _globalDataProvider = globalDataProvider;
         _transactionProvider = transactionProvider;
         _warehouseProvider = warehouseProvider;
         _divisionSizeProvider = divisionSizeProvider;
+        _toolsProvider = toolsProvider;
         InitializeComponent();
 
         OpenDetailsCommand = new Command<SawmillListModel>(OnOpenDetails);
@@ -77,7 +79,8 @@ public partial class SawmillListView : ContentView, INotifyPropertyChanged
     {
         try
         {
-            var sawmillDetailPage = new SawmillDetailPage(_globalDataProvider, _sawmillProvider, _transactionProvider, _warehouseProvider,_divisionSizeProvider, sawmill.Id);
+            var sawmillDetailPage = new SawmillDetailPage(_globalDataProvider, _sawmillProvider, _transactionProvider,
+                _warehouseProvider, _divisionSizeProvider, _toolsProvider, sawmill.Id);
             await Navigation.PushAsync(sawmillDetailPage);
         }
         catch (Exception ex)

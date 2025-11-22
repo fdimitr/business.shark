@@ -12,51 +12,67 @@ namespace BusinessSharkClient.Data.Repositories
             => await _set.AsNoTracking().OrderBy(x => x.Id).ToListAsync();
 
         public async Task<List<T>> GetDirtyAsync(int batchSize = 100)
-            => await _set.Where(x => x.IsDirty).OrderBy(x => x.Id).Take(batchSize).ToListAsync();
+            => await _set.Where(x => x.IsDirty)
+                         .OrderBy(x => x.Id)
+                         .Take(batchSize)
+                         .ToListAsync();
 
-        public async Task UpsertAsync(T entity)
+        public async Task UpsertAsync(T entity, CancellationToken token)
         {
-            var exists = await _set.FindAsync(entity.Id);
-            if (exists == null)
-                await _set.AddAsync(entity);
-            else
-                db.Entry(exists).CurrentValues.SetValues(entity);
-
-            await db.SaveChangesAsync();
-        }
-
-        public async Task UpsertRangeAsync(IEnumerable<T> entities)
-        {
-            foreach (var e in entities)
+            await DbWriteExtensions.WriteAsync(async () =>
             {
-                var exists = await _set.FindAsync(e.Id);
+                var exists = await _set.FindAsync(entity.Id, token);
                 if (exists == null)
-                    await _set.AddAsync(e);
+                    await _set.AddAsync(entity, token);
                 else
-                    db.Entry(exists).CurrentValues.SetValues(e);
-            }
-            await db.SaveChangesAsync();
+                    db.Entry(exists).CurrentValues.SetValues(entity);
+
+                await db.SaveChangesAsync(token);
+            }, token);
         }
 
-        public async Task MarkCleanAsync(IEnumerable<T> entities)
+        public async Task UpsertRangeAsync(IEnumerable<T> entities, CancellationToken token)
         {
-            foreach (var e in entities)
+            await DbWriteExtensions.WriteAsync(async () =>
             {
-                var item = await _set.FindAsync(e.Id);
-                if (item != null)
+                foreach (var e in entities)
                 {
-                    item.IsDirty = false;
+                    var exists = await _set.FindAsync(e.Id, token);
+                    if (exists == null)
+                        await _set.AddAsync(e, token);
+                    else
+                        db.Entry(exists).CurrentValues.SetValues(e);
                 }
-            }
-            await db.SaveChangesAsync();
+
+                await db.SaveChangesAsync(token);
+            }, token);
         }
 
-        public async Task<T?> GetByIdAsync(int id) => await _set.FindAsync(id);
-
-        public async Task DeleteAsync(T entity)
+        public async Task MarkCleanAsync(IEnumerable<T> entities, CancellationToken token)
         {
-            _set.Remove(entity);
-            await db.SaveChangesAsync();
+            await DbWriteExtensions.WriteAsync(async () =>
+            {
+                foreach (var e in entities)
+                {
+                    var item = await _set.FindAsync(e.Id, token);
+                    if (item != null)
+                        item.IsDirty = false;
+                }
+
+                await db.SaveChangesAsync(token);
+            }, token);
+        }
+
+        public async Task<T?> GetByIdAsync(int id)
+            => await _set.FindAsync(id);
+
+        public async Task DeleteAsync(T entity, CancellationToken token)
+        {
+            await DbWriteExtensions.WriteAsync(async () =>
+            {
+                _set.Remove(entity);
+                await db.SaveChangesAsync(token);
+            }, token);
         }
 
         public IQueryable<T> Query() => _set.AsQueryable();

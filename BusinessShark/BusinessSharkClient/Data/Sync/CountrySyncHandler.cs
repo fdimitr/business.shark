@@ -7,17 +7,17 @@ using Microsoft.Extensions.Logging;
 
 namespace BusinessSharkClient.Data.Sync
 {
-    public class ProductCategorySyncHandler(
-        ILocalRepository<ProductCategoryEntity> repo,
-        ProductCategoryService.ProductCategoryServiceClient remote,
+    public class CountrySyncHandler(
+        ILocalRepository<CountryEntity> repo,
+        CountryService.CountryServiceClient remote,
         AppDbContext db,
-        ILogger<ProductCategorySyncHandler> logger) : BaseSyncHandler(db), ISyncHandler<ProductCategoryEntity>
+        ILogger<CountrySyncHandler> logger) : BaseSyncHandler(db), ISyncHandler<CountryEntity>
     {
-        public override string EntityName => "ProductCategory";
-        public SyncPriority Priority => SyncPriority.Critical;
+        public override string EntityName => "Country";
+        public SyncPriority Priority { get; } = SyncPriority.Critical;
+
         public Task<bool> PushAsync(CancellationToken token = default)
         {
-            // ProductCategory is not pushed from client to server
             return Task.FromResult(true);
         }
 
@@ -26,10 +26,10 @@ namespace BusinessSharkClient.Data.Sync
             // Get lastSync from DataState
             var lastSync = await GetLastSyncAsync();
 
-            ProductCategoryResponse? pull;
+            CountrySyncResponse? pull;
             try
             {
-                pull = await remote.SyncAsync(new ProductCategoryRequest
+                pull = await remote.SyncAsync(new CountrySyncRequest()
                 {
                     Timestamp = lastSync != null
                         ? Timestamp.FromDateTime(lastSync.Value)
@@ -40,20 +40,21 @@ namespace BusinessSharkClient.Data.Sync
             {
                 logger.LogError(ex, "Pull failed for {Entity}", EntityName);
                 return false;
-            }   
+            }
 
-            if (!pull.ProductCategories.Any()) return false;
+            if (!pull.Countries.Any()) return false;
 
             await using var tx = await DbContext.Database.BeginTransactionAsync(token);
             try
             {
-                                // apply updated/inserted
-                var upserts = pull.ProductCategories.Select(u => new ProductCategoryEntity
+                // apply updated/inserted
+                var upserts = pull.Countries.Select(c => new CountryEntity
                 {
-                    Id = u.ProductCategoryId,
-                    Name = u.Name,
+                    Id = c.CountryId,
+                    Code = c.Code,
+                    Name = c.Name,
                     IsDeleted = false,
-                    IsDirty = false
+                    IsDirty = false,
                 });
 
                 await repo.UpsertRangeAsync(upserts, token);

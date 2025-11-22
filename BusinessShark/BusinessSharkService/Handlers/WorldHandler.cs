@@ -4,6 +4,7 @@ using BusinessSharkService.DataAccess;
 using BusinessSharkService.DataAccess.Models.Finance;
 using BusinessSharkService.Handlers.Context;
 using BusinessSharkService.Handlers.Interfaces;
+using BusinessSharkService.Handlers.Location;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSharkService.Handlers

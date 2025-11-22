@@ -20,8 +20,10 @@ namespace BusinessSharkClient.Data.Sync
                 await _queue.Writer.WriteAsync(handler, token);
 
             // loading sync worker tasks
-            for (int i = 0; i < 2; i++)
-                _ = Task.Run(() => WorkerLoop(companyId, token), token);
+//            for (int i = 0; i < 2; i++)
+//                _ = Task.Run(() => WorkerLoop(companyId, token), token);
+
+            _ = Task.Run(() => WorkerLoop(companyId, token), token);
         }
 
         private async Task WorkerLoop(int companyId, CancellationToken token)

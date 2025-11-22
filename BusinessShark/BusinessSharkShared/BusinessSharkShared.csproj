@@ -26,6 +26,9 @@
     <None Remove="Protos\division_transaction.proto" />
     <None Remove="Protos\division_warehouse.proto" />
     <None Remove="Protos\division_size.proto" />
+    <None Remove="Protos\city.proto" />
+    <None Remove="Protos\countr.proto" />
+    <None Remove="Protos\tools.proto" />
   </ItemGroup>
   
   <ItemGroup>
@@ -40,6 +43,9 @@
     <Protobuf Include="Protos\division_transaction.proto" ProtoRoot="Protos" />
     <Protobuf Include="Protos\division_warehouse.proto" ProtoRoot="Protos" />
     <Protobuf Include="Protos\division_size.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\city.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\country.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\tools.proto" ProtoRoot="Protos" />
   </ItemGroup>
 
 </Project>

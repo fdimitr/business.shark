@@ -6,11 +6,11 @@ namespace BusinessSharkClient.Data.Repositories.Interfaces
     {
         Task<List<T>> GetAllAsync();
         Task<List<T>> GetDirtyAsync(int batchSize = 100);
-        Task UpsertAsync(T entity);
-        Task UpsertRangeAsync(IEnumerable<T> entities);
-        Task MarkCleanAsync(IEnumerable<T> entities);
+        Task UpsertAsync(T entity, CancellationToken token);
+        Task UpsertRangeAsync(IEnumerable<T> entities, CancellationToken token);
+        Task MarkCleanAsync(IEnumerable<T> entities, CancellationToken token);
         Task<T?> GetByIdAsync(int id);
-        Task DeleteAsync(T entity);
+        Task DeleteAsync(T entity, CancellationToken token);
         IQueryable<T> Query();
     }
 }

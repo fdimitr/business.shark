@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BusinessSharkService";
+import "google/protobuf/empty.proto";
+
+package city;
+
+service CityService {
+  rpc Sync(CitySyncRequest) returns (CitySyncResponse);
+}
+
+message CitySyncRequest {
+  google.protobuf.Timestamp Timestamp = 1;
+}
+
+message CityGrpc {
+  int32 CityId = 1;
+  string Name = 2;
+  int32 CountryId = 3;
+  double Population = 4;
+  double AverageSalary = 5;	
+  double BaseLandPrice = 6;
+  double LandTax = 7;
+  int32 WealthLevel = 8;
+  int32 Happiness = 9;
+}
+
+message CitySyncResponse {
+  repeated CityGrpc Cities = 1;
+  google.protobuf.Timestamp UpdatedAt = 2;
+}

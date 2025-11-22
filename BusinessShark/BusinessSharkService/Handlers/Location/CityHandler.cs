@@ -3,7 +3,7 @@ using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.Handlers.Divisions;
 using Microsoft.EntityFrameworkCore;
 
-namespace BusinessSharkService.Handlers
+namespace BusinessSharkService.Handlers.Location
 {
     public class CityHandler
     {
@@ -14,7 +14,7 @@ namespace BusinessSharkService.Handlers
             _dataContext = dataContext;
         }
 
-        public async Task<List<City>> GetCitiesAsync(DateTime updatedAt)
+        public async Task<List<City>> LoadAsync(DateTime updatedAt)
         {
             return await _dataContext.Cities
                 .Where(c => c.UpdatedAt > updatedAt)

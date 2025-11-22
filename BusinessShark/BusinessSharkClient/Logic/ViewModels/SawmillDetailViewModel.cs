@@ -11,10 +11,15 @@ namespace BusinessSharkClient.Logic.ViewModels
         public ICommand SaveDivisionDetailCommand { get; }
         private readonly SawmillProvider _sawmillProvider;
         private readonly GlobalDataProvider _globalDataProvider;
+        private readonly ToolsProvider _toolsProvider;
 
-        public SawmillDetailViewModel(GlobalDataProvider globalDataProvider, SawmillProvider sawmillProvider, DivisionSizeProvider divisionSizeProvider) 
+        public SawmillDetailViewModel(GlobalDataProvider globalDataProvider, 
+            SawmillProvider sawmillProvider, 
+            DivisionSizeProvider divisionSizeProvider,
+            ToolsProvider toolsProvider)
         {
             _sawmillProvider = sawmillProvider;
+            _toolsProvider = toolsProvider;
             _globalDataProvider = globalDataProvider;
             SaveDivisionDetailCommand = new Command(OnSaveDivisionDetail);
             SizeViewModel = new(divisionSizeProvider);
@@ -141,11 +146,12 @@ namespace BusinessSharkClient.Logic.ViewModels
             //Salary = response.Employees.SalaryPerEmployee;
             //TrainingProgress = 0;
 
-            //// Equipment
-            //EquipmentCount = response.Tools.TotalQuantity;
-            //EquipmentTechLevel = response.Tools.TechLevel;
-            //Wear = response.Tools.WearCoefficient;
-            //Efficiency = response.Tools.Efficiency;
+            // Equipment
+            var tools = await _toolsProvider.LoadAsync(divisionId);
+            EquipmentCount = tools.Quantity;
+            EquipmentTechLevel = tools.TechLevel;
+            Wear = tools.Wear;
+            Efficiency = tools.Efficiency;
         }
 
     }

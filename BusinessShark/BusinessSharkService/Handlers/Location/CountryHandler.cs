@@ -3,7 +3,7 @@ using BusinessSharkService.DataAccess.Models.Location;
 using BusinessSharkService.Handlers.Divisions;
 using Microsoft.EntityFrameworkCore;
 
-namespace BusinessSharkService.Handlers
+namespace BusinessSharkService.Handlers.Location
 {
     public class CountryHandler(
         DataContext dataContext,
@@ -13,7 +13,7 @@ namespace BusinessSharkService.Handlers
         SawmillHandler sawmillHandler)
     {
 
-        public async Task<List<Country>> GetCountriesAsync(DateTime updatedAt)
+        public async Task<List<Country>> LoadAsync(DateTime updatedAt)
         {
             return await dataContext.Countries
                 .Where(c => c.UpdatedAt > updatedAt)

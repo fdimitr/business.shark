@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BusinessSharkService";
+import "google/protobuf/empty.proto";
+
+package tools;
+
+service ToolsService {
+  rpc Sync(ToolsSyncRequest) returns (ToolsSyncResponse);
+}
+
+message ToolsSyncRequest {
+	int32 CompanyId = 1;
+	google.protobuf.Timestamp Timestamp = 2;
+}
+
+message ToolsGrpc {
+  int32 ToolsId = 1;
+  int32 DivisionId = 2;
+  int32 Quantity = 3;
+  int32 MaxQuantity = 4;
+  double TechLevel = 5;
+  double Wear = 6;
+  double Efficiency = 7;
+  double MaintenanceCosts = 8;
+  int32 WarrantyDays = 9;
+}
+
+message ToolsSyncResponse {
+  repeated ToolsGrpc Tools = 1;
+  google.protobuf.Timestamp UpdatedAt = 2;
+}

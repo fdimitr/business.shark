@@ -292,6 +292,7 @@ namespace BusinessSharkService.DataAccess
                 }
                 foreach (var tool in tools)
                 {
+                    tool.UpdatedAt = DateTime.UtcNow;
                     modelBuilder.Entity<Tools>().HasData(tool);
                 }
                 foreach (var employee in employees)

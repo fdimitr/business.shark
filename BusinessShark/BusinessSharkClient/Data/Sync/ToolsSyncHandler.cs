@@ -7,17 +7,17 @@ using Microsoft.Extensions.Logging;
 
 namespace BusinessSharkClient.Data.Sync
 {
-    public class ProductCategorySyncHandler(
-        ILocalRepository<ProductCategoryEntity> repo,
-        ProductCategoryService.ProductCategoryServiceClient remote,
+    public class ToolsSyncHandler(
+        ILocalRepository<ToolsEntity> repo,
+        ToolsService.ToolsServiceClient remote,
         AppDbContext db,
-        ILogger<ProductCategorySyncHandler> logger) : BaseSyncHandler(db), ISyncHandler<ProductCategoryEntity>
+        ILogger<ToolsSyncHandler> logger) : BaseSyncHandler(db), ISyncHandler<ToolsEntity>
     {
-        public override string EntityName => "ProductCategory";
-        public SyncPriority Priority => SyncPriority.Critical;
+        public SyncPriority Priority { get; } = SyncPriority.High;
+        public override string EntityName => "Tools";
+
         public Task<bool> PushAsync(CancellationToken token = default)
         {
-            // ProductCategory is not pushed from client to server
             return Task.FromResult(true);
         }
 
@@ -26,11 +26,12 @@ namespace BusinessSharkClient.Data.Sync
             // Get lastSync from DataState
             var lastSync = await GetLastSyncAsync();
 
-            ProductCategoryResponse? pull;
+            ToolsSyncResponse? pull;
             try
             {
-                pull = await remote.SyncAsync(new ProductCategoryRequest
+                pull = await remote.SyncAsync(new ToolsSyncRequest
                 {
+                    CompanyId = companyId,
                     Timestamp = lastSync != null
                         ? Timestamp.FromDateTime(lastSync.Value)
                         : Timestamp.FromDateTime(DateTime.MinValue.ToUniversalTime())
@@ -40,20 +41,27 @@ namespace BusinessSharkClient.Data.Sync
             {
                 logger.LogError(ex, "Pull failed for {Entity}", EntityName);
                 return false;
-            }   
+            }
 
-            if (!pull.ProductCategories.Any()) return false;
+            if (!pull.Tools.Any()) return false;
 
             await using var tx = await DbContext.Database.BeginTransactionAsync(token);
             try
             {
-                                // apply updated/inserted
-                var upserts = pull.ProductCategories.Select(u => new ProductCategoryEntity
+                // apply updated/inserted
+                var upserts = pull.Tools.Select(t => new ToolsEntity
                 {
-                    Id = u.ProductCategoryId,
-                    Name = u.Name,
+                    Id = t.ToolsId,
                     IsDeleted = false,
-                    IsDirty = false
+                    IsDirty = false,
+                    Quantity = t.Quantity,
+                    DivisionId = t.DivisionId,
+                    Efficiency = t.Efficiency,
+                    MaintenanceCosts = t.MaintenanceCosts,
+                    MaxQuantity = t.MaxQuantity,
+                    TechLevel = t.TechLevel,
+                    Wear = t.Wear,
+                    WarrantyDays = t.WarrantyDays
                 });
 
                 await repo.UpsertRangeAsync(upserts, token);

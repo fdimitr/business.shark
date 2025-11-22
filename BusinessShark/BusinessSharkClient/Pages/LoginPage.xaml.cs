@@ -57,7 +57,6 @@ public partial class LoginPage : ContentPage
                 // Load global data
                 ShowPopup("Synchronizing data ....");
                 await _syncEngine.StartGlobalDataSync(CancellationToken.None);
-
                 await _syncEngine.StartBackgroundSync(loginResult.CompanyId, CancellationToken.None);
 
                 await _globalDataProvider.LoadData();

@@ -24,13 +24,14 @@ public partial class SawmillDetailPage : ContentPage
         DivisionTransactionProvider transactionProvider,
         DivisionWarehouseProvider warehouseProvider,
         DivisionSizeProvider divisionSizeProvider,
+        ToolsProvider toolsProvider,
         int divisionId)
     {
         _transactionProvider = transactionProvider;
         _warehouseProvider = warehouseProvider;
         _globalDataProvider = globalDataProvider;
         _divisionId = divisionId;
-        SawmillDetail = new SawmillDetailViewModel(globalDataProvider, sawmillProvider, divisionSizeProvider) { Name = "Loading ..." };
+        SawmillDetail = new SawmillDetailViewModel(globalDataProvider, sawmillProvider, divisionSizeProvider, toolsProvider) { Name = "Loading ..." };
 
         OpenDivisionAnalyticsCommand = new Command(OnOpenDivisionAnalytics);
         OpenFinancialStatisticsCommand = new Command(OnOpenFinancialStatistics);

@@ -36,7 +36,7 @@ namespace BusinessSharkClient.Data.Sync
 
             if (!pull.Sawmills.Any()) return false;
 
-            await using var tx = await dbContext.Database.BeginTransactionAsync(token);
+            await using var tx = await DbContext.Database.BeginTransactionAsync(token);
             try
             {
                 var upserts = pull.Sawmills.Select(s => new SawmillEntity
@@ -58,7 +58,7 @@ namespace BusinessSharkClient.Data.Sync
                     QualityBonus = s.QualityBonus
                 });
 
-                await repo.UpsertRangeAsync(upserts);
+                await repo.UpsertRangeAsync(upserts, token);
                 await SetLastSyncAsync(pull.UpdatedAt.ToDateTime());
                 await tx.CommitAsync(token);
                 return true;
