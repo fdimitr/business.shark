@@ -12,15 +12,21 @@ namespace BusinessSharkClient.Logic.ViewModels
         private readonly SawmillProvider _sawmillProvider;
         private readonly GlobalDataProvider _globalDataProvider;
         private readonly ToolsProvider _toolsProvider;
+        private readonly EmployeesProvider _employeesProvider;
+        private readonly DivisionTransactionProvider _divisionTransactionProvider;
 
         public SawmillDetailViewModel(GlobalDataProvider globalDataProvider, 
             SawmillProvider sawmillProvider, 
             DivisionSizeProvider divisionSizeProvider,
-            ToolsProvider toolsProvider)
+            ToolsProvider toolsProvider,
+            EmployeesProvider employeesProvider,
+            DivisionTransactionProvider divisionTransactionProvider)
         {
             _sawmillProvider = sawmillProvider;
             _toolsProvider = toolsProvider;
             _globalDataProvider = globalDataProvider;
+            _employeesProvider = employeesProvider;
+            _divisionTransactionProvider = divisionTransactionProvider; 
             SaveDivisionDetailCommand = new Command(OnSaveDivisionDetail);
             SizeViewModel = new(divisionSizeProvider);
 
@@ -135,16 +141,19 @@ namespace BusinessSharkClient.Logic.ViewModels
             QualityBonus = response.QualityBonus;
             QuantityBonus = response.QuantityBonus;
 
-            //var divisionStatistics = DivisionTransactionViewModel.GetLastTransaction(response.DivisionTransactions.ToList());
-            //Balance = divisionStatistics.Balance;
-            //LastProductionQuantity = divisionStatistics.QuantityProduced;
-            //LastProductionQuality = divisionStatistics.QualityProduced;
+            // Transactions
+            var transactions = await _divisionTransactionProvider.LoadAsync(divisionId);
+            var divisionStatistics = DivisionTransactionViewModel.GetLastTransaction(transactions);
+            Balance = divisionStatistics.Balance;
+            LastProductionQuantity = divisionStatistics.QuantityProduced;
+            LastProductionQuality = divisionStatistics.QualityProduced;
 
-            //// Employee
-            //WorkerCount = response.Employees.TotalQuantity;
-            //Qualification = response.Employees.SkillLevel;
-            //Salary = response.Employees.SalaryPerEmployee;
-            //TrainingProgress = 0;
+            // Employee
+            var employees = await _employeesProvider.LoadAsync(divisionId);
+            WorkerCount = employees.TotalQuantity;
+            Qualification = employees.SkillLevel;
+            Salary = employees.Salary;
+            TrainingProgress = 0;
 
             // Equipment
             var tools = await _toolsProvider.LoadAsync(divisionId);

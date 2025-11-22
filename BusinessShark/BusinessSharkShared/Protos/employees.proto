@@ -1,0 +1,30 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BusinessSharkService";
+import "google/protobuf/empty.proto";
+
+package employees;
+
+service EmployeesService {
+  rpc Sync(EmployeesSyncRequest) returns (EmployeesSyncResponse);
+}
+
+message EmployeesSyncRequest {
+	int32 CompanyId = 1;
+	google.protobuf.Timestamp Timestamp = 2;
+}
+
+message EmployeesGrpc {
+  int32 EmployeesId = 1;
+  int32 DivisionId = 2;
+  int32 TotalQuantity = 3;
+  double SkillLevel = 4;
+  double Salary = 5;
+}
+
+message EmployeesSyncResponse {
+  repeated EmployeesGrpc Employees = 1;
+  google.protobuf.Timestamp UpdatedAt = 2;
+}

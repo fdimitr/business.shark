@@ -20,6 +20,7 @@ namespace BusinessSharkService.DataAccess.Models
         public double SkillLevel { get; set; } = 1;
 
         public double SalaryPerEmployee { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         }
 }

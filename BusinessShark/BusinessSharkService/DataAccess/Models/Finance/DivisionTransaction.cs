@@ -29,5 +29,6 @@ namespace BusinessSharkService.DataAccess.Models.Finance
         // Production statistics
         public int QuantityProduced { get; set; }
         public double QualityProduced { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

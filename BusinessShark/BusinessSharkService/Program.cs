@@ -105,6 +105,7 @@ builder.Services.AddScoped<WarehouseHandler>();
 builder.Services.AddScoped<WarehouseProductsHandler>();
 builder.Services.AddScoped<DivisionSizeHandler>();
 builder.Services.AddScoped<ToolsHandler>();
+builder.Services.AddScoped<EmployeesHandler>();
 
 builder.Services.AddHostedService<CalculationService>();
 
@@ -117,6 +118,7 @@ app.UseCors();
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 
 // Configure the HTTP request pipeline.
+app.MapGrpcService<EmployeesGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<ToolsGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<CityGrpcService>().EnableGrpcWeb();
 app.MapGrpcService<CountryGrpcService>().EnableGrpcWeb();

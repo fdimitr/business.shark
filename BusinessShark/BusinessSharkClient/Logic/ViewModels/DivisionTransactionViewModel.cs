@@ -1,4 +1,4 @@
-﻿using BusinessSharkService;
+﻿using BusinessSharkClient.Data.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BusinessSharkClient.Logic.ViewModels
@@ -30,10 +30,10 @@ namespace BusinessSharkClient.Logic.ViewModels
 
         public double Balance { get; set; }
 
-        public static DivisionTransactionViewModel GetLastTransaction(List<DivisionTransactionsGrpc> divisionTransactionsGrpcs)
+        public static DivisionTransactionViewModel GetLastTransaction(List<DivisionTransactionEntity> divisionTransactions)
         {
             var result = new DivisionTransactionViewModel();
-            var dt = divisionTransactionsGrpcs.OrderByDescending(dt => dt.TransactionDate).Take(1).FirstOrDefault();
+            var dt = divisionTransactions.OrderByDescending(dt => dt.TransactionDate).Take(1).FirstOrDefault();
             if (dt != null)
             {
                 result.Balance = dt.SalesProductsAmount -

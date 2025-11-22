@@ -11,7 +11,7 @@ namespace BusinessSharkService.GrpcServices
     {
         public override async Task<ToolsSyncResponse> Sync(ToolsSyncRequest request, ServerCallContext context)
         {
-            var tools = await toolsHandler.LoadAsync(request.Timestamp.ToDateTime());
+            var tools = await toolsHandler.LoadAsync(request.CompanyId, request.Timestamp.ToDateTime());
             var response = new ToolsSyncResponse();
             if (tools.Any())
             {

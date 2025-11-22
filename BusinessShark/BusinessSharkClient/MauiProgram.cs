@@ -149,6 +149,12 @@ namespace BusinessSharkClient
                 return new BusinessSharkService.ToolsService.ToolsServiceClient(invoker);
             });
 
+            builder.Services.AddScoped(services =>
+            {
+                var invoker = services.GetRequiredService<CallInvoker>();
+                return new BusinessSharkService.EmployeesService.EmployeesServiceClient(invoker);
+            });
+
             // Repositories
             builder.Services.AddScoped(typeof(ILocalRepository<>), typeof(EfLocalRepository<>));
             builder.Services.AddScoped<DataStateRepository>();
@@ -160,6 +166,8 @@ namespace BusinessSharkClient
             builder.Services.AddScoped<ISyncHandler, CitySyncHandler>();
             builder.Services.AddScoped<ISyncHandler, CountrySyncHandler>();
             builder.Services.AddScoped<ISyncHandler, ToolsSyncHandler>();
+            builder.Services.AddScoped<ISyncHandler, EmployeesSyncHandler>();
+            builder.Services.AddScoped<ISyncHandler, DivisionTransactionSyncHandler>();
             builder.Services.AddScoped<SyncEngine>();
 
             // Providers
@@ -169,6 +177,7 @@ namespace BusinessSharkClient
             builder.Services.AddScoped<DivisionWarehouseProvider>();
             builder.Services.AddScoped<DivisionSizeProvider>();
             builder.Services.AddScoped<ToolsProvider>();
+            builder.Services.AddScoped<EmployeesProvider>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

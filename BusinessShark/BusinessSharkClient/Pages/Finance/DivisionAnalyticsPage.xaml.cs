@@ -6,8 +6,8 @@ namespace BusinessSharkClient.Pages.Finance;
 
 public partial class DivisionAnalyticsPage : ContentPage
 {
-    private DivisionTransactionProvider _transactionProvider;
-    private int _divisionId;
+    private readonly DivisionTransactionProvider _transactionProvider;
+    private readonly int _divisionId;
 
     public DivisionAnalyticsPage(DivisionTransactionProvider transactionProvider, int divisionId)
     {

@@ -5,6 +5,8 @@ namespace BusinessSharkClient.Data
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {
+        public DbSet<DivisionTransactionEntity> DivisionTransactions => Set<DivisionTransactionEntity>();
+        public DbSet<EmployeesEntity> Employees => Set<EmployeesEntity>();
         public DbSet<CityEntity> Cities => Set<CityEntity>();
         public DbSet<CountryEntity> Countries => Set<CountryEntity>();
         public DbSet<ToolsEntity> Tools => Set<ToolsEntity>();

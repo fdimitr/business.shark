@@ -1,38 +1,37 @@
-﻿using BusinessSharkClient.Logic.ViewModels;
-using BusinessSharkService;
+﻿using BusinessSharkClient.Data.Entities;
+using BusinessSharkClient.Data.Repositories.Interfaces;
+using BusinessSharkClient.Logic.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSharkClient.Logic
 {
-    public class DivisionTransactionProvider
+    public class DivisionTransactionProvider(ILocalRepository<DivisionTransactionEntity> repo)
     {
-        private DivisionTransactionsService.DivisionTransactionsServiceClient _transactionClient;
-        public DivisionTransactionProvider(DivisionTransactionsService.DivisionTransactionsServiceClient transactionClient)
+        public async Task<List<DivisionTransactionEntity>> LoadAsync(int divisionId)
         {
-            _transactionClient = transactionClient;
+            return await repo.Query().Where(x => x.DivisionId == divisionId).ToListAsync();
         }
 
         public async Task<DivisionAnalyticsViewModel> GetDivisionAnalytics(int divisionId)
         {
-            var response = await _transactionClient.LoadAsync(
-                new DivisionTransactionRequest { DivisionId = divisionId });
-            
-            var analytics = new DivisionAnalyticsViewModel(response.DivisionTransactions.ToList());
+            var transactions = await repo.Query().Where(x => x.DivisionId == divisionId).ToListAsync();
+
+            var analytics = new DivisionAnalyticsViewModel(transactions);
             return analytics;
         }
 
         public async Task<List<DivisionTransactionViewModel>> GetDivisionFinancialStatistics(int divisionId)
         {
-            var response = await _transactionClient.LoadAsync(
-                new DivisionTransactionRequest { DivisionId = divisionId });
+            var transactions = await repo.Query().Where(x => x.DivisionId == divisionId).ToListAsync();
 
             var result = new List<DivisionTransactionViewModel>();
-            foreach (var grpcModel in response.DivisionTransactions.ToList())
+            foreach (var grpcModel in transactions)
             {
                 var statistics = new DivisionTransactionViewModel
                 {
-                    DivisionTransactionsId = grpcModel.DivisionTransactionsId,
+                    DivisionTransactionsId = grpcModel.Id,
                     DivisionId = divisionId,
-                    TransactionDate = grpcModel.TransactionDate.ToDateTime(),
+                    TransactionDate = grpcModel.TransactionDate,
                     SalesProductsAmount = grpcModel.SalesProductsAmount,
                     PurchasedProductsAmount = grpcModel.PurchasedProductsAmount,
                     TransportCostsAmount = grpcModel.TransportCostsAmount,
@@ -50,7 +49,6 @@ namespace BusinessSharkClient.Logic
 
                 result.Add(statistics);
             }
-            
             return result;
         }
     }

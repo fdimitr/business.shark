@@ -6,11 +6,15 @@ namespace BusinessSharkService.Handlers
 {
     public class ToolsHandler(DataContext dataContext)
     {
-        public async Task<List<Tools>> LoadAsync(DateTime updatedAt)
+        public async Task<List<Tools>> LoadAsync(int companyId, DateTime updatedAt)
         {
-            return await dataContext.Tools
-                .Where(c => c.UpdatedAt > updatedAt)
-                .ToListAsync();
+            var query = from tool in dataContext.Tools
+                        join division in dataContext.Divisions
+                            on tool.DivisionId equals division.DivisionId
+                        where division.CompanyId == companyId && tool.UpdatedAt > updatedAt
+                        select tool;
+
+            return await query.AsNoTracking().ToListAsync();
         }
     }
 }

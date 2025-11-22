@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using BusinessSharkService;
+using BusinessSharkClient.Data.Entities;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
@@ -18,14 +18,14 @@ namespace BusinessSharkClient.Logic.ViewModels
         public Axis[] XAxes { get; }
         public Axis[] YAxes { get; }
 
-        public DivisionAnalyticsViewModel(List<DivisionTransactionsGrpc> divisionTransactions)
+        public DivisionAnalyticsViewModel(List<DivisionTransactionEntity> divisionTransactions)
         {
             Days = [];
             foreach (var dt in divisionTransactions)
             {
                 Days.Add(new Models.DivisionAnalyticsModel
                 {
-                    Date = dt.TransactionDate.ToDateTime(),
+                    Date = dt.TransactionDate,
                     Income = dt.SalesProductsAmount,
                     Expense = dt.PurchasedProductsAmount +
                               dt.TransportCostsAmount +

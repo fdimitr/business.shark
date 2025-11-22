@@ -297,6 +297,7 @@ namespace BusinessSharkService.DataAccess
                 }
                 foreach (var employee in employees)
                 {
+                    employee.UpdatedAt = DateTime.UtcNow;
                     modelBuilder.Entity<Employees>().HasData(employee);
                 }
                 // *****************************************************************************

@@ -46,6 +46,7 @@
     <Protobuf Include="Protos\city.proto" ProtoRoot="Protos" />
     <Protobuf Include="Protos\country.proto" ProtoRoot="Protos" />
     <Protobuf Include="Protos\tools.proto" ProtoRoot="Protos" />
+    <Protobuf Include="Protos\employees.proto" ProtoRoot="Protos" />
   </ItemGroup>
 
 </Project>
